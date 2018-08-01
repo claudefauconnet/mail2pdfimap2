@@ -111,6 +111,7 @@ var common = {
         return str;
     },
     deleteFolderRecursive: function (path) {
+        return;
         try {
             if (fs.existsSync(path)) {
                 fs.readdirSync(path).forEach(function (file, index) {

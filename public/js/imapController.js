@@ -1,13 +1,13 @@
 var imapController = (function () {
     var self = {};
-self.currentState="";
-self.currentFolder="";
+    self.currentState="";
+    self.currentFolder="";
     self.loadTreeHierarchy = function () {
 
         $("#waitImg").css("visibility", "visible")
         var payload = {
             getFolderHierarchy: 1,
-         //   rootFolder: "testMail2Pdf",
+            //   rootFolder: "testMail2Pdf",
             mailAdress: $("#mailInput").val(),
             password: $("#passwordInput").val()
         }
@@ -62,18 +62,18 @@ self.currentFolder="";
 
     }
 
-self.getJsTreeSelectedNodes=function(){
-    var selectedData = [];
-    var selectedIndexes;
-    $("#messageDiv2").html("");
-    $("#messageDiv3").html("");
-    selectedIndexes = $("#jstreeDiv").jstree("get_selected", true);
-    jQuery.each(selectedIndexes, function (index, value) {
-        selectedData.push(selectedIndexes[index]);
-    });
-    self.currentFolder=selectedData[0].text;
-    return selectedData;
-}
+    self.getJsTreeSelectedNodes=function(){
+        var selectedData = [];
+        var selectedIndexes;
+        $("#messageDiv2").html("");
+        $("#messageDiv3").html("");
+        selectedIndexes = $("#jstreeDiv").jstree("get_selected", true);
+        jQuery.each(selectedIndexes, function (index, value) {
+            selectedData.push(selectedIndexes[index]);
+        });
+        self.currentFolder=selectedData[0].text;
+        return selectedData;
+    }
     self.generateFolderPdfArchive = function (withAttachments) {
 
 
@@ -88,7 +88,7 @@ self.getJsTreeSelectedNodes=function(){
         self.currentState="ARCHIVE_PROCESSING";
         var folder = selectedNodes[0];
         var folderPath="";
-            for(var i=0;i<folder.original.ancestors.length;i++){
+        for(var i=0;i<folder.original.ancestors.length;i++){
             if(i>0)
                 folderPath+="/";
             folderPath+=folder.original.ancestors[i];
@@ -107,12 +107,13 @@ self.getJsTreeSelectedNodes=function(){
             type: "POST",
             url: "/imap",
             data: payload,
+            timeout: 0,
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
                 self.currentState="ARCHIVE_DONE";
                 $("#waitImg").css("visibility", "hidden")
                 $("#messageDiv3").html("<B>"+data.text+"</B>");
-                $("#downloadArchiveButton").css("visibility","visible");
+
                 if (data.length == 0) {
                     return;
 
@@ -122,7 +123,9 @@ self.getJsTreeSelectedNodes=function(){
 
 
             },
-            error: function (err) {
+            error: function (err,status) {
+                console.log(status);
+                $("#downloadArchiveButton").css("visibility","visible");
                 $("#waitImg").css("visibility", "hidden")
                 console.log(err);
                 self.currentState="";
