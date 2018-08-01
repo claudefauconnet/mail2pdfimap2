@@ -1,0 +1,47 @@
+{
+  "name": "mail2pdfimap",
+  "version": "1.0.0",
+  "description": "archive imap mails to PDF",
+  "main": "app.js",
+  "bin": {
+    "mail2pdfimap": "common.js"
+  },
+  "dependencies": {
+    "async": "^2.6.1",
+    "body-parser": "~1.18.2",
+    "chardet": "^0.6.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "iconv-lite": "^0.4.23",
+    "imap": "^0.8.19",
+    "jade": "~1.11.0",
+    "legacy-encoding": "^3.0.0",
+    "mailparser": "^2.2.0",
+    "morgan": "~1.9.0",
+    "pdfkit": "^0.8.3",
+    "serve-favicon": "~2.4.5",
+    "socket.io": "^1.7.4",
+    "zip-dir": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claudefauconnet/mail2pdfImap.git"
+  },
+  "keywords": [
+    "imap",
+    "email",
+    "pdf",
+    "attachments"
+  ],
+  "author": "Claude Fauconnet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/claudefauconnet/mail2pdfImap/issues"
+  },
+  "homepage": "https://github.com/claudefauconnet/mail2pdfImap#readme"
+}
