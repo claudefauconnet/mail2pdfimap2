@@ -107,11 +107,12 @@ var imapController = (function () {
             type: "POST",
             url: "/imap",
             data: payload,
-            timeout: 0,
+            timeout: 1000*3600*2,
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
                 self.currentState="ARCHIVE_DONE";
-                $("#waitImg").css("visibility", "hidden")
+                $("#waitImg").css("visibility", "hidden");
+               // $("#downloadArchiveButton").css("visibility", "visible")
                 $("#messageDiv3").html("<B>"+data.text+"</B>");
 
                 if (data.length == 0) {
@@ -124,6 +125,7 @@ var imapController = (function () {
 
             },
             error: function (err,status) {
+
                 console.log(status);
                 $("#downloadArchiveButton").css("visibility","visible");
                 $("#waitImg").css("visibility", "hidden")

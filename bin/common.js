@@ -127,6 +127,9 @@ var common = {
         } catch (e) {
             archiveProcessor.consoleToFile(e);
         }
+    },
+    roundToMO:function(octets){
+       return  Math.round(octets/1000000 * 100) / 100
     }
 
 

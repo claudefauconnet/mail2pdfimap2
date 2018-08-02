@@ -67,7 +67,7 @@ var mailPdfGenerator = {
             pdfFileName = common.dateToString(mail.date) + "-" + mailTitle + ".pdf";
             pdfFileName = mailPdfGenerator.processDuplicateMailTitles(pdfDirPath, pdfFileName);
 
-            console.log(initialName+"\t"+pdfFileName)
+           // console.log(initialName+"\t"+pdfFileName)
 
             var attachments = [];
             if (withAttachments && mail.attachments) {
@@ -234,7 +234,7 @@ var mailPdfGenerator = {
         }
         catch (e) {
             console.log(" ERROR , file " + pdfFileName + " skipped : " + e);
-            return callback(e)
+         return callback(e)
         }
     },
     formatStringForArchive: function (str, maxLength) {
