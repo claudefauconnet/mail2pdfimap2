@@ -24,6 +24,9 @@
 
                 if (!message || message.length == 0)
                     return;
+                if(message.indexOf("__")==0){
+                    return    $("#messageDiv3").html("<i>"+message.substring(2)+"<i>");
+                }
                 if(imapController.currentState=="ARCHIVE_PROCESSING")
                 $("#messageDiv2").prepend(message+"<br>");
                 else {
