@@ -31,7 +31,7 @@ var PDFDocument = require(modulesDir + 'pdfkit');
 var path = require('path');
 var common = require('./common.js');
 var socket = require('../routes/socket.js');
-var execSync = require('child_process').execSync;
+
 
 var addMetaData = false;
 
@@ -326,33 +326,8 @@ var mailPdfGenerator = {
         }
         return attachmentFileName;
     }
-    ,
-    convertToNewestPDFversion: function (inputFile) {
-//https://www.npmjs.com/package/ghostscript-js
-        //  gswin64.exe -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=D:\GitHub\mail2pdfImap\pdfs\claude.fauconnet@atd-quartmonde.org_23679\testMail2Pdf\technique\moteurDerecherche\test2.pdf D:\GitHub\mail2pdfImap\pdfs\claude.fauconnet@atd-quartmonde.org_23679\testMail2Pdf\technique\moteurDerecherche\test.pdf
 
-      var ghostscriptExe="gs";
-        if (path.sep == "\\")//windows
-            ghostscriptExe="\"C:\\Program Files\\gs\\gs9.21\\bin\\gswin64.exe\""
-        var outputFile=inputFile.substring(0,inputFile.length-1)
-        var cmd = ghostscriptExe + " -sDEVICE=pdfwrite  -sPAPERSIZE=a4 -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH -sOutputFile="+outputFile+" "+ inputFile;
 
-        console.log("EXECUTING " + cmd)
-        execSync(cmd, function (err, stdout, stderr) {
-            if (err) {
-                socket.message(err);
-                return;
-
-            }
-            try {
-                fs.unlink(inputFile);
-            }
-            catch(e){
-                socket.message(e);
-            }
-        });
-
-    }
 
 
 }

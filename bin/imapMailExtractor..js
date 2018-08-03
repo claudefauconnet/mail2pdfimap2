@@ -10,6 +10,7 @@ var zipdir = require('zip-dir');
 var socket = require('../routes/socket.js');
 var chardet = require('chardet');
 var iconv = require('iconv-lite');
+var execSync = require('child_process').execSync;
 
 var host = 'imap.atd-quartmonde.org';
 var port = 993;
@@ -27,6 +28,7 @@ var skippedFolders = ["Autres utilisateurs", "Dossiers partagés"];
 
 var imapMailExtractor = {
     deleteDirAfterZip: true,
+    archivePrefix:"pdfMailArchive",
     archiveMaxSize: 1000 * 1000 * 200,//50MO,
     maxMessageSize: 1000 * 1000 * 5,
     maxAttachmentsSize: 1000 * 1000 * 5,
@@ -461,10 +463,8 @@ var imapMailExtractor = {
         var startTime = new Date();
 
 
-
-
         //set pdf files root path
-        var pdfArchiveRootPath = pdfArchiveDir + "/" + mailAdress + "_" + Math.round(Math.random() * 100000);
+        var pdfArchiveRootPath = pdfArchiveDir + "/" + imapMailExtractor.archivePrefix+"_"+mailAdress + "_" + Math.round(Math.random() * 100000);
         pdfArchiveRootPath = path.resolve(pdfArchiveRootPath);
         if (!fs.existsSync(pdfArchiveRootPath)) {
             fs.mkdirSync(pdfArchiveRootPath);
@@ -552,14 +552,16 @@ var imapMailExtractor = {
                                 root: leafFolder
                             }
                             folderMessages.messages = validMessages;
-                            var duration = ( new Date()-startTime ) / 1000
-                            socket.message("__total valid mail processed : " + totalMails + " in " + duration + "secs.")
+
                             imapMailExtractor.createFolderPdfs(pdfArchiveRootPath, folderMessages, withAttachments, function (err, result) {
 
                                 if (err) {
                                     return callbackSerie3(err)
                                 }
+
                                 totalMails += result;
+                                var duration = (new Date() - startTime) / 1000
+                                socket.message("__total valid mail processed : " + totalMails + " in " + duration + "secs.")
                                 return callbackSerie3();
                             });
                             // output.push(folderMessages);
@@ -675,14 +677,15 @@ var imapMailExtractor = {
 
         socket.message("download pdfMailArchive-" + pdfArchiveRootPath + " STARTED");
 
-        var dir = path.resolve(pdfArchiveRootPath);
+        var pdfArchiveRootPath_1_5= imapMailExtractor.toPDF_1_5_Folder (pdfArchiveRootPath) ;
+        var dir = path.resolve(pdfArchiveRootPath_1_5);
 
         zipdir(dir, function (err, buffer) {
             if (err)
                 return callback(err);
 
             response.setHeader('Content-type', 'application/zip');
-            response.setHeader("Content-Disposition", "attachment;filename=pdfMailArchive-" + mailAdress + ".zip");
+            response.setHeader("Content-Disposition", "attachment;filename="+imapMailExtractor+"-" + mailAdress + ".zip");
             response.send(buffer);
             socket.message("download pdfMailArchive-" + pdfArchiveRootPath + " DONE");
             if (imapMailExtractor.deleteDirAfterZip)
@@ -690,33 +693,97 @@ var imapMailExtractor = {
 
         });
 
+    },
+
+    toPDF_1_5_Folder: function (rootDir) {
+        function recurse(path,newPath) {
+            if (fs.existsSync(path)) {
+
+                fs.readdirSync(path).forEach(function (file, index) {
+                    var curPath = path + "/" + file;
+                    var curNewPath = newPath + "/" + file;
+                    if (fs.lstatSync(curPath).isDirectory()) {
+                        if (!fs.existsSync(newPath)) {
+                            fs.mkdirSync(newPath);
+                        }
+                        if (!fs.existsSync(curNewPath)) {
+                            fs.mkdirSync(curNewPath);
+                        }
+                        recurse(curPath, curNewPath);
+                    }
+                    else {
+                       imapMailExtractor.toPDF_1_5_File(curPath,curNewPath);
+
+                    }
+
+
+                });
+
+            }
+
+
+        }
+        var newRootDir=rootDir+"_1.5"
+        recurse(rootDir, newRootDir);
+        imapMailExtractor.deleteFolderRecursive(rootDir)
+        return  newRootDir;
     }
+
+    ,
+        toPDF_1_5_File: function (inputFile,outputFile) {
+//https://www.npmjs.com/package/ghostscript-js
+            //  gswin64.exe -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=D:\GitHub\mail2pdfImap\pdfs\claude.fauconnet@atd-quartmonde.org_23679\testMail2Pdf\technique\moteurDerecherche\test2.pdf D:\GitHub\mail2pdfImap\pdfs\claude.fauconnet@atd-quartmonde.org_23679\testMail2Pdf\technique\moteurDerecherche\test.pdf
+
+            var ghostscriptExe = "gs";
+            if (path.sep == "\\")//windows
+                ghostscriptExe = "\"C:\\Program Files\\gs\\gs9.21\\bin\\gswin64.exe\""
+
+         var cmd = ghostscriptExe + " -sDEVICE=pdfwrite  -sPAPERSIZE=a4 -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=\"" + outputFile + "\" \"" + inputFile+"\"";
+          //  var cmd = ghostscriptExe + " -sDEVICE=pdfwrite  -sPAPERSIZE=a4 -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dNODISPLAY -dBATCH  -sOutputFile=\"" + outputFile + "\" \"" + inputFile+"\"";
+
+
+         //   dNOPAGEPROMPT
+          //  console.log("EXECUTING " + cmd)
+            execSync(cmd, function (err, stdout, stderr) {
+                if (err) {
+                    socket.message(err);
+                    return;
+
+                }
+
+            });
+
+        }
 
 
     ,
-    deleteFolderRecursive: function (path) {
-        return;
-        if (fs.existsSync(path)) {
-            fs.readdirSync(path).forEach(function (file, index) {
-                var curPath = path + "/" + file;
-                if (fs.lstatSync(curPath).isDirectory()) { // recurse
-                    imapMailExtractor.deleteFolderRecursive(curPath);
-                } else { // delete file
-                    fs.unlinkSync(curPath);
-                }
-            });
-            try {
-                fs.rmdirSync(path);
+        deleteFolderRecursive: function (path,isChild) {
+            if(!isChild && path.indexOf(imapMailExtractor.archivePrefix)!=0) {
+                console.log ("!!!!!!!!!!!!refuse to delete dir other than pdfMailArchive...")
+                return;
             }
-            catch (e) {
-                console.log(e);
+
+            if (fs.existsSync(path)) {
+                fs.readdirSync(path).forEach(function (file, index) {
+                    var curPath = path + "/" + file;
+                    if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                        imapMailExtractor.deleteFolderRecursive(curPath,true);
+                    } else { // delete file
+                        fs.unlinkSync(curPath);
+                    }
+                });
+                try {
+                    fs.rmdirSync(path);
+                }
+                catch (e) {
+                    console.log(e);
+                }
             }
         }
     }
-}
 
 
-module.exports = imapMailExtractor;
+    module.exports = imapMailExtractor;
 
 var options = {
     user: "claude.fauconnet@atd-quartmonde.org",
@@ -748,4 +815,7 @@ if (false) {
     imapMailExtractor.getFolderMessages(options.user, options.password, "Dossiers partagés/archives.cjw/02-Versements/2018", function (err, result) {
 
     })
+}
+if(false){
+    imapMailExtractor.toPDF_1_5_Folder("D:\\mailspdf1.3")
 }
