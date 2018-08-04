@@ -17,6 +17,7 @@
     "imap": "^0.8.19",
     "jade": "~1.11.0",
     "legacy-encoding": "^3.0.0",
+    "libmime": "^4.0.1",
     "mailparser": "^2.2.0",
     "morgan": "~1.9.0",
     "pdfkit": "^0.8.3",

@@ -67,6 +67,7 @@ var imapController = (function () {
         var selectedIndexes;
         $("#messageDiv2").html("");
         $("#messageDiv3").html("");
+      //  $("#messageDiv").html("");
         selectedIndexes = $("#jstreeDiv").jstree("get_selected", true);
         jQuery.each(selectedIndexes, function (index, value) {
             selectedData.push(selectedIndexes[index]);
@@ -84,6 +85,7 @@ var imapController = (function () {
         }
         $("#messageDiv3").html("Processing...");
         $("#messageDiv2").html("");
+        $("#messageDiv").html("");
         $("#waitImg").css("visibility", "visible")
         self.currentState="ARCHIVE_PROCESSING";
         var folder = selectedNodes[0];

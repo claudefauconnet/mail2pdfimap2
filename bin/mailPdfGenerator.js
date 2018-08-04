@@ -41,7 +41,7 @@ var mailPdfGenerator = {
     maxPdfSubjectLength: 33,
     addMetaData: true,
     attachmentMaxSize: 5000000,
-    attachmentsExcluded:["logosignature.png","atd_slogan.png"]
+    attachmentsExcluded: ["logosignature.png", "atd_slogan.png"]
     ,
 
     createMailPdf: function (pdfDirPath, mail, withAttachments, callback) {
@@ -59,7 +59,7 @@ var mailPdfGenerator = {
                 mailTitle = mail.subject;
             else
                 mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
-            var initialName=mailTitle;
+            var initialName = mailTitle;
             var pdfFileName = mailTitle;
 
             mailTitle = mailPdfGenerator.formatStringForArchive(mailTitle, mailPdfGenerator.maxPdfSubjectLength);
@@ -67,7 +67,7 @@ var mailPdfGenerator = {
             pdfFileName = common.dateToString(mail.date) + "-" + mailTitle + ".pdf";
             pdfFileName = mailPdfGenerator.processDuplicateMailTitles(pdfDirPath, pdfFileName);
 
-           // console.log(initialName+"\t"+pdfFileName)
+            // console.log(initialName+"\t"+pdfFileName)
 
             var attachments = [];
             if (withAttachments && mail.attachments) {
@@ -84,7 +84,19 @@ var mailPdfGenerator = {
             }
 
 
-            var doc = new PDFDocument
+            var doc = new PDFDocument({
+                size: [595.28, 841.89],
+              //  version: "1.5",// not working;
+                info: {
+                    Title: mailTitle,
+                    Author: mail.from.text, // the name of the author
+                    //  Subject: '', // the subject of the document
+                    // Keywords: 'pdf;javascript'; // keywords associated with the document
+                    CreationDate: mail.date, // the date the document was created (added automatically by PDFKit)
+                    Keywords:"mail2pdf@souslesens.org"
+
+                }
+            })
 
 
             var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
@@ -219,6 +231,7 @@ var mailPdfGenerator = {
             doc.fontSize(fontSize.title)
             doc.text('text : ', {width: textWidth, align: 'left'})
             doc.fontSize(fontSize.small)
+            mail.text=mail.text.replace(/\r\n|\r/g, '\n');
             if (mail.text)
                 doc.text(mail.text, {width: textWidth, align: 'left'})
             else if (mail.html)
@@ -228,13 +241,13 @@ var mailPdfGenerator = {
 
 
             doc.end();
-        //    mailPdfGenerator.convertToNewestPDFversion(pdfPath);
+            //    mailPdfGenerator.convertToNewestPDFversion(pdfPath);
             // archiveProcessor.totalPdfSaved += 1
             return callback(null, {path: pdfDirPath, file: pdfFileName});
         }
         catch (e) {
             console.log(" ERROR , file " + pdfFileName + " skipped : " + e);
-         return callback(e)
+            return callback(e)
         }
     },
     formatStringForArchive: function (str, maxLength) {
@@ -302,7 +315,7 @@ var mailPdfGenerator = {
         if (attachment.filename.indexOf(".asc") > -1) {// attachment of type signature ???
             return;
         }
-        if(mailPdfGenerator.attachmentsExcluded.indexOf(attachment.filename)>-1)
+        if (mailPdfGenerator.attachmentsExcluded.indexOf(attachment.filename) > -1)
             return;
 
         var attachmentsDir = path.resolve(pdfDirPath + "/attachments");
@@ -316,7 +329,7 @@ var mailPdfGenerator = {
          }*/
         var attachmentFileName = pdfPreffix + "__" + attachment.filename
         if (attachment.content.length > mailPdfGenerator.attachmentMaxSize) {
-           socket.message("BBBBBBBBBBBBBBBBB-BigAttachment :"+(attachment.content.size/1000000)+"MO maximum " +(mailPdfGenerator.maxPdfSubjectLength/1000000)+"  "+ pdfDirPath + "/" + pdfFileName);
+            socket.message("BBBBBBBBBBBBBBBBB-BigAttachment :" + (attachment.content.size / 1000000) + "MO maximum " + (mailPdfGenerator.maxPdfSubjectLength / 1000000) + "  " + pdfDirPath + "/" + pdfFileName);
             var attachmentFileName = pdfPreffix + "BIG-FILE__" + "__" + attachment.filename;
             var file = path.resolve(attachmentsDir + "/" + attachmentFileName);
             fs.writeFileSync(file, "BigAttachment content removed, size : " + attachment.content.size);
@@ -326,8 +339,6 @@ var mailPdfGenerator = {
         }
         return attachmentFileName;
     }
-
-
 
 
 }

@@ -52,7 +52,12 @@ function processResponse(response, error, result) {
             }
             else {
                 if (result.contentType && result.data) {
-                    response.setHeader('Content-type', result.contentType);
+                    try {
+                        response.setHeader('Content-type', result.contentType);
+                    }
+                    catch(e){
+                        console.log(e);
+                    }
                     if (typeof result.data == "object")
                         response.send(JSON.stringify(result.data));
                     else
