@@ -15,7 +15,7 @@ router.post('/imap', function (req, response) {
         });
 
     if (req.body. generateFolderHierarchyMessages)
-        imapMailExtractor. generateFolderHierarchyMessages(req.body.mailAdress,req.body.password ,req.body.rootFolder, req.body.withAttachments, function (error, result) {
+        imapMailExtractor. generateFolderHierarchyMessages(req.body.mailAdress,req.body.password ,req.body.rootFolder, req.body.withAttachments, req.body.scanOnly, function (error, result) {
             processResponse(response, error, result)
         });
     if (req.body.downloadArchive)

@@ -130,6 +130,9 @@ var common = {
     },
     roundToMO:function(octets){
        return  Math.round(octets/1000000 * 100) / 100
+    },
+    roundToKO:function(octets){
+        return  Math.round(octets/1000 * 10) / 10
     }
 
 

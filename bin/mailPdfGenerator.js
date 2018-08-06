@@ -65,7 +65,7 @@ var mailPdfGenerator = {
             mailTitle = mailPdfGenerator.formatStringForArchive(mailTitle, mailPdfGenerator.maxPdfSubjectLength);
             mailTitle = mailPdfGenerator.removeMultipleReAndFwdInTitle(mailTitle);
             pdfFileName = common.dateToString(mail.date) + "-" + mailTitle + ".pdf";
-            pdfFileName = mailPdfGenerator.processDuplicateMailTitles(pdfDirPath, pdfFileName);
+           // pdfFileName = mailPdfGenerator.processDuplicateMailTitles(pdfDirPath, pdfFileName);
 
             // console.log(initialName+"\t"+pdfFileName)
 
@@ -101,8 +101,23 @@ var mailPdfGenerator = {
 
             var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
             // console.log("--processing--"+pdfFileName);
-            /* if (fs.existsSync(pdfPath))
-                 fs.unlinkSync(pdfPath)*/
+            if (fs.existsSync(pdfPath)){
+                var pathRoot=pdfPath.substring(0,pdfPath.indexOf(".pdf"))
+                var newPath;
+                var increment=1;
+               do {
+                   newPath=pathRoot+"-"+increment+".pdf";
+                   increment+=1
+               }while (fs.existsSync(newPath))
+
+                pdfPath=newPath
+
+
+
+            //    console.log(" !!!!--duplicate--"+pdfFileName);
+
+            }
+
             doc.pipe(fs.createWriteStream(pdfPath));
 
 
@@ -231,9 +246,12 @@ var mailPdfGenerator = {
             doc.fontSize(fontSize.title)
             doc.text('text : ', {width: textWidth, align: 'left'})
             doc.fontSize(fontSize.small)
-            mail.text=mail.text.replace(/\r\n|\r/g, '\n');
+          //  mail.text=mail.text.replace(/\r\n|\r/g, '\n');
+        //    mail.text=mail.text.replace(/\n/g, '#');
+         //   mail.text=mail.text.replace(/#/g, '\n');
             if (mail.text)
-                doc.text(mail.text, {width: textWidth, align: 'left'})
+              //  doc.text(mail.text, {width: textWidth, align: 'left'})
+               doc.text(mail.text, {width: textWidth, align: 'left'})
             else if (mail.html)
                 doc.text(mail.html, {width: textWidth, align: 'left'})
             else if (mail.textAsHtml)

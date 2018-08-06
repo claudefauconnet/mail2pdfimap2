@@ -1,7 +1,33 @@
 var imapController = (function () {
     var self = {};
-    self.currentState="";
-    self.currentFolder="";
+    self.currentState = "";
+    self.currentFolder = "";
+
+    self.onLoadPage = function () {
+        var url = window.location.href;
+        var p = url.indexOf('/index');
+        url = url.substring(0, p);
+        var socket = io.connect(url);
+        socket.on('connect', function (data) {
+            socket.emit('join', 'Hello World from client');
+        });
+        socket.on('messages', function (message) {
+
+            if (!message || message.length == 0)
+                return;
+            if (message.indexOf("__") == 0) {
+                return $("#messageDiv3").html("<i>" + message.substring(2) + "<i>");
+            }
+            if (imapController.currentState == "ARCHIVE_PROCESSING")
+                $("#messageDiv2").prepend(message + "<br>");
+            else {
+                $("#messageDiv").html(message);
+                $("#messageDiv2").prepend(message + "<br>");
+            }
+        })
+    }
+
+
     self.loadTreeHierarchy = function () {
 
         $("#waitImg").css("visibility", "visible")
@@ -23,14 +49,14 @@ var imapController = (function () {
                     return;
 
                 }
-                self.currentState="OPENED";
+                self.currentState = "OPENED";
                 $("#messageDiv").html("Select a box to process");
 
                 $('#jstreeDiv').jstree({
                     'core': {
                         'data': data
                     }
-                }).on('loaded.jstree', function() {
+                }).on('loaded.jstree', function () {
                     $('#jstreeDiv').jstree('open_all');
                 }).on('changed.jstree', function (e, data) {
                     var i, j, r = [];
@@ -42,11 +68,12 @@ var imapController = (function () {
                     }
 
                     ;
-                    $("#generateFolderPdfArchiveButton").css("visibility","visible");
-                    $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility","visible");
+                    $("#generateFolderPdfArchiveButton").css("visibility", "visible");
+                    $("#scanFolderPdfArchiveButton").css("visibility", "visible");
+                    $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "visible");
                     $("#messageDiv2").html("");
                     $("#messageDiv3").html("");
-                    $("#messageDiv").html(data.node.text+ " selected");
+                    $("#messageDiv").html(data.node.text + " selected");
 
 
                 })
@@ -54,32 +81,38 @@ var imapController = (function () {
             error: function (err) {
                 $("#waitImg").css("visibility", "hidden")
                 console.log(err);
-                self.currentState="";
-                $("#messageDiv").html("ERROR "+err.responseText);
+                self.currentState = "";
+                $("#messageDiv").html("ERROR " + err.responseText);
             }
         })
 
 
     }
 
-    self.getJsTreeSelectedNodes=function(){
+    self.getJsTreeSelectedNodes = function () {
         var selectedData = [];
         var selectedIndexes;
         $("#messageDiv2").html("");
         $("#messageDiv3").html("");
-      //  $("#messageDiv").html("");
+        //  $("#messageDiv").html("");
         selectedIndexes = $("#jstreeDiv").jstree("get_selected", true);
         jQuery.each(selectedIndexes, function (index, value) {
             selectedData.push(selectedIndexes[index]);
         });
-        self.currentFolder=selectedData[0].text;
+        self.currentFolder = selectedData[0].text;
         return selectedData;
     }
-    self.generateFolderPdfArchive = function (withAttachments) {
+
+    self.scanFolderPdfArchive = function () {
+        self.generateFolderPdfArchive(false, true);
+
+    }
+
+    self.generateFolderPdfArchive = function (withAttachments, scanOnly) {
 
 
-        var selectedNodes=self.getJsTreeSelectedNodes();
-        if(selectedNodes.length==0){
+        var selectedNodes = self.getJsTreeSelectedNodes();
+        if (selectedNodes.length == 0) {
             return alert("select a root folder first");
 
         }
@@ -87,13 +120,13 @@ var imapController = (function () {
         $("#messageDiv2").html("");
         $("#messageDiv").html("");
         $("#waitImg").css("visibility", "visible")
-        self.currentState="ARCHIVE_PROCESSING";
+        self.currentState = "ARCHIVE_PROCESSING";
         var folder = selectedNodes[0];
-        var folderPath="";
-        for(var i=0;i<folder.original.ancestors.length;i++){
-            if(i>0)
-                folderPath+="/";
-            folderPath+=folder.original.ancestors[i];
+        var folderPath = "";
+        for (var i = 0; i < folder.original.ancestors.length; i++) {
+            if (i > 0)
+                folderPath += "/";
+            folderPath += folder.original.ancestors[i];
         }
         var payload = {
             generateFolderHierarchyMessages: 1,
@@ -102,38 +135,49 @@ var imapController = (function () {
             password: $("#passwordInput").val()
 
         }
-        if(withAttachments)
-            payload.withAttachments=true;
+        if (scanOnly)
+            payload.scanOnly = true
+        if (withAttachments)
+            payload.withAttachments = true;
 
         $.ajax({
             type: "POST",
             url: "/imap",
             data: payload,
-            timeout: 1000*3600*2,
+            timeout: 1000 * 3600 * 2,
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
-                self.currentState="ARCHIVE_DONE";
+
+
+                self.currentState = "ARCHIVE_DONE";
                 $("#waitImg").css("visibility", "hidden");
-               // $("#downloadArchiveButton").css("visibility", "visible")
-                $("#messageDiv3").html("<B>"+data.text+"</B>");
+                // $("#downloadArchiveButton").css("visibility", "visible")
+
+
+                $("#messageDiv3").html("<B>" + data.text + "</B>");
+
+                if (scanOnly) {
+                    return;
+                }
 
                 if (data.length == 0) {
                     return;
 
-                }setTimeout(function(){// time to effectivly write files on server (if zip is incomplete and delete dir fails ( not empty)
+                }
+                setTimeout(function () {// time to effectivly write files on server (if zip is incomplete and delete dir fails ( not empty)
                     self.downloadArchive(data.pdfArchiveRootPath)
-                },3000)
+                }, 3000)
 
 
             },
-            error: function (err,status) {
+            error: function (err, status) {
 
                 console.log(status);
-                $("#downloadArchiveButton").css("visibility","visible");
+                //  $("#downloadArchiveButton").css("visibility","visible");
                 $("#waitImg").css("visibility", "hidden")
                 console.log(err);
-                self.currentState="";
-                $("#messageDiv").html("ERROR : "+err.responseText);
+                self.currentState = "";
+                $("#messageDiv").html("ERROR : " + err.responseText);
             }
         })
 
