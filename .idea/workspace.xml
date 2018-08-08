@@ -3,13 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0a96685c-461d-44a4-ab34-6a49d3b4b2ca" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/bin/common.js" afterPath="$PROJECT_DIR$/bin/common.js" />
       <change beforePath="$PROJECT_DIR$/bin/imapMailExtractor..js" afterPath="$PROJECT_DIR$/bin/imapMailExtractor..js" />
-      <change beforePath="$PROJECT_DIR$/bin/mailPdfGenerator.js" afterPath="$PROJECT_DIR$/bin/mailPdfGenerator.js" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" afterPath="$PROJECT_DIR$/public/index.html" />
+      <change beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
       <change beforePath="$PROJECT_DIR$/public/indexCF.html" afterPath="$PROJECT_DIR$/public/indexCF.html" />
-      <change beforePath="$PROJECT_DIR$/public/js/imapController.js" afterPath="$PROJECT_DIR$/public/js/imapController.js" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -29,8 +25,28 @@
       <file leaf-file-name="imapMailExtractor..js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bin/imapMailExtractor..js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="441" column="0" lean-forward="false" selection-start-line="441" selection-start-column="0" selection-end-line="441" selection-end-column="0" />
+            <state relative-caret-position="229">
+              <caret line="424" column="32" lean-forward="true" selection-start-line="424" selection-start-column="32" selection-end-line="424" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="imapSimple.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/imap-simple/lib/imapSimple.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="213" column="56" lean-forward="false" selection-start-line="213" selection-start-column="56" selection-end-line="213" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="buffer.js" pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/8.10.0/core-modules/buffer.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="147" column="2" lean-forward="false" selection-start-line="147" selection-start-column="2" selection-end-line="147" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -39,18 +55,8 @@
       <file leaf-file-name="common.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bin/common.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
+            <state relative-caret-position="756">
               <caret line="42" column="4" lean-forward="false" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="24" column="26" lean-forward="false" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -79,7 +85,7 @@
       <file leaf-file-name="imapController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/imapController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
+            <state relative-caret-position="2664">
               <caret line="148" column="57" lean-forward="false" selection-start-line="148" selection-start-column="57" selection-end-line="148" selection-end-column="57" />
               <folding />
             </state>
@@ -115,7 +121,7 @@
       <file leaf-file-name="mailPdfGenerator.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bin/mailPdfGenerator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1102">
+            <state relative-caret-position="1908">
               <caret line="106" column="32" lean-forward="false" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
               <folding />
             </state>
@@ -135,10 +141,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Total mails Processed</find>
-      <find>archiveSize</find>
-      <find>mail too</find>
-      <find>download ar</find>
       <find>moi</find>
       <find>imap.once('error'</find>
       <find>addMetaData</find>
@@ -165,6 +167,10 @@
       <find>folderMailSubjects</find>
       <find>proces</find>
       <find>reject</find>
+      <find>fetchOnMessage</find>
+      <find>resolve</find>
+      <find>message.parts.push(partObj);</find>
+      <find>&lt;hr&gt;</find>
     </findStrings>
     <replaceStrings>
       <replace>pdfDirPath</replace>
@@ -192,6 +198,7 @@
         <option value="$PROJECT_DIR$/public/indexCF.html" />
         <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/public/js/imapController.js" />
+        <option value="$PROJECT_DIR$/node_modules/imap-simple/lib/imapSimple.js" />
         <option value="$PROJECT_DIR$/bin/imapMailExtractor..js" />
       </list>
     </option>
@@ -226,6 +233,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -242,6 +250,24 @@
               <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
               <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
               <item name="mailtopdfimap" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="imap-simple" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="imap-simple" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
@@ -290,7 +316,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -301,7 +326,7 @@
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../scoreparts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -332,25 +357,25 @@
     <configuration name="Sender.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="$PROJECT_DIR$/node_modulesXX/ws/lib/Sender.js" working-dir="$PROJECT_DIR$/node_modulesXX/ws/lib" />
     <configuration name="XMLHttpRequest.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="$PROJECT_DIR$/node_modulesXX/xmlhttprequest-ssl/lib/XMLHttpRequest.js" working-dir="$PROJECT_DIR$/node_modulesXX/xmlhttprequest-ssl/lib" />
     <configuration name="imapMailExtractor..js" type="NodeJSConfigurationType" factoryName="Node.js" path-to-js-file="imapMailExtractor..js" working-dir="$PROJECT_DIR$/bin" />
-    <configuration name="json3.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="$PROJECT_DIR$/node_modulesXX/json3/lib/json3.js" working-dir="$PROJECT_DIR$/node_modulesXX/json3/lib" />
+    <configuration name="imapSimple.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="imapSimple.js" working-dir="$PROJECT_DIR$/node_modules/imap-simple/lib" />
     <configuration name="mailPdfGenerator.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="mailPdfGenerator.js" working-dir="$PROJECT_DIR$/bin" />
     <configuration name="myMailParser..js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="myMailParser..js" working-dir="$PROJECT_DIR$/bin" />
     <list size="7">
       <item index="0" class="java.lang.String" itemvalue="Node.js.bin\www" />
       <item index="1" class="java.lang.String" itemvalue="Node.js.imapMailExtractor..js" />
-      <item index="2" class="java.lang.String" itemvalue="Node.js.json3.js" />
-      <item index="3" class="java.lang.String" itemvalue="Node.js.XMLHttpRequest.js" />
-      <item index="4" class="java.lang.String" itemvalue="Node.js.Sender.js" />
-      <item index="5" class="java.lang.String" itemvalue="Node.js.myMailParser..js" />
-      <item index="6" class="java.lang.String" itemvalue="Node.js.mailPdfGenerator.js" />
+      <item index="2" class="java.lang.String" itemvalue="Node.js.XMLHttpRequest.js" />
+      <item index="3" class="java.lang.String" itemvalue="Node.js.Sender.js" />
+      <item index="4" class="java.lang.String" itemvalue="Node.js.myMailParser..js" />
+      <item index="5" class="java.lang.String" itemvalue="Node.js.mailPdfGenerator.js" />
+      <item index="6" class="java.lang.String" itemvalue="Node.js.imapSimple.js" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Node.js.mailPdfGenerator.js" />
-        <item index="1" class="java.lang.String" itemvalue="Node.js.myMailParser..js" />
-        <item index="2" class="java.lang.String" itemvalue="Node.js.Sender.js" />
-        <item index="3" class="java.lang.String" itemvalue="Node.js.XMLHttpRequest.js" />
-        <item index="4" class="java.lang.String" itemvalue="Node.js.json3.js" />
+        <item index="0" class="java.lang.String" itemvalue="Node.js.imapSimple.js" />
+        <item index="1" class="java.lang.String" itemvalue="Node.js.mailPdfGenerator.js" />
+        <item index="2" class="java.lang.String" itemvalue="Node.js.myMailParser..js" />
+        <item index="3" class="java.lang.String" itemvalue="Node.js.Sender.js" />
+        <item index="4" class="java.lang.String" itemvalue="Node.js.XMLHttpRequest.js" />
       </list>
     </recent_temporary>
   </component>
@@ -381,11 +406,14 @@
       <workItem from="1533027220896" duration="18221000" />
       <workItem from="1533134818970" duration="67386000" />
       <workItem from="1533482265171" duration="16361000" />
+      <workItem from="1533568385279" duration="20000" />
+      <workItem from="1533647960469" duration="1359000" />
+      <workItem from="1533650934224" duration="17312000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="227991000" />
+    <option name="totallyTimeSpent" value="246682000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -398,24 +426,25 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1849315" sideWeight="0.84456927" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32826087" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24920969" sideWeight="0.49250937" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24565217" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24642289" sideWeight="0.1554307" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24583334" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22826087" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -495,7 +524,7 @@
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>70</line>
+          <line>72</line>
           <option name="timeStamp" value="168" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
@@ -530,32 +559,17 @@
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>229</line>
+          <line>398</line>
           <option name="timeStamp" value="419" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>144</line>
-          <option name="timeStamp" value="420" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>138</line>
-          <option name="timeStamp" value="421" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>137</line>
-          <option name="timeStamp" value="422" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>524</line>
+          <line>695</line>
           <option name="timeStamp" value="423" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>709</line>
+          <line>881</line>
           <option name="timeStamp" value="518" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
@@ -565,27 +579,48 @@
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>210</line>
-          <properties lambdaOrdinal="-1" />
+          <line>379</line>
           <option name="timeStamp" value="568" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>118</line>
-          <properties lambdaOrdinal="-1" />
+          <line>120</line>
           <option name="timeStamp" value="569" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>583</line>
-          <properties lambdaOrdinal="-1" />
+          <line>755</line>
           <option name="timeStamp" value="570" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>641</line>
+          <line>334</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="588" />
+          <option name="timeStamp" value="603" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>223</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="611" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>189</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="651" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>209</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="652" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>218</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="658" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -596,25 +631,11 @@
           <properties />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="600" />
+      <option name="time" value="664" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="43" lean-forward="false" selection-start-line="9" selection-start-column="43" selection-end-line="9" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/socket.io.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modulesXX/express/lib/response.js" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/8.10.0/core-modules/timers.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -714,7 +735,7 @@
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
-          <caret line="24" column="26" lean-forward="false" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
+          <caret line="25" column="26" lean-forward="false" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
           <folding />
         </state>
       </provider>
@@ -736,7 +757,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/common.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
+        <state relative-caret-position="756">
           <caret line="42" column="4" lean-forward="false" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
           <folding />
         </state>
@@ -774,7 +795,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/js/imapController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
+        <state relative-caret-position="2664">
           <caret line="148" column="57" lean-forward="false" selection-start-line="148" selection-start-column="57" selection-end-line="148" selection-end-column="57" />
           <folding />
         </state>
@@ -782,16 +803,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/mailPdfGenerator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1102">
+        <state relative-caret-position="1908">
           <caret line="106" column="32" lean-forward="false" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/8.10.0/core-modules/buffer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="147" column="2" lean-forward="false" selection-start-line="147" selection-start-column="2" selection-end-line="147" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/imap-simple/lib/imapSimple.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="213" column="56" lean-forward="false" selection-start-line="213" selection-start-column="56" selection-end-line="213" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/imapMailExtractor..js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="441" column="0" lean-forward="false" selection-start-line="441" selection-start-column="0" selection-end-line="441" selection-end-column="0" />
+        <state relative-caret-position="229">
+          <caret line="424" column="32" lean-forward="true" selection-start-line="424" selection-start-column="32" selection-end-line="424" selection-end-column="32" />
           <folding />
         </state>
       </provider>

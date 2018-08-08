@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mail2PdfImap</title>
     <link rel="stylesheet" href="./js/jsTree/themes/default/style.min.css"/>
 
     <script src="./js/jquery/jquery.min.js"></script>
@@ -13,43 +13,24 @@
 
     <script>
         $(function () {
-            var url = window.location.href;
-            var p = url.indexOf('/index');
-            url = url.substring(0, p);
-            var socket = io.connect(url);
-            socket.on('connect', function (data) {
-                socket.emit('join', 'Hello World from client');
-            });
-            socket.on('messages', function (message) {
-
-                if (!message || message.length == 0)
-                    return;
-                if(message.indexOf("__")==0){
-                    return    $("#messageDiv3").html("<i>"+message.substring(2)+"<i>");
-                }
-                if(imapController.currentState=="ARCHIVE_PROCESSING")
-                $("#messageDiv2").prepend(message+"<br>");
-                else {
-                    $("#messageDiv").html(message);
-                    $("#messageDiv2").prepend(message+"<br>" );
-                }
-            })
+      imapController.onLoadPage();
         })
 
-              //  $("#waitImg").css("visibility", "hidden");
+
 
     </script>
 
     <style>
 
-        body{
+        body {
             font-family: Verdana;
             font-size: 12px;
         }
-        .rejected{
 
-            font-style:italic;
-            color:red;
+        .rejected {
+
+            font-style: italic;
+            color: red;
         }
     </style>
 
@@ -77,25 +58,36 @@
 
 
 </table>
-            <button onclick="imapController.loadTreeHierarchy();">1.show folders</button>&nbsp;
+<button onclick="imapController.loadTreeHierarchy();">1.show folders</button>&nbsp;
 
-            <button id="generateFolderPdfArchiveButton" style="visibility: hidden" onclick="imapController.generateFolderPdfArchive();">2a. generate pdf</button>&nbsp;
+<button id="scanFolderPdfArchiveButton" style="visibility: hidden" onclick="imapController.scanFolderPdfArchive();">
+    2. scan archive
+</button>&nbsp;
 
-            <button id="generateFolderPdfArchiveWithAttachmentButton" style="visibility: hidden" onclick="imapController.generateFolderPdfArchive(true);">2b.generate pdf + attachments</button>&nbsp;
+<button id="generateFolderPdfArchiveButton" style="visibility: hidden"
+        onclick="imapController.generateFolderPdfArchive();">3b. generate pdf
+</button>&nbsp;
 
-    <button id="downloadArchiveButton"  style="visibility: hidden"  onclick="imapController.downloadArchive();">3. download zip archive</button>&nbsp;
+<button id="generateFolderPdfArchiveWithAttachmentButton" style="visibility: hidden"
+        onclick="imapController.generateFolderPdfArchive(true);">3b.generate pdf + attachments
+</button>&nbsp;
+
+<!--   <button id="downloadArchiveButton"  style="visibility: hidden"  onclick="imapController.downloadArchive();">3. download zip archive</button>&nbsp;-->
 
 <br>
-<div id="messageDiv"  style="font-weight: bold;color: blue"></div>
+<div id="messageDiv" style="font-weight: bold;color: blue"></div>
 <br>
 <table>
     <tr>
-        <td><div id="jstreeDiv" style="font-weight: normal;color: saddlebrown;height: 500px; overflow: auto;"></div>
+        <td>
+            <div id="jstreeDiv" style="font-weight: normal;color: saddlebrown;height: 500px; overflow: auto;"></div>
         </td>
-        <td valign="top"><img id="waitImg" src="images/waitAnimated.gif" width="50px" style="visibility: hidden;"><span id="messageDiv3" style="font-weight: bold"></span><br><div id="messageDiv2" style="font-weight: normal;color: saddlebrown;height: 500px; overflow: auto;"></div></td>
+        <td valign="top"><img id="waitImg" src="images/waitAnimated.gif" width="30px" style="visibility: hidden;"><span
+                id="messageDiv3" style="font-weight: bold"></span><br>
+            <div id="messageDiv2" style="font-weight: normal;color: saddlebrown;height: 500px; overflow: auto;"></div>
+        </td>
     </tr>
 </table>
-
 
 
 </body>
