@@ -48,15 +48,9 @@ var mailPdfGenerator = {
         try {
 
 
-            if (mail.html)
-                mail.html = mailPdfGenerator.removeHtmlTags(mail.html);
-            if (mail.text)
-                mail.text = mailPdfGenerator.removeHtmlTags(mail.text);
-
-
             var mailTitle;
-            if (mail.subject)
-                mailTitle = mail.subject;
+            if (mail.Subject)
+                mailTitle = mail.Subject;
             else
                 mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
             var initialName = mailTitle;
@@ -65,7 +59,7 @@ var mailPdfGenerator = {
             mailTitle = mailPdfGenerator.formatStringForArchive(mailTitle, mailPdfGenerator.maxPdfSubjectLength);
             mailTitle = mailPdfGenerator.removeMultipleReAndFwdInTitle(mailTitle);
             pdfFileName = common.dateToString(mail.date) + "-" + mailTitle + ".pdf";
-           // pdfFileName = mailPdfGenerator.processDuplicateMailTitles(pdfDirPath, pdfFileName);
+            // pdfFileName = mailPdfGenerator.processDuplicateMailTitles(pdfDirPath, pdfFileName);
 
             // console.log(initialName+"\t"+pdfFileName)
 
@@ -86,14 +80,237 @@ var mailPdfGenerator = {
 
             var doc = new PDFDocument({
                 size: [595.28, 841.89],
-              //  version: "1.5",// not working;
+                //  version: "1.5",// not working;
+                info: {
+                    Title: mail.Subject,
+                    Author: mail.From, // the name of the author
+                    //  Subject: '', // the subject of the document
+                    // Keywords: 'pdf;javascript'; // keywords associated with the document
+                    CreationDate: mail.Date, // the date the document was created (added automatically by PDFKit)
+                    Keywords: "mail2pdf@souslesens.org"
+
+                }
+            })
+
+
+
+            var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
+            // console.log("--processing--"+pdfFileName);
+            if (fs.existsSync(pdfPath)) {
+                var pathRoot = pdfPath.substring(0, pdfPath.indexOf(".pdf"))
+                var newPath;
+                var increment = 1;
+                do {
+                    newPath = pathRoot + "-" + increment + ".pdf";
+                    increment += 1
+                } while (fs.existsSync(newPath))
+
+                pdfPath = newPath
+
+
+                //    console.log(" !!!!--duplicate--"+pdfFileName);
+
+            }
+
+            doc.pipe(fs.createWriteStream(pdfPath));
+
+
+            var fontSize = {
+                title: 12,
+                text: 10,
+                small: 8
+            }
+            var textWidth = 500
+
+
+            //metadata
+            if (addMetaData) {
+                if (mail.Subject)
+                    doc.info.Title = mail.Subject;
+                if (mail.From)
+                    doc.info.Author = mail.From;
+                if (mail.Date)
+                    doc.info.CreationDate = mail.Date;
+
+
+                //  doc.info.Keywords=""+mail.subject+","+mail.from.text+","+mail.to.text
+
+
+            }
+
+
+            doc.fontSize(fontSize.title)
+            doc.text('MessageId : ', {width: textWidth, align: 'left'})
+            doc.fontSize(fontSize.text)
+
+            doc.text("??????", {width: textWidth, align: 'left'})
+            //     doc.text(mail.messageId, {width: textWidth, align: 'left'})
+
+
+            doc.fontSize(fontSize.title)
+            doc.text('From : ', {width: textWidth, align: 'left'})
+            doc.fontSize(fontSize.text)
+            if (mail.From)
+                doc.text(mail.From, {width: textWidth, align: 'left'})
+
+            doc.moveDown(0.5)
+            doc.fontSize(fontSize.title)
+            doc.text('To : ', {width: textWidth, align: 'left'})
+            doc.fontSize(fontSize.text)
+            if (mail.To)
+                doc.text(mail.To, {width: textWidth, align: 'left'})
+
+
+            doc.moveDown(0.5)
+            doc.fontSize(fontSize.title)
+            doc.text('replyTo : ', {width: textWidth, align: 'left'})
+            doc.fontSize(fontSize.text)
+            if (mail["Reply-To"])
+                doc.text(mail["Reply-To"], {width: textWidth, align: 'left'})
+
+            if (mail.Cc) {
+                doc.moveDown(0.5)
+                doc.fontSize(fontSize.title)
+                //  doc.fontcolor("red")
+                doc.text('Cc : ', {width: textWidth, align: 'left'})
+                doc.fontSize(fontSize.text)
+
+                doc.text(mail.Cc, {width: textWidth, align: 'left'})
+
+
+            }
+            if (mail.Cci) {
+                doc.moveDown(0.5)
+                doc.fontSize(fontSize.title)
+                //  doc.fontcolor("red")
+                doc.text('Cci : ', {width: textWidth, align: 'left'})
+                doc.fontSize(fontSize.text)
+
+                doc.text(mail.Cci, {width: textWidth, align: 'left'})
+
+
+            }
+
+            doc.moveDown(0.5)
+            doc.fontSize(fontSize.title)
+            doc.text('Date : ', {width: textWidth, align: 'left'})
+            doc.fontSize(fontSize.text)
+            doc.text(mail.Date, {width: textWidth, align: 'left'})
+
+            doc.moveDown(0.5)
+            doc.fontSize(fontSize.title)
+            doc.text('Subject : ', {width: textWidth, align: 'left'})
+            doc.fontSize(fontSize.text)
+            doc.text(mail.Subject, {width: textWidth, align: 'left'})
+
+
+            if (attachments.length > 0) {
+                doc.fontSize(fontSize.title)
+                doc.text('Attachments removed : ', {width: textWidth, align: 'left'})
+                doc.moveDown(0.5)
+                for (var i = 0; i < attachments.length; i++) {
+
+                    doc.moveDown(0.5)
+                    doc.underline(20, 0, 100, 20, 'blue')
+                        .link(20, 0, 100, 20, './attachments/' + attachments[i])
+                    //  doc.fontcolor("red")
+                    doc.fontSize(fontSize.text)
+                    if (attachments[i].substring)
+                        doc.text(attachments[i].substring(attachments[i].indexOf("__" + 2)), {
+                            width: textWidth,
+                            align: 'left'
+                        })
+                }
+
+
+            }
+            /*  if (mail.references && mail.references.length > 0) {
+                  doc.moveDown(0.5)
+                  doc.fontSize(fontSize.title)
+                  //  doc.fontcolor("red")
+                  doc.text('References : ', {width: textWidth, align: 'left'})
+                  doc.fontSize(fontSize.small)
+                  for (var i = 0; i < mail.references.length; i++) {
+                      doc.text(mail.references[i] + "\n", {width: textWidth, align: 'left'})
+                  }
+
+              }*/
+
+
+            doc.moveDown(0.5)
+            doc.fontSize(fontSize.title)
+            doc.text('text : ', {width: textWidth, align: 'left'})
+            doc.fontSize(fontSize.small)
+
+           if(mail.text.indexOf("html")>-1) {
+                mail.text
+
+           }else{
+               doc.text(mail.text, {width: textWidth, align: 'left'})
+           }
+
+
+
+            doc.end();
+            //    mailPdfGenerator.convertToNewestPDFversion(pdfPath);
+            // archiveProcessor.totalPdfSaved += 1
+            return callback(null, {path: pdfDirPath, file: pdfFileName});
+        }
+        catch (e) {
+            console.log(" ERROR , file " + pdfFileName + " skipped : " + e);
+            return callback(e)
+        }
+    },
+    createMailPdfSimpleParser: function (pdfDirPath, mail, withAttachments, callback) {
+        try {
+
+
+            if (mail.html)
+                mail.html = mailPdfGenerator.removeHtmlTags(mail.html);
+            if (mail.text)
+                mail.text = mailPdfGenerator.removeHtmlTags(mail.text);
+
+
+            var mailTitle;
+            if (mail.subject)
+                mailTitle = mail.subject;
+            else
+                mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
+            var initialName = mailTitle;
+            var pdfFileName = mailTitle;
+
+            mailTitle = mailPdfGenerator.formatStringForArchive(mailTitle, mailPdfGenerator.maxPdfSubjectLength);
+            mailTitle = mailPdfGenerator.removeMultipleReAndFwdInTitle(mailTitle);
+            pdfFileName = common.dateToString(mail.date) + "-" + mailTitle + ".pdf";
+            // pdfFileName = mailPdfGenerator.processDuplicateMailTitles(pdfDirPath, pdfFileName);
+
+            // console.log(initialName+"\t"+pdfFileName)
+
+            var attachments = [];
+            if (withAttachments && mail.attachments) {
+                for (var i = 0; i < mail.attachments.length > 0; i++) {
+                    if (mail.attachments[i].filename) {
+                        //  archiveProcessor.consoleToFile(mail.attachments[i].name)
+                        //    var id = mail.attachments[i].contentId;
+
+                        var attachmentName = mailPdfGenerator.processAttachment(mail.attachments[i], pdfDirPath, pdfFileName);
+                        if (attachmentName)
+                            attachments.push(attachmentName);//"<a href='attachments/"+attachmentName+"'>"+mail.attachments[i].filename + "</a>\n";
+                    }
+                }
+            }
+
+
+            var doc = new PDFDocument({
+                size: [595.28, 841.89],
+                //  version: "1.5",// not working;
                 info: {
                     Title: mailTitle,
                     Author: mail.from.text, // the name of the author
                     //  Subject: '', // the subject of the document
                     // Keywords: 'pdf;javascript'; // keywords associated with the document
                     CreationDate: mail.date, // the date the document was created (added automatically by PDFKit)
-                    Keywords:"mail2pdf@souslesens.org"
+                    Keywords: "mail2pdf@souslesens.org"
 
                 }
             })
@@ -101,20 +318,19 @@ var mailPdfGenerator = {
 
             var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
             // console.log("--processing--"+pdfFileName);
-            if (fs.existsSync(pdfPath)){
-                var pathRoot=pdfPath.substring(0,pdfPath.indexOf(".pdf"))
+            if (fs.existsSync(pdfPath)) {
+                var pathRoot = pdfPath.substring(0, pdfPath.indexOf(".pdf"))
                 var newPath;
-                var increment=1;
-               do {
-                   newPath=pathRoot+"-"+increment+".pdf";
-                   increment+=1
-               }while (fs.existsSync(newPath))
+                var increment = 1;
+                do {
+                    newPath = pathRoot + "-" + increment + ".pdf";
+                    increment += 1
+                } while (fs.existsSync(newPath))
 
-                pdfPath=newPath
+                pdfPath = newPath
 
 
-
-            //    console.log(" !!!!--duplicate--"+pdfFileName);
+                //    console.log(" !!!!--duplicate--"+pdfFileName);
 
             }
 
@@ -246,12 +462,12 @@ var mailPdfGenerator = {
             doc.fontSize(fontSize.title)
             doc.text('text : ', {width: textWidth, align: 'left'})
             doc.fontSize(fontSize.small)
-          //  mail.text=mail.text.replace(/\r\n|\r/g, '\n');
-        //    mail.text=mail.text.replace(/\n/g, '#');
-         //   mail.text=mail.text.replace(/#/g, '\n');
+            //  mail.text=mail.text.replace(/\r\n|\r/g, '\n');
+            //    mail.text=mail.text.replace(/\n/g, '#');
+            //   mail.text=mail.text.replace(/#/g, '\n');
             if (mail.text)
-              //  doc.text(mail.text, {width: textWidth, align: 'left'})
-               doc.text(mail.text, {width: textWidth, align: 'left'})
+            //  doc.text(mail.text, {width: textWidth, align: 'left'})
+                doc.text(mail.text, {width: textWidth, align: 'left'})
             else if (mail.html)
                 doc.text(mail.html, {width: textWidth, align: 'left'})
             else if (mail.textAsHtml)
