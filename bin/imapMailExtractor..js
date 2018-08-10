@@ -5,6 +5,7 @@ var simpleParser = require('mailparser').simpleParser;
 var fs = require('fs');
 var path = require('path');
 var mailPdfGenerator = require('./mailPdfGenerator');
+var mailPdfGeneratorHtml = require('./mailPdfGeneratorHtml');
 var common = require('./common.js')
 var zipdir = require('zip-dir');
 var socket = require('../routes/socket.js');
@@ -14,7 +15,7 @@ var execSync = require('child_process').execSync;
 var libmime = require('libmime');
 
 
-var wkhtmltopdf = require('wkhtmltopdf');
+
 if(path.sep=="\\")
 
 
@@ -282,30 +283,20 @@ var imapMailExtractor = {
                                         message[key] = value;
                                     }
                                 }
-                                try {
-                                    if(message.text.indexOf("html")<0){
-                                        message.text=message.text.replace(/\n/g,"<br>")
-                                        message.text=message.text.replace(/\r/g,"")
-                                        message.text="<html><body>"+message.text+"</body></html>"
 
+                                mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath,message,function(err,message){
+                                    if(err){
+                                        console.log(err);
                                     }
 
-                                    var file=path.resolve(pdfArchiveFolderPath + "/" + message.Subject + ".pdf");
-                                 file="D:\\"+ message.Subject + ".pdf"
-                                    console.log(message.text);
-                                    wkhtmltopdf(message.text,{ pageSize: 'letter' }, function (err, stream) {
-                                        if(err){
 
-                                            console.log(err);
-                                        }
-                                        // do whatever with the stream
-                                    });
-                                 //   wkhtmltopdf(message.text).pipe(fs.createWriteStream(file));
-                                }
-                                catch (e) {
-                                    console.log(message.text);
-                                    console.log(e);
-                                }
+
+                                })
+
+
+
+
+
 
 
                             });
@@ -550,9 +541,14 @@ var imapMailExtractor = {
                         })
                     },
                     function (callbackSerie3) {// génération des pdfs
+
+                        return callbackSerie3(null);
+
+
+
                         if (scanOnly) {
 
-                            return callbackSerie3(null);
+
 
                         }
 
@@ -827,7 +823,7 @@ if (false) {
 
 
 }
-if (true) {
+if (false) {
     pdfArchiveDir = "D:\\GitHub\\mail2pdfImap\\pdfs\\"
     imapMailExtractor.generateFolderHierarchyMessages(options.user, options.password, "Autres utilisateurs/administration.cijw/Administration Montreuil", false, false, function (err, result) {
         if (err)
