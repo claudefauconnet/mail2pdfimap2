@@ -6,21 +6,22 @@ var fs = require('fs');
 var path = require('path');
 var mailPdfGenerator = require('./mailPdfGenerator');
 var mailPdfGeneratorHtml = require('./mailPdfGeneratorHtml');
+//var archiveZipper = require('./archiveZipper');
+
 var common = require('./common.js')
 var zipdir = require('zip-dir');
 var socket = require('../routes/socket.js');
 var chardet = require('chardet');
 var iconv = require('iconv-lite');
-var execSync = require('child_process').execSync;
+
 var libmime = require('libmime');
+var archiver = require('archiver');
 
 
-
-if(path.sep=="\\")
-
+if (path.sep == "\\")
 
 
-var host = 'imap.atd-quartmonde.org';
+    var host = 'imap.atd-quartmonde.org';
 var port = 993;
 
 /// pour les grosses boites : www.server.timeout = 5000*1000*1000;
@@ -174,163 +175,8 @@ var imapMailExtractor = {
         return infos;
 
 
-    },
-
-    processFolderPdfs: function (mailAdress, password, folder, folderInfos, pdfArchiveFolderPath, callback0) {
-
-        var messages = [];
-        messages.folderSize = 0;
-        var partsInfos = folderInfos.partsInfos;
-        var i = 0;
-        var imap = imapMailExtractor.getImapConn(mailAdress, password);
-        imap.once('ready', function () {
-            imap.openBox(folder, true, function (err, box) {
-                if (err) {
-                    console.log(err);
-                    return callback0(err)
-                }
-
-                //  imap.search([['SMALLER', 5000]], function (err, results) {
-
-                //   All functions below have sequence number-based counterparts that can be accessed by using the 'seq' namespace of the imap connection's instance (e.g. conn.seq.search() returns sequence number(s) instead of UIDs, conn.seq.fetch() fetches by sequence number(s) instead of UIDs, etc):
-                imap.seq.search([['SMALLER', imapMailExtractor.maxMessageSize]], function (err, results) {
-                    if (results.length == 0)
-                        return callback0(null, []);
-
-                    async.eachSeries(results, function (result, callbackEachMessage) {
-                        var seqBodies = []
-                        // on ne fetcthe que les parts ids de texte
-
-                        seqBodies = folderInfos[result].infos.htmlPartIds
-                        if (seqBodies.length == 0)
-                            seqBodies = folderInfos[result].infos.textPartIds
-                        if (seqBodies.length == 0)
-                            return callbackEachMessage();
-
-                        var f = imap.seq.fetch(result, {
-                            bodies: seqBodies,
-                            struct: false
-                        });
-                        var folderCountMessages = 1;
-
-                        f.on('message', function (msg, seqno) {
-
-                            var message = {};
-                            var msgState = 1;
-
-                            msg.on('body', function (stream, info) {
-
-                                if (info.which == 'HEADER') {
-                                    stream.on('data', function (chunk) {
-                                        var str = chunk.toString('utf8');
-                                    })
-
-
-                                }
-
-
-                                messages.folderSize += info.size;
-                                if (folderCountMessages % 10 == 0) {
-                                    socket.message("__" + folderCountMessages + " messages read from  folder " + common.roundToKO(messages.folderSize) + "KO");
-                                }
-                                var buffer = '';
-                                stream.on('data', function (chunk) {
-                                        if (msgState > 0 && info.size > imapMailExtractor.maxMessageSize) {
-                                            msgState = -1;
-                                            socket.message("mail exceed max size for archive " + common.roundToMO(info.size));
-                                            return;
-                                        }
-                                        // !!!!!!!!!!!determination de l'encodage du buffer pour le transformer en UTF8
-                                        str = imapMailExtractor.decodeChunk(chunk);
-
-                                        buffer += str;
-
-                                    }
-                                );
-
-                                stream.once('end', function () {
-                                    message = {
-                                        text: buffer
-                                    }
-
-                                });
-                            });
-                            msg.once('attributes', function (attrs) {
-                                message.attributes = attrs.uid;
-                            });
-                            msg.once('end', function () {
-                                folderCountMessages += 1;
-
-                                //processing headers
-                                var headersStr = folderInfos[seqno].headers;
-                                headersStr= headersStr.replace(/\r/g, "");
-
-                                var lines = headersStr.split("\n")
-                                var multiLineStr = "";
-                                var toRemove = []
-                                for (var i = (lines.length - 1); i > 0; i--) {
-                                    var p = lines[i].indexOf(":");
-                                    if (p < 0) {
-                                        lines[i - 1] += lines[i];
-
-                                    }
-                                }
-                                for (var i = 0; i < lines.length; i++) {
-                                    var p = lines[i].indexOf(":");
-                                    if (p > -1) {
-                                        var key = lines[i].substring(0, p);
-                                        var value = lines[i].substring(p + 1);
-                                        message[key] = value;
-                                    }
-                                }
-
-                                mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath,message,function(err,message){
-                                    if(err){
-                                        console.log(err);
-                                    }
-
-
-
-                                })
-
-
-
-
-
-
-
-                            });
-                        });
-                        f.once('error', function (err) {
-                            socket.message("<span class='rejected'> 1 mail rejected reason :" + err.message + "</span>");
-                            console.log('Fetch error: ' + err.message);
-                            //  callback0(err.message);
-                            callbackEachMessage(err);
-                        });
-                        f.once('end', function () {
-                            return callbackEachMessage();
-
-                        });
-                    }, function (err) {// end eachMessage
-                        if (err)
-                            callback0(err)
-
-                        return callback0(null, messages)
-                        imap.end();
-                    });
-                });
-
-            });
-
-
-        });
-        imap.once('error', function (err) {
-            console.log('Fetch error: ' + err.message);
-            //  callback0(err.message);
-        })
-        imap.connect();
-
-    },
+    }
+    ,
     getFolderMailsInfos: function (mailAdress, password, folder, callback1) {
 
         var messages = {
@@ -411,6 +257,174 @@ var imapMailExtractor = {
 
     },
 
+    processFolderPdfs: function (mailAdress, password, folder, folderInfos, pdfArchiveFolderPath, callback0) {
+
+
+        var zipArchive = imapMailExtractor.initZipArchive(pdfArchiveFolderPath);
+
+        var messages = [];
+        messages.folderSize = 0;
+        var partsInfos = folderInfos.partsInfos;
+        var i = 0;
+        var imap = imapMailExtractor.getImapConn(mailAdress, password);
+        imap.once('ready', function () {
+            imap.openBox(folder, true, function (err, box) {
+                if (err) {
+                    console.log(err);
+                    return callback0(err)
+                }
+
+                //  imap.search([['SMALLER', 5000]], function (err, results) {
+
+                //   All functions below have sequence number-based counterparts that can be accessed by using the 'seq' namespace of the imap connection's instance (e.g. conn.seq.search() returns sequence number(s) instead of UIDs, conn.seq.fetch() fetches by sequence number(s) instead of UIDs, etc):
+                imap.seq.search([['SMALLER', imapMailExtractor.maxMessageSize]], function (err, results) {
+                    if (results.length == 0)
+                        return callback0(null, []);
+
+                    async.eachSeries(results, function (result, callbackEachMessage) {
+                        var seqBodies = []
+                        // on ne fetcthe que les parts ids de texte
+
+                        seqBodies = folderInfos[result].infos.htmlPartIds
+                        if (seqBodies.length == 0)
+                            seqBodies = folderInfos[result].infos.textPartIds
+                        if (seqBodies.length == 0)
+                            return callbackEachMessage();
+
+                        var f = imap.seq.fetch(result, {
+                            bodies: seqBodies,
+                            struct: false
+                        });
+                        var folderCountMessages = 1;
+
+                        f.on('message', function (msg, seqno) {
+
+                            var message = {};
+                            var msgState = 1;
+
+                            msg.on('body', function (stream, info) {
+
+                                if (info.which == 'HEADER') {
+                                    stream.on('data', function (chunk) {
+                                        var str = chunk.toString('utf8');
+                                    })
+
+
+                                }
+
+
+                                messages.folderSize += info.size;
+                                if (folderCountMessages % 10 == 0) {
+                                    socket.message("__" + folderCountMessages + " messages read from  folder " + common.roundToKO(messages.folderSize) + "KO");
+                                }
+                                var buffer = '';
+                                stream.on('data', function (chunk) {
+                                        if (msgState > 0 && info.size > imapMailExtractor.maxMessageSize) {
+                                            msgState = -1;
+                                            socket.message("mail exceed max size for archive " + common.roundToMO(info.size));
+                                            return;
+                                        }
+                                        // !!!!!!!!!!!determination de l'encodage du buffer pour le transformer en UTF8
+                                        var str = imapMailExtractor.decodeChunk(chunk);
+
+                                        buffer += str;
+
+                                    }
+                                );
+
+                                stream.once('end', function () {
+                                    message = {
+                                        text: buffer
+                                    }
+
+                                });
+                            });
+                            msg.once('attributes', function (attrs) {
+                                message.attributes = attrs.uid;
+                            });
+                            msg.once('end', function () {
+                                folderCountMessages += 1;
+
+                                //processing header metadata
+                                var headersStr = folderInfos[seqno].headers;
+                                headersStr = headersStr.replace(/\r/g, "");
+
+                                var lines = headersStr.split("\n")
+                                var multiLineStr = "";
+                                var toRemove = []
+                                for (var i = (lines.length - 1); i > 0; i--) {
+                                    var p = lines[i].indexOf(":");
+                                    if (p < 0) {
+                                        lines[i - 1] += lines[i];
+
+                                    }
+                                }
+                                for (var i = 0; i < lines.length; i++) {
+                                    var p = lines[i].indexOf(":");
+                                    if (p > -1) {
+                                        var key = lines[i].substring(0, p);
+                                        var value = lines[i].substring(p + 1);
+                                        message[key] = value;
+                                    }
+                                }
+                                //end processing headers metadata
+                                var pdfObj = "";
+                                async.series([
+
+                                    function (callbackPdfSerie) {
+                                        mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath, message, function (err, result) {
+                                            if (err) {
+                                                console.log(err);
+                                                return callbackPdfSerie(err);
+                                            }
+                                            pdfObj = result;
+                                            return callbackPdfSerie();
+
+                                        })
+                                    },
+                                    function (callbackPdfSerie) {
+                                        zipArchive.append(message.stream, {name: message.name});
+                                        return callbackPdfSerie();
+                                    }]
+                                    ,
+                                    function (err) {
+
+                                })
+
+
+                            });
+                        });
+                        f.once('error', function (err) {
+                            socket.message("<span class='rejected'> 1 mail rejected reason :" + err.message + "</span>");
+                            console.log('Fetch error: ' + err.message);
+                            //  callback0(err.message);
+                            callbackEachMessage(err);
+                        });
+                        f.once('end', function () {
+                            return callbackEachMessage();
+
+                        });
+                    }, function (err) {// end eachMessage
+                        if (err)
+                            callback0(err)
+                        zipArchive.finalize();
+                        return callback0(null, messages)
+                        imap.end();
+                    });
+                });
+
+            });
+
+
+        });
+        imap.once('error', function (err) {
+            console.log('Fetch error: ' + err.message);
+            //  callback0(err.message);
+        })
+        imap.connect();
+
+    },
+
 
     generateFolderHierarchyMessages: function (mailAdress, password, rootFolder, withAttachments, scanOnly, callback) {
         var archivePath = null;
@@ -480,7 +494,7 @@ var imapMailExtractor = {
                             archiveTotalValidMails += messages._globalInfo.mailsCount;
 
 
-                            if (scanOnly) {
+                            if (true || scanOnly) {
                                 var text = "<hr><B>" + folder.text +
                                     " count :" + messages.countValidMessages + "/" + (messages.length + messages.countValidMessages) +
                                     " size :" + common.roundToMO(messages.totalValidSize) + "/" + common.roundToMO(messages.totalSize) + " MO.";
@@ -539,47 +553,6 @@ var imapMailExtractor = {
 
                             return callbackSerie2(null, folderInfos);
                         })
-                    },
-                    function (callbackSerie3) {// génération des pdfs
-
-                        return callbackSerie3(null);
-
-
-
-                        if (scanOnly) {
-
-
-
-                        }
-
-                        if (box.indexOf(leafFolder) < 0) {
-                            return callbackSerie3(null, 0)
-                        }
-
-                        var message = " <hr><B>Processing " + validMessages.length + " emails in " + folder.text + "</B>" + folderInfos.totalValidSize + "MO";
-                        socket.message(message);
-                        var xx = 1;
-                        var folderMessages = {
-                            folder: folder.text,
-                            ancestors: folder.ancestors,
-                            messages: [],
-                            root: leafFolder
-                        }
-                        folderMessages.messages = validMessages;
-
-                        imapMailExtractor.createFolderPdfs(pdfArchiveRootPath, folderMessages, withAttachments, function (err, result) {
-
-                            if (err) {
-                                return callbackSerie3(err)
-                            }
-
-                            totalMails += result;
-
-                            return callbackSerie3();
-                        });
-                        // output.push(folderMessages);
-
-
                     }
                 ], function (err, result) {
                     if (err) {
@@ -621,79 +594,49 @@ var imapMailExtractor = {
 
         })
 
-    }
-    ,
+    },
 
-    createFolderPdfs: function (pdfArchiveRootPath, folderMessages, withAttachments, callback) {
+    initZipArchive: function (rootFolder) {
+        // create a file to stream archive data to.
+        var output = fs.createWriteStream('D:\\example.zip');
+        var archive = archiver('zip', {
+            zlib: {level: 9} // Sets the compression level.
+        });
+        output.on('close', function () {
+            console.log(archive.pointer() + ' total bytes');
+            console.log('archiver has been finalized and the output file descriptor has closed.');
+        });
 
 
-        var start = folderMessages.ancestors.indexOf(folderMessages.root)
-        if (start < 0)
-            return callback(null, 0);
+        output.on('end', function () {
+            console.log('Data has been drained');
+        });
 
-        for (var i = start; i < folderMessages.ancestors.length; i++) {
-
-            pdfArchiveRootPath += "/" + folderMessages.ancestors[i];
-            var dir = path.resolve(pdfArchiveRootPath)
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir);
+        archive.on('warning', function (err) {
+            if (err.code === 'ENOENT') {
+                // log warning
+            } else {
+                // throw error
+                throw err;
             }
+        });
 
-        }
-
-        //end set pdf files path
-
-
-        async.eachSeries(folderMessages.messages, function (rawMessage, callbackEachMail) {
+        archive.on('error', function (err) {
+            throw err;
+        });
 
 
-                var bodyInfo = rawMessage.bodyInfo;
-                var seqno = rawMessage.seqno;
-                simpleParser(rawMessage.content, function (err, mail) {
-
-                    if (err) {
-                        console.log(err);
-                        return callbackEachMail(err);
-                    }
-
-
-                    mailPdfGenerator.createMailPdf(pdfArchiveRootPath, mail, withAttachments, function (err, result) {
-                        if (err) {
-
-
-                            console.log(err);
-                            console.log("ERR " + mail.subject)
-                            //   return callbackEachMail(err);
-                        } else {
-
-                        }
-                        return callbackEachMail(null);
-
-
-                    })
-                });
-
-            }, function (err) {
-                if (err) {
-                    console.log(err);
-                    return callback(err);
-                }
-
-                return callback(null, folderMessages.messages.length);
-            }
-        );
-
+        archive.pipe(output);
+        return archive;
 
     }
+
 
     ,
     downloadArchive: function (mailAdress, pdfArchiveRootPath, response) {
 
 
-        socket.message("transforming pdfs to version 1.5...");
-        var pdfArchiveRootPath_1_5 = imapMailExtractor.toPDF_1_5_Folder(pdfArchiveRootPath);
-        var dir = path.resolve(pdfArchiveRootPath_1_5);
-        //  socket.message("download pdfMailArchive-" + pdfArchiveRootPath + " STARTED");
+        var dir = path.resolve(pdfArchiveRootPath);
         socket.message("creating  zip file on server and start download...");
         zipdir(dir, function (err, buffer) {
             if (err)
@@ -705,76 +648,6 @@ var imapMailExtractor = {
             socket.message("download pdfMailArchive-" + imapMailExtractor.archivePrefix + "-" + mailAdress + " DONE");
             if (imapMailExtractor.deleteDirAfterZip)
                 imapMailExtractor.deleteFolderRecursive(dir);
-
-        });
-
-    },
-
-    toPDF_1_5_Folder: function (rootDir) {
-        function recurse(path, newPath) {
-            if (fs.existsSync(path)) {
-
-                fs.readdirSync(path).forEach(function (file, index) {
-                    var curPath = path + "/" + file;
-                    var curNewPath = newPath + "/" + file;
-                    if (fs.lstatSync(curPath).isDirectory()) {
-                        if (!fs.existsSync(newPath)) {
-                            fs.mkdirSync(newPath);
-                        }
-                        if (!fs.existsSync(curNewPath)) {
-                            fs.mkdirSync(curNewPath);
-                        }
-                        recurse(curPath, curNewPath);
-                    }
-                    else {
-                        try {
-                            imapMailExtractor.toPDF_1_5_File(curPath, curNewPath);
-                        }
-                        catch (e) {
-                            fs.copyFileSync(curPath, curNewPath)
-                            console.log(e);
-                            var text = "<span class='rejected'><B> !!! cannot convert pdf file  to version 1.5 :" + file + "</span>"
-                            socket.message(text);
-
-                        }
-
-                    }
-
-
-                });
-
-            }
-
-
-        }
-
-        var newRootDir = rootDir + "_1.5"
-        recurse(rootDir, newRootDir);
-        imapMailExtractor.deleteFolderRecursive(rootDir)
-        return newRootDir;
-    }
-
-    ,
-    toPDF_1_5_File: function (inputFile, outputFile) {
-//https://www.npmjs.com/package/ghostscript-js
-        //  gswin64.exe -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=D:\GitHub\mail2pdfImap\pdfs\claude.fauconnet@atd-quartmonde.org_23679\testMail2Pdf\technique\moteurDerecherche\test2.pdf D:\GitHub\mail2pdfImap\pdfs\claude.fauconnet@atd-quartmonde.org_23679\testMail2Pdf\technique\moteurDerecherche\test.pdf
-
-        var ghostscriptExe = "gs";
-        if (path.sep == "\\")//windows
-            ghostscriptExe = "\"C:\\Program Files\\gs\\gs9.21\\bin\\gswin64.exe\""
-
-        var cmd = ghostscriptExe + " -sDEVICE=pdfwrite  -sPAPERSIZE=a4 -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=\"" + outputFile + "\" \"" + inputFile + "\"";
-        //  var cmd = ghostscriptExe + " -sDEVICE=pdfwrite  -sPAPERSIZE=a4 -dCompatibilityLevel=1.5 -dNOPAUSE -dQUIET -dNODISPLAY -dBATCH  -sOutputFile=\"" + outputFile + "\" \"" + inputFile+"\"";
-
-
-        //   dNOPAGEPROMPT
-        //  console.log("EXECUTING " + cmd)
-        execSync(cmd, function (err, stdout, stderr) {
-            if (err) {
-
-                return;
-
-            }
 
         });
 

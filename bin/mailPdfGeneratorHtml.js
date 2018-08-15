@@ -33,6 +33,8 @@ var common = require('./common.js');
 var socket = require('../routes/socket.js');
 var wkhtmltopdf = require('wkhtmltopdf');
 
+var execSync = require('child_process').execSync;
+
 var addMetaData = false;
 
 
@@ -45,93 +47,147 @@ var mailPdfGenerator = {
     ,
 
     createMailPdf: function (pdfDirPath, mail, callback) {
-        try {
+
+        var mailTitle;
+        if (mail.Subject)
+            mailTitle = mail.Subject;
+        else
+            mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
+        var initialName = mailTitle;
+        var pdfFileName = mailTitle;
+
+        mailTitle = mailPdfGenerator.formatStringForArchive(mailTitle, mailPdfGenerator.maxPdfSubjectLength);
+        mailTitle = mailPdfGenerator.removeMultipleReAndFwdInTitle(mailTitle);
+        pdfFileName = common.dateToString(new Date(mail.Date)) + "-" + mailTitle + ".pdf";
 
 
-            var mailTitle;
-            if (mail.Subject)
-                mailTitle = mail.Subject;
-            else
-                mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
-            var initialName = mailTitle;
-            var pdfFileName = mailTitle;
+        var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
+        // console.log("--processing--"+pdfFileName);
+        if (fs.existsSync(pdfPath)) {
+            var pathRoot = pdfPath.substring(0, pdfPath.indexOf(".pdf"))
+            var newPath;
+            var increment = 1;
+            do {
+                newPath = pathRoot + "-" + increment + ".pdf";
+                increment += 1
+            } while (fs.existsSync(newPath))
 
-            mailTitle = mailPdfGenerator.formatStringForArchive(mailTitle, mailPdfGenerator.maxPdfSubjectLength);
-            mailTitle = mailPdfGenerator.removeMultipleReAndFwdInTitle(mailTitle);
-            pdfFileName = common.dateToString(mail.date) + "-" + mailTitle + ".pdf";
-
-
-            var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
-            // console.log("--processing--"+pdfFileName);
-            if (fs.existsSync(pdfPath)) {
-                var pathRoot = pdfPath.substring(0, pdfPath.indexOf(".pdf"))
-                var newPath;
-                var increment = 1;
-                do {
-                    newPath = pathRoot + "-" + increment + ".pdf";
-                    increment += 1
-                } while (fs.existsSync(newPath))
-
-                pdfPath = newPath
+            pdfPath = newPath
 
 
-                //    console.log(" !!!!--duplicate--"+pdfFileName);
+            //    console.log(" !!!!--duplicate--"+pdfFileName);
 
-            }
-
-
-            if (mail.text.indexOf("html") < 0) {
-
-                mail.text = mail.text.replace(/\n/g, "<br>")
-                mail.text = mail.text.replace(/\r/g, "")
-                mail.text = "<html><body>" + mail.text + "</body></html>"
-
-            } else {
-                mail.text = mail.text.replace(/=\n/g, "")
-                mail.text = mail.text.replace(/=\r/g, "")
-                mail.text = mail.text.replace(/\n/g, "")
-                mail.text = mail.text.replace(/\r/g, "")
-                mail.text = mail.text.replace(/\n/g, "")
-           //     mail.text = mail.text.replace(/<blockquote.*<\/blockquote>/gm, "");
-                mail.text = mail.text.replace(/<img.*>/gm, "");
-
-
-            }
-            var pdfHtmlHeader="<style>body{font-size :18px}.key {font-size :24px;font-weight:bold}</style>"
-          pdfHtmlHeader+="<span class=key>Subject</span>"+mail.Subject+"<br>"
-            pdfHtmlHeader+="<span class=key>From</span>"+mail.From+"<br>"
-            pdfHtmlHeader+="<span class=key>To</span>"+mail.To+"<br>"
-            pdfHtmlHeader+="<span class=key>Date</span>"+mail.Date+"<br>"
-
-
-
-            var pdfHtml="";
-            var p=mail.text.indexOf("<head>")
-            if(p<0){
-                pdfHtmlHeader="<head>"+pdfHtmlHeader+"</head>";
-            }
-            p=mail.text.indexOf("<html>")
-            if(p<0){
-                pdfHtml="<html>"+pdfHtmlHeader+mail.text+"</html>";
-
-            }
-            else{
-                pdfHtml=mail.text.substring(0,p+6)+pdfHtmlHeader+mail.text.substring(p+7);
-
-            }
-
-
-console.log(pdfHtml);
-
-
-
-            wkhtmltopdf(pdfHtml).pipe(fs.createWriteStream(pdfPath));
-        }catch(e){
-            console.log(e);
         }
 
 
-    },
+        if (mail.text.indexOf("html") < 0) {
+
+            mail.text = mail.text.replace(/\n/g, "<br>")
+            mail.text = mail.text.replace(/\r/g, "")
+            mail.text = "<html><body>" + mail.text + "</body></html>"
+
+        } else {
+            mail.text = mail.text.replace(/=\n/g, "")
+            mail.text = mail.text.replace(/=\r/g, "")
+            mail.text = mail.text.replace(/\n/g, "")
+            mail.text = mail.text.replace(/\r/g, "")
+            mail.text = mail.text.replace(/\n/g, "")
+            mail.text = mail.text.replace(/<meta[^>]*>/g, "")
+
+        }
+
+
+        /*  if (true || mail.Subject.indexOf("500") > -1)
+              console.log(mail.text)
+          else
+              return;*/
+
+        var pdfData = "<span class=key>archive courriel</span><br><br><br>"
+
+        pdfData += "Subject : <span class=key>" + mail.Subject + "</span><br>"
+        pdfData += "From : <span class=key>" + mail.From + "</span><br>"
+        pdfData += "To : <span class=key>" + mail.To + "</span><br>"
+        pdfData += "Date : <span class=key>" + mail.Date + "</span><br>";
+        if (mail.Cc)
+            pdfData += "Cc : <span class=key>" + mail.Cc + "</span><br>";
+        if (mail.ReplyTo)
+            pdfData += "ReplyTo : <span class=key>" + mail.ReplyTo + "</span><br>";
+
+
+        var pdfHtml;
+        var p = mail.text.indexOf("<html>");
+        if (p < 0) {
+            pdfHtml = "<html>" + pdfData + mail.text + "</html>";
+
+        }
+        else {
+
+            var p = mail.text.indexOf("<body>");
+            if (p < 0)
+                p = mail.text.indexOf("</head>");
+            if (p < 0)
+                p = mail.text.indexOf("<html>");
+
+            pdfHtml = mail.text.substring(0, p + 6) + pdfData + mail.text.substring(p + 6);
+        }
+
+        var headContent = "<meta charset=\"UTF-8\" />"
+        headContent += "<style>body{font-size :18px}.key {font-size :24px;font-weight:bold}</style>";
+
+        var p = pdfHtml.indexOf("<head>")
+        if (p < 0) {
+            var q = pdfHtml.indexOf("<html>");
+
+            pdfHtml = pdfHtml.substring(0, q + 6) + "<head>" + headContent + "</head>" + pdfHtml.substring(q + 6);
+        }
+
+        else {
+            pdfHtml = pdfHtml.substring(0, q + 6) + headContent + pdfHtml.substring(q + 6);
+        }
+
+
+        //  console.log(pdfHtml);
+
+
+        /*  var p = mail.text.indexOf("<body>")
+          if (p < 0) {
+              pdfHtmlHeader = "<body>" + pdfHtmlHeader + "</body>";
+          }*/
+
+
+        //
+
+        wkhtmltopdf(pdfHtml, {
+            // output: pdfPath,
+            noImages: true,
+            disableExternalLinks: true,
+            title: mail.Subject,
+            noBackground: true,
+            encoding: "8859-1"
+        }
+            , function (err, stream) {
+            if (err) {
+                console.log(err);
+            }
+
+            var chunks = [];
+            stream.on('data', function (chunk) {
+                chunks.push(chunk.toString());
+            });
+            stream.on('end', function () {
+                var str = chunks.join('');
+                return callback(err, {stream: str, name: pdfFileName});
+            });
+
+        })
+
+    }
+
+
+
+
+
+    ,
     formatStringForArchive: function (str, maxLength) {
         str = common.toAscii(common.truncate(str, maxLength));
         str = str.replace(/ /g, "_");
