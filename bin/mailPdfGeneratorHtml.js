@@ -158,13 +158,13 @@ var mailPdfGenerator = {
         //
 
         wkhtmltopdf(pdfHtml, {
-            // output: pdfPath,
+             output: pdfPath,
             noImages: true,
             disableExternalLinks: true,
             title: mail.Subject,
             noBackground: true,
             encoding: "8859-1"
-        }
+        });/*
             , function (err, stream) {
             if (err) {
                 console.log(err);
@@ -179,7 +179,7 @@ var mailPdfGenerator = {
                 return callback(err, {stream: str, name: pdfFileName});
             });
 
-        })
+        })*/
 
     }
 
