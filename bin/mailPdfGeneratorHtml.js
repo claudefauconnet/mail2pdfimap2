@@ -32,6 +32,7 @@ var path = require('path');
 var common = require('./common.js');
 var socket = require('../routes/socket.js');
 var wkhtmltopdf = require('wkhtmltopdf');
+var htmlencode = require('htmlencode');
 
 var execSync = require('child_process').execSync;
 
@@ -41,9 +42,7 @@ var addMetaData = false;
 var mailPdfGenerator = {
     pdfDir: "",//"pdfArchives",
     maxPdfSubjectLength: 33,
-    addMetaData: true,
-    attachmentMaxSize: 5000000,
-    attachmentsExcluded: ["logosignature.png", "atd_slogan.png"]
+    addMetaData: true
     ,
 
     createMailPdf: function (pdfDirPath, mail, callback) {
@@ -53,6 +52,11 @@ var mailPdfGenerator = {
             mailTitle = mail.Subject;
         else
             mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
+
+        if(mail.Subject.indexOf("De-Diana-Skelton-archive")>-1)
+            var xx="1";
+
+
         var initialName = mailTitle;
         var pdfFileName = mailTitle;
 
@@ -105,13 +109,13 @@ var mailPdfGenerator = {
         var pdfData = "<span class=key>archive courriel</span><br><br><br>"
 
         pdfData += "Subject : <span class=key>" + mail.Subject + "</span><br>"
-        pdfData += "From : <span class=key>" + mail.From + "</span><br>"
-        pdfData += "To : <span class=key>" + mail.To + "</span><br>"
+        pdfData += "From : <span class=key>" + htmlencode.htmlEncode(mail.From) + "</span><br>"
+        pdfData += "To : <span class=key>" +  htmlencode.htmlEncode(mail.To) + "</span><br>"
         pdfData += "Date : <span class=key>" + mail.Date + "</span><br>";
         if (mail.Cc)
-            pdfData += "Cc : <span class=key>" + mail.Cc + "</span><br>";
+            pdfData += "Cc : <span class=key>" +  htmlencode.htmlEncode(mail.Cc) + "</span><br>";
         if (mail.ReplyTo)
-            pdfData += "ReplyTo : <span class=key>" + mail.ReplyTo + "</span><br>";
+            pdfData += "ReplyTo : <span class=key>" +  htmlencode.htmlEncode(mail.ReplyTo) + "</span><br>";
 
 
         var pdfHtml;
@@ -132,6 +136,10 @@ var mailPdfGenerator = {
         }
 
         var headContent = "<meta charset=\"UTF-8\" />"
+
+//https://github.com/wkhtmltopdf/wkhtmltopdf/issues/2000
+
+
         headContent += "<style>body{font-size :18px}.key {font-size :24px;font-weight:bold}</style>";
 
         var p = pdfHtml.indexOf("<head>")
@@ -146,41 +154,24 @@ var mailPdfGenerator = {
         }
 
 
-        //  console.log(pdfHtml);
+        try {
+            wkhtmltopdf(pdfHtml, {
+              //  output: pdfPath,
+                noImages: true,
+                disableExternalLinks: true,
+                title: mail.Subject,
+                noBackground: true,
+                encoding: "8859-1"
+            }, function(err,stream){
+                if(err)
+                    console.log(err);
+                stream.pipe(fs.createWriteStream(pdfPath));
+        });
 
-
-        /*  var p = mail.text.indexOf("<body>")
-          if (p < 0) {
-              pdfHtmlHeader = "<body>" + pdfHtmlHeader + "</body>";
-          }*/
-
-
-        //
-
-        wkhtmltopdf(pdfHtml, {
-             output: pdfPath,
-            noImages: true,
-            disableExternalLinks: true,
-            title: mail.Subject,
-            noBackground: true,
-            encoding: "8859-1"
-        });/*
-            , function (err, stream) {
-            if (err) {
-                console.log(err);
-            }
-
-            var chunks = [];
-            stream.on('data', function (chunk) {
-                chunks.push(chunk.toString());
-            });
-            stream.on('end', function () {
-                var str = chunks.join('');
-                return callback(err, {stream: str, name: pdfFileName});
-            });
-
-        })*/
-
+        }
+        catch(e){
+            console.log(e);
+        }
     }
 
 
@@ -189,6 +180,7 @@ var mailPdfGenerator = {
 
     ,
     formatStringForArchive: function (str, maxLength) {
+        str=str.trim();
         str = common.toAscii(common.truncate(str, maxLength));
         str = str.replace(/ /g, "_");
         str = common.replaceNonLetterOrNumberChars(str, "");
@@ -248,35 +240,8 @@ var mailPdfGenerator = {
         } while (i < 100)
         return pdfFileName;
 
-    },
-    processAttachment: function (attachment, pdfDirPath, pdfFileName) {
-        if (attachment.filename.indexOf(".asc") > -1) {// attachment of type signature ???
-            return;
-        }
-        if (mailPdfGenerator.attachmentsExcluded.indexOf(attachment.filename) > -1)
-            return;
-
-        var attachmentsDir = path.resolve(pdfDirPath + "/attachments");
-        if (!fs.existsSync(attachmentsDir)) {
-            fs.mkdirSync(attachmentsDir);
-        }
-        var pdfPreffix = pdfFileName.substring(0, pdfFileName.lastIndexOf("."))
-        /* var dir = path.resolve(attachmentsDir + "/" + pdfDir);
-         if (!fs.existsSync(dir)) {
-             fs.mkdirSync(dir);
-         }*/
-        var attachmentFileName = pdfPreffix + "__" + attachment.filename
-        if (attachment.content.length > mailPdfGenerator.attachmentMaxSize) {
-            socket.message("BBBBBBBBBBBBBBBBB-BigAttachment :" + (attachment.content.size / 1000000) + "MO maximum " + (mailPdfGenerator.maxPdfSubjectLength / 1000000) + "  " + pdfDirPath + "/" + pdfFileName);
-            var attachmentFileName = pdfPreffix + "BIG-FILE__" + "__" + attachment.filename;
-            var file = path.resolve(attachmentsDir + "/" + attachmentFileName);
-            fs.writeFileSync(file, "BigAttachment content removed, size : " + attachment.content.size);
-        } else {
-            var file = path.resolve(attachmentsDir + "/" + attachmentFileName);
-            fs.writeFileSync(file, attachment.content);
-        }
-        return attachmentFileName;
     }
+
 
 
 }

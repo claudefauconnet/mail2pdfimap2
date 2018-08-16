@@ -48,7 +48,7 @@ var common = {
     },
 
     replaceNonLetterOrNumberChars: function (str, replaceBy) {
-        return str.replace(/[^a-zA-Z0-9_]/g, replaceBy);
+        return str.replace(/[^a-zA-Z0-9_.]/g, replaceBy);
 
     },
 
