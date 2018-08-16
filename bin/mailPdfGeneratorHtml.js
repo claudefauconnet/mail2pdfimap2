@@ -66,7 +66,8 @@ var mailPdfGenerator = {
 
 
         var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
-        // console.log("--processing--"+pdfFileName);
+
+  //  console.log("--processing--"+pdfPath);
         if (fs.existsSync(pdfPath)) {
             var pathRoot = pdfPath.substring(0, pdfPath.indexOf(".pdf"))
             var newPath;
@@ -75,13 +76,13 @@ var mailPdfGenerator = {
                 newPath = pathRoot + "-" + increment + ".pdf";
                 increment += 1
             } while (fs.existsSync(newPath))
-
             pdfPath = newPath
 
 
             //    console.log(" !!!!--duplicate--"+pdfFileName);
 
         }
+        fs.writeFileSync(pdfPath,"");
 
 
         if (mail.text.indexOf("html") < 0) {
@@ -164,7 +165,7 @@ var mailPdfGenerator = {
                 encoding: "8859-1"
             }, function(err,stream){
                 if(err)
-                    console.log(err);
+                   return console.log(err +"  html "+pdfHtml);
                 stream.pipe(fs.createWriteStream(pdfPath));
         });
 
