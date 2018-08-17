@@ -446,7 +446,7 @@ var port = 993;*/
 
                                         message.text = buffer;
                                         //  console.log(message.Subject)
-                                        console.log(folderCountMessages + "   " + message.Subject + " : " + JSON.stringify(folderInfos[seqno].infos.partsSubTypes));
+                                     //   console.log(folderCountMessages + "   " + message.Subject + " : " + JSON.stringify(folderInfos[seqno].infos.partsSubTypes));
 
 
                                         mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath, message, function (err, result) {
@@ -673,7 +673,7 @@ var port = 993;*/
                         }, 1000 * 60 * 10)
                     return callback(null, {
 
-                        text: "Total mails Processed : " + archiveTotalValidMails + "in " + totalDuration + "sec, preparing zip download, size:" + common.roundToMO(archiveAttachmentsSize) + "MO" + "<br>" + text,
+                        text: "Total mails Processed : " + archiveTotalValidMails + " in " + totalDuration + "sec, preparing zip download, size:" + common.roundToMO(archiveAttachmentsSize) + "MO" + "<br>" + text,
                         pdfArchiveRootPath: pdfArchiveRootPath + ".zip"
                     })
                 })

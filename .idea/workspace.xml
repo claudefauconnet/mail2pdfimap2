@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0a96685c-461d-44a4-ab34-6a49d3b4b2ca" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/bin/imapMailExtractor..js" afterPath="$PROJECT_DIR$/bin/imapMailExtractor..js" />
+      <change beforePath="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" afterPath="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,11 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="imapMailExtractor..js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="imapMailExtractor..js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bin/imapMailExtractor..js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3658">
-              <caret line="667" column="74" lean-forward="false" selection-start-line="667" selection-start-column="74" selection-end-line="667" selection-end-column="74" />
+            <state relative-caret-position="1111">
+              <caret line="441" column="0" lean-forward="true" selection-start-line="441" selection-start-column="0" selection-end-line="441" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -91,18 +92,18 @@
       <file leaf-file-name="indexCF.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/indexCF.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
+            <state relative-caret-position="18">
               <caret line="25" column="33" lean-forward="false" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mailPdfGeneratorHtml.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="mailPdfGeneratorHtml.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="176" column="0" lean-forward="false" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
+            <state relative-caret-position="166">
+              <caret line="158" column="0" lean-forward="false" selection-start-line="158" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -111,8 +112,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/node_modules/wkhtmltopdf/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2502">
-              <caret line="139" column="11" lean-forward="false" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
+            <state relative-caret-position="454">
+              <caret line="210" column="0" lean-forward="false" selection-start-line="210" selection-start-column="0" selection-end-line="210" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -161,13 +162,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>messageInfos</find>
-      <find>initZipArchive</find>
-      <find>host</find>
-      <find>pdfArchiveDir</find>
-      <find>skippedFolders</find>
-      <find>message</find>
-      <find>pdfArchiveFolderPath</find>
       <find>pdfArchiveRootPath</find>
       <find>formatStringForArchive</find>
       <find>utf</find>
@@ -188,9 +182,16 @@
       <find>%</find>
       <find>validMailsCount</find>
       <find>archiveTotalValidMails</find>
-      <find>console</find>
-      <find>count</find>
+      <find>xvfb</find>
       <find>partsSubTypes</find>
+      <find>shell</find>
+      <find>args</find>
+      <find>wkhtmltopdf</find>
+      <find>count</find>
+      <find>wkhtmltopdf.command</find>
+      <find>conso</find>
+      <find>in</find>
+      <find>console</find>
     </findStrings>
     <replaceStrings>
       <replace>pdfDirPath</replace>
@@ -205,10 +206,10 @@
       <replace>getAttachmentFileName</replace>
     </replaceStrings>
     <dirStrings>
-      <dir>D:\GitHub\mail2pdfImap\node_modules\wkhtmltopdf</dir>
       <dir>D:\GitHub\mail2pdfImap\node_modules\imap-simple</dir>
       <dir>D:\GitHub\mail2pdfImap\node_modules\download-email-attachments</dir>
       <dir>D:\GitHub\mail2pdfImap\node_modules\mailparser</dir>
+      <dir>D:\GitHub\mail2pdfImap\node_modules\wkhtmltopdf</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -233,13 +234,13 @@
         <option value="$PROJECT_DIR$/node_modules/imap-simple/lib/imapSimple.js" />
         <option value="$PROJECT_DIR$/bin/mailPdfGenerator.js" />
         <option value="$PROJECT_DIR$/bin/archiveZipper..js" />
-        <option value="$PROJECT_DIR$/node_modules/wkhtmltopdf/index.js" />
         <option value="$PROJECT_DIR$/bin/testEncoding..js" />
         <option value="$PROJECT_DIR$/bin/testImapSimple..js" />
         <option value="$PROJECT_DIR$/bin/common.js" />
-        <option value="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" />
         <option value="$PROJECT_DIR$/public/test.html" />
+        <option value="$PROJECT_DIR$/node_modules/wkhtmltopdf/index.js" />
         <option value="$PROJECT_DIR$/bin/imapMailExtractor..js" />
+        <option value="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" />
       </list>
     </option>
   </component>
@@ -294,19 +295,13 @@
             <path>
               <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
               <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
               <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="wkhtmltopdf" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
@@ -414,12 +409,12 @@
       <workItem from="1533886173022" duration="8349000" />
       <workItem from="1534238833104" duration="22057000" />
       <workItem from="1534354209104" duration="27494000" />
-      <workItem from="1534432300706" duration="15048000" />
+      <workItem from="1534432300706" duration="23903000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="345553000" />
+    <option name="totallyTimeSpent" value="354408000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -438,6 +433,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.09130435" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24920969" sideWeight="0.49250937" order="1" side_tool="false" content_ui="tabs" />
@@ -450,7 +446,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -579,11 +574,6 @@
           <option name="timeStamp" value="740" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
-          <line>173</line>
-          <option name="timeStamp" value="902" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
           <line>183</line>
           <properties lambdaOrdinal="-1" />
@@ -598,7 +588,7 @@
           <properties />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="980" />
+      <option name="time" value="984" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -697,6 +687,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9180">
           <caret line="529" column="27" lean-forward="false" selection-start-line="529" selection-start-column="27" selection-end-line="529" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -733,26 +724,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/indexCF.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="25" column="33" lean-forward="false" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/imapController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="11" column="59" lean-forward="false" selection-start-line="11" selection-start-column="59" selection-end-line="12" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/wkhtmltopdf/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2502">
-          <caret line="139" column="11" lean-forward="false" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
           <folding />
         </state>
       </provider>
@@ -810,14 +785,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="176" column="0" lean-forward="false" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
@@ -826,10 +793,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/indexCF.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="25" column="33" lean-forward="false" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/wkhtmltopdf/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="454">
+          <caret line="210" column="0" lean-forward="false" selection-start-line="210" selection-start-column="0" selection-end-line="210" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bin/imapMailExtractor..js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3658">
-          <caret line="667" column="74" lean-forward="false" selection-start-line="667" selection-start-column="74" selection-end-line="667" selection-end-column="74" />
+        <state relative-caret-position="1111">
+          <caret line="441" column="0" lean-forward="true" selection-start-line="441" selection-start-column="0" selection-end-line="441" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="158" column="0" lean-forward="false" selection-start-line="158" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
           <folding />
         </state>
       </provider>

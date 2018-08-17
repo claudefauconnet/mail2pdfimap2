@@ -34,9 +34,13 @@ var socket = require('../routes/socket.js');
 var wkhtmltopdf = require('wkhtmltopdf');
 var htmlencode = require('htmlencode');
 
-var execSync = require('child_process').execSync;
+var exec = require('child_process').exec;
 
 var addMetaData = false;
+var exec = require('child_process').exec;
+var initLinuxwkhtml2pdf=false;
+
+
 
 
 var mailPdfGenerator = {
@@ -67,7 +71,7 @@ var mailPdfGenerator = {
 
         var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
 
-  //  console.log("--processing--"+pdfPath);
+        //  console.log("--processing--"+pdfPath);
         if (fs.existsSync(pdfPath)) {
             var pathRoot = pdfPath.substring(0, pdfPath.indexOf(".pdf"))
             var newPath;
@@ -153,21 +157,74 @@ var mailPdfGenerator = {
         else {
             pdfHtml = pdfHtml.substring(0, q + 6) + headContent + pdfHtml.substring(q + 6);
         }
+/* INSTALL LINUX wkhtmltopdf
+https://discuss.flectrahq.com/t/any-guide-for-wkhtmltox-0-12-1-install-on-debian-9-x/120/4
 
+dpkg -i libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
+dpkg -i libpng12-0_1.2.49-1+deb7u2_amd64.deb
+
+download wkhtmltopdf 0.12.2.1 jessie precompiled binary for jessie
+
+https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.2.1/wkhtmltox-0.12.2.1_linux-jessie-amd64.deb 50
+
+install it:
+dpkg -i wkhtmltox-0.12.2.1_linux-jessie-amd64.deb
+
+add symlink:
+
+sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
+sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
+
+
+
+
+ */
 
         try {
-            wkhtmltopdf(pdfHtml, {
-              //  output: pdfPath,
-                noImages: true,
-                disableExternalLinks: true,
-                title: mail.Subject,
-                noBackground: true,
-                encoding: "8859-1"
-            }, function(err,stream){
-                if(err)
-                   return console.log(err +"  html "+pdfHtml);
-                stream.pipe(fs.createWriteStream(pdfPath));
-        });
+            if(true) {
+                wkhtmltopdf(pdfHtml, {
+                    //  output: pdfPath,
+                    noImages: true,
+                    disableExternalLinks: true,
+                    title: mail.Subject,
+                    noBackground: true,
+                    encoding: "8859-1"
+                }, function (err, stream) {
+                    if (err)
+                        return console.log(err + "  html " + pdfHtml);
+                    stream.pipe(fs.createWriteStream(pdfPath));
+                });
+            }
+         /*   else{//linux Debian
+
+
+                var tempHtmlPath=pdfPath.replace(".pdf",".html")
+
+                fs.writeFileSync(tempHtmlPath,pdfHtml)   ;
+
+                //  var cmd =" xvfb-run --auto-servernum --server-num= 1  /usr/local/sbin/wkhtmltopdf ";
+                var cmd ="/usr/local/sbin/wkhtmltopdf ";
+                if( path.sep=="\\") {
+                    cmd = 'D:\\wkhtmltox\\bin\\wkhtmltopdf';
+                }
+                var options="";
+                cmd+=options+" "+tempHtmlPath+" "+pdfPath;
+                console.log(cmd);
+                exec(cmd, function (err, stdout, stderr) {
+
+                    if (err) {
+                        console.log(err);
+
+
+
+                    }
+                    fs.unlinkSync(tempHtmlPath);
+
+
+                });
+
+
+            }*/
 
         }
         catch(e){
