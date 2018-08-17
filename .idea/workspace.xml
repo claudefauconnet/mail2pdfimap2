@@ -22,8 +22,18 @@
       <file leaf-file-name="imapMailExtractor..js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bin/imapMailExtractor..js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="676" column="8" lean-forward="false" selection-start-line="676" selection-start-column="8" selection-end-line="676" selection-end-column="8" />
+            <state relative-caret-position="3658">
+              <caret line="667" column="74" lean-forward="false" selection-start-line="667" selection-start-column="74" selection-end-line="667" selection-end-column="74" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="155">
+              <caret line="21" column="24" lean-forward="false" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -151,7 +161,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>smal</find>
       <find>messageInfos</find>
       <find>initZipArchive</find>
       <find>host</find>
@@ -178,9 +187,10 @@
       <find>processing</find>
       <find>%</find>
       <find>validMailsCount</find>
-      <find>count</find>
       <find>archiveTotalValidMails</find>
       <find>console</find>
+      <find>count</find>
+      <find>partsSubTypes</find>
     </findStrings>
     <replaceStrings>
       <replace>pdfDirPath</replace>
@@ -404,12 +414,12 @@
       <workItem from="1533886173022" duration="8349000" />
       <workItem from="1534238833104" duration="22057000" />
       <workItem from="1534354209104" duration="27494000" />
-      <workItem from="1534432300706" duration="11273000" />
+      <workItem from="1534432300706" duration="15048000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="341778000" />
+    <option name="totallyTimeSpent" value="345553000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -433,7 +443,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24920969" sideWeight="0.49250937" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24565217" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24642289" sideWeight="0.1554307" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37828946" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19078948" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -575,7 +585,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>179</line>
+          <line>183</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="969" />
         </line-breakpoint>
@@ -588,7 +598,7 @@
           <properties />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="973" />
+      <option name="time" value="980" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -629,13 +639,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="546" column="14" lean-forward="false" selection-start-line="546" selection-start-column="14" selection-end-line="546" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="17" column="66" lean-forward="false" selection-start-line="17" selection-start-column="66" selection-end-line="17" selection-end-column="66" />
         </state>
       </provider>
     </entry>
@@ -815,10 +818,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="21" column="24" lean-forward="false" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bin/imapMailExtractor..js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="676" column="8" lean-forward="false" selection-start-line="676" selection-start-column="8" selection-end-line="676" selection-end-column="8" />
+        <state relative-caret-position="3658">
+          <caret line="667" column="74" lean-forward="false" selection-start-line="667" selection-start-column="74" selection-end-line="667" selection-end-column="74" />
           <folding />
         </state>
       </provider>

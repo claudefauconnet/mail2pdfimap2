@@ -141,7 +141,7 @@ var port = 993;*/
         infos.rejectedAttachmentsSize = infos.rejectedAttachmentsSize || 0;
         infos.textPartIds = infos.textPartIds || [];
         infos.htmlPartIds = infos.htmlPartIds || [];
-     //   infos.partsSubTypes = infos.partsSubTypes || [];
+        infos.partsSubTypes = infos.partsSubTypes || [];
 
         for (var i = 0; i < parts.length; ++i) {
             if (Array.isArray(parts[i])) {
@@ -162,22 +162,26 @@ var port = 993;*/
                     }
 
 
-                }else {
+                } else {
                     if (parts[i].size)
                         infos.totalSize += parts[i].size;
                     if (parts[i].partID) {
                         if (parts[i].subtype) {
-                           var partSubType= parts[i].subtype.toUpperCase();
-                          //  if(infos.partsSubTypes.indexOf(partSubType)<0)
-                         //   infos.partsSubTypes.push(partSubType);
+                            var partSubType = parts[i].subtype.toUpperCase();
+                            if (infos.partsSubTypes.indexOf(partSubType) < 0)
+                                infos.partsSubTypes.push(partSubType);
                             if (partSubType == "HTML")
                                 infos.htmlPartIds.push(parts[i].partID);
-                            else  if (partSubType == "PLAIN"){
+                            else if (partSubType == "PLAIN") {
                                 infos.textPartIds.push(parts[i].partID);
                             }
+                            else {
+                                console.log("partSubType" + partSubType)
+                                var xx = "aa";
+                            }
                         }
-                        else{
-                            var xx="aa";
+                        else {
+                            var xx = "aa";
                         }
                     }
                 }
@@ -335,7 +339,7 @@ var port = 993;*/
                 //  imap.search([['SMALLER', 5000]], function (err, results) {
 
                 //   All functions below have sequence number-based counterparts that can be accessed by using the 'seq' namespace of the imap connection's instance (e.g. conn.seq.search() returns sequence number(s) instead of UIDs, conn.seq.fetch() fetches by sequence number(s) instead of UIDs, etc):
-                imap.seq.search([['LARGER',1]], function (err, results) {
+                imap.seq.search([['LARGER', 1]], function (err, results) {
                     if (results.length == 0)
                         return callback0(null, []);
                     var folderCountMessages = 0;
@@ -352,7 +356,7 @@ var port = 993;*/
                         if (seqBodies.length == 0)
                             seqBodies = folderInfos[result].infos.textPartIds;
                         if (seqBodies.length == 0)
-                           var xx=1;
+                            var xx = 1;
 
 
                         if (withAttachments) {
@@ -364,13 +368,11 @@ var port = 993;*/
                             return callbackEachMessage();
 
 
-
                         folderCountMessages += 1;
 
 
-
-                        if(Object.keys(validAttachments).length>0){
-                            var x="aa";
+                        if (Object.keys(validAttachments).length > 0) {
+                            var x = "aa";
                         }
 
                         //FETCH each mail
@@ -383,36 +385,32 @@ var port = 993;*/
                         f.on('message', function (msg, seqno) {
 
                             var message = folderInfos[seqno].headers;
-                            var xx=folderInfos[seqno];
+                            var xx = folderInfos[seqno];
                             var msgState = 1;
-                            var isAttachement=false;
-
-
-
+                            var isAttachement = false;
 
 
                             msg.on('body', function (stream, info) {
 
 
-
                                 messages.folderSize += info.size;
                                 totalArchiveSize += info.size;
                                 if (folderCountMessages % 10 == 0) {
-                                    socket.message("__" + folderCountMessages + " messages read from  folder " + common.roundToMO(messages.folderSize) + "MO, total Archive size : " + common.roundToMO(totalArchiveSize)+ "MO");
+                                    socket.message("__" + folderCountMessages + " messages read from  folder " + common.roundToMO(messages.folderSize) + "MO, total Archive size : " + common.roundToMO(totalArchiveSize) + "MO");
                                 }
 
                                 //process Attachments
                                 if (withAttachments && validAttachments[info.which]) {
-                                    var y=xx;
+                                    var y = xx;
                                     isAttachement = true;
                                     var attachmentInfos = validAttachments[info.which];
                                     var file = imapMailExtractor.getAttachmentFileName(message, attachmentInfos, pdfArchiveFolderPath);
-                                    if (file  && stream) {
+                                    if (file && stream) {
                                         //https://stackoverflow.com/questions/25247207/how-to-read-and-save-attachments-using-node-imap/25281153
                                         var writeStream = fs.createWriteStream(file);
 
                                         writeStream.on('finish', function () {
-                                          //  console.log(' Done writing to file ' + file)
+                                            //  console.log(' Done writing to file ' + file)
                                         })
 
                                         try {
@@ -421,18 +419,18 @@ var port = 993;*/
                                                 stream.pipe(base64.decode()).pipe(writeStream);
                                             else stream.pipe(writeStream)
                                         }
-                                        catch(e){
+                                        catch (e) {
                                             console.log(e);
                                         }
                                     }
 
 
-                                }else{
-                                    var y=xx;
-                               isAttachement=false;
+                                } else {
+                                    var y = xx;
+                                    isAttachement = false;
                                 }
 
-                                if (isAttachement===false) {
+                                if (isAttachement === false) {
                                     var buffer = '';
                                     stream.on('data', function (chunk) {
 
@@ -447,11 +445,15 @@ var port = 993;*/
                                     stream.once('end', function () {
 
                                         message.text = buffer;
-                                            mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath, message, function (err, result) {
-                                                if (err) {
-                                                    console.log(err);
-                                                }
-                                            })
+                                        //  console.log(message.Subject)
+                                        console.log(folderCountMessages + "   " + message.Subject + " : " + JSON.stringify(folderInfos[seqno].infos.partsSubTypes));
+
+
+                                        mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath, message, function (err, result) {
+                                            if (err) {
+                                                console.log(err);
+                                            }
+                                        })
 
 
                                     });
@@ -461,8 +463,6 @@ var port = 993;*/
                                 message.attributes = attrs.uid;
                             });
                             msg.once('end', function () {
-
-
 
 
                             });
@@ -659,13 +659,25 @@ var port = 993;*/
 
                     })
                 }
+                console.log(pdfArchiveRootPath)
+                socket.message("creating  zip archive on server...");
+                setTimeout(function () {
+                zipdir(pdfArchiveRootPath, function (err, buffer) {
+                    if (err)
+                        return callback(err);
+                    fs.writeFileSync(pdfArchiveRootPath + ".zip", buffer);
 
+                    if (imapMailExtractor.deleteDirAfterZip)
+                        setTimeout(function () {
+                            imapMailExtractor.deleteFolderRecursive(pdfArchiveRootPath);
+                        }, 1000 * 60 * 10)
+                    return callback(null, {
 
-                return callback(null, {
-
-                    text: "Total mails Processed : " + archiveTotalValidMails + "in " + totalDuration + "sec, preparing zip download, size:" + common.roundToMO(archiveAttachmentsSize) + "MO" + "<br>" + text,
-                    pdfArchiveRootPath: pdfArchiveRootPath
+                        text: "Total mails Processed : " + archiveTotalValidMails + "in " + totalDuration + "sec, preparing zip download, size:" + common.roundToMO(archiveAttachmentsSize) + "MO" + "<br>" + text,
+                        pdfArchiveRootPath: pdfArchiveRootPath + ".zip"
+                    })
                 })
+                }, 1000 * 5)
             })
 
 
@@ -674,21 +686,20 @@ var port = 993;*/
     }
     ,
     downloadArchive: function (mailAdress, pdfArchiveRootPath, response) {
-        
+
         var dir = path.resolve(pdfArchiveRootPath);
-        socket.message("creating  zip file on server and start download...");
-        zipdir(dir, function (err, buffer) {
-            if (err)
-                return callback(err);
 
-            response.setHeader('Content-type', 'application/zip');
-            response.setHeader("Content-Disposition", "attachment;filename=" + imapMailExtractor.archivePrefix + "-" + mailAdress + ".zip");
-            response.send(buffer);
-            socket.message("download pdfMailArchive-" + imapMailExtractor.archivePrefix + "-" + mailAdress + " DONE");
-            if (imapMailExtractor.deleteDirAfterZip)
-                imapMailExtractor.deleteFolderRecursive(dir);
+        socket.message("start download zip file...");
 
-        });
+        var archive = fs.readFileSync(dir);
+        response.setHeader('Content-type', 'application/zip');
+        response.setHeader("Content-Disposition", "attachment;filename=" + imapMailExtractor.archivePrefix + "-" + mailAdress + ".zip");
+        response.send(archive);
+        socket.message("download pdfMailArchive-" + imapMailExtractor.archivePrefix + "-" + mailAdress + " DONE");
+        if (imapMailExtractor.deleteDirAfterZip)
+            setTimeout(function () {
+               fs.unlink(dir)
+            }, 1000 * 60 * 20)
 
     }
 
@@ -753,17 +764,16 @@ var port = 993;*/
             return null;
         //   attachmentName = "attachment_" + Math.round(Math.random() * 100);
         attachmentName = imapMailExtractor.decodeChunk(attachmentName);
-        if (imapMailExtractor.attachmentsExcluded.indexOf(attachmentName) >-1)
+        if (imapMailExtractor.attachmentsExcluded.indexOf(attachmentName) > -1)
             return;
         if (attachmentName.indexOf(".eml") > -1) {
             var xx = 1;
         }
 
-        attachmentName = mailPdfGeneratorHtml.formatStringForArchive(attachmentName,300);
+        attachmentName = mailPdfGeneratorHtml.formatStringForArchive(attachmentName, 300);
 
         var fileName = pdfName + "__" + attachmentName;
         if (pdfArchiveFolderPath) {
-
 
 
             return path.resolve(attachmentsDir + "/" + fileName);
