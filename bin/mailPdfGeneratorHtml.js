@@ -111,7 +111,7 @@ var mailPdfGenerator = {
           else
               return;*/
 
-        var pdfData = "<span class=key>archive courriel</span><br><br><br>"
+        var pdfData = ""
 
         pdfData += "Subject : <span class=key>" + mail.Subject + "</span><br>"
         pdfData += "From : <span class=key>" + htmlencode.htmlEncode(mail.From) + "</span><br>"
@@ -145,7 +145,7 @@ var mailPdfGenerator = {
 //https://github.com/wkhtmltopdf/wkhtmltopdf/issues/2000
 
 
-        headContent += "<style>body{font-size :18px}.key {font-size :24px;font-weight:bold}</style>";
+        headContent += "<style>body{font-size :14px}.key {font-size :18px;font-weight:bold}</style>";
 
         var p = pdfHtml.indexOf("<head>")
         if (p < 0) {
