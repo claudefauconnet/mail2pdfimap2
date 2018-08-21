@@ -15,7 +15,7 @@ var iconv = require('iconv-lite');
 var libmime = require('libmime');
 var base64 = require('base64-stream');
 
-var  AllHtmlEntities = require('html-entities').AllHtmlEntities;
+var AllHtmlEntities = require('html-entities').AllHtmlEntities;
 var htmlEntities = new AllHtmlEntities();
 
 
@@ -74,28 +74,32 @@ var port = 993;*/
 
                 var tree = [];
                 var id = 1000;
+                var stop = false;
 
-
-                function recurse(idParent, object, ancestors) {
+                function recurse(idParent, object, ancestors, parentPath) {
 
 
                     for (var key in object) {
+                        if (stop == true)
+                            return;
                         if (!rootFolder || rootFolder.indexOf(key) > -1 || ancestors.indexOf(leafFolder) > -1) {
-                            if (folderAncestors && folderAncestors.indexOf(key) < 0)
-                                return;
+
                             id += 1;
                             var ancestors2 = ancestors.slice(0);
                             ancestors2.push(key)
                             tree.push({parent: idParent, id: id, text: key, ancestors: ancestors2});
+                            parentPath += "/" + key
+                            if (rootFolder && (parentPath) == "/" + rootFolder)
+                                return stop = true;
 
-                            recurse(id, object[key].children, ancestors2)
+                            recurse(id, object[key].children, ancestors2, parentPath)
                         }
                     }
 
 
                 }
 
-                recurse("#", result, []);
+                recurse("#", result, [], "");
 
 
                 return callback(null, tree);
@@ -138,17 +142,18 @@ var port = 993;*/
                 }
                 buffer[bufferPos++] = chr.charCodeAt(0);
             }
-            var str2=buffer.toString();
-            str2= htmlEntities.decode(str2);
+            var str2 = buffer.toString();
+            str2 = htmlEntities.decode(str2);
             return str2;
         }
+
         var str = "";
 
         var encoding = chardet.detect(chunk);
 
         if (partEncoding == "QUOTED-PRINTABLE") {
-          str=  decodeQuotedPrintable(chunk.toString());
-          return str;
+            str = decodeQuotedPrintable(chunk.toString());
+            return str;
 
         }
         if (encoding.length > 0 && encoding != 'UTF-8') {
@@ -905,9 +910,9 @@ if (false) {
             buffer[bufferPos++] = chr.charCodeAt(0);
         }
 
-        var str2=buffer.toString();
-       str2= htmlEntities.decode(str2);
-       return str2;
+        var str2 = buffer.toString();
+        str2 = htmlEntities.decode(str2);
+        return str2;
     }
 
     var str = "Lors de la derni=C3=A8re r=C3=\r\n=A9union du Comit=C3=A9 d&#39;Orientation, nous =C3=A9tions convenus que je=\r\n passerais en revue la convention avec le CNC, pour d=C3=A9cision et mise e=\r\nn =C5=93uvre =C3=A9ventuelle.</div><div><br></div><div>Si cela est toujours=\r\n d&#39;actualit=C3=A9, peux-tu m&#39;en envoyer une copie";
