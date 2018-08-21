@@ -20,6 +20,10 @@ router.post('/imap', function (req, response) {
         });
     if (req.body.downloadArchive)
         imapMailExtractor.downloadArchive(req.body.mailAdress,req.body.pdfArchiveRootPath, response);
+    if (req.body.downloadJournal)
+        imapMailExtractor.downloadJournal(req.body.content, response);
+
+
 
 });
 

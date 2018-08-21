@@ -151,7 +151,7 @@ var imapController = (function () {
 
                 self.currentState = "ARCHIVE_DONE";
                 $("#waitImg").css("visibility", "hidden");
-                // $("#downloadArchiveButton").css("visibility", "visible")
+                 $("#downloadJournalButton").css("visibility", "visible")
 
 
                 $("#messageDiv3").html("<B>" + data.text + "</B>");
@@ -173,7 +173,7 @@ var imapController = (function () {
             error: function (err, status) {
 
                 console.log(status);
-                //  $("#downloadArchiveButton").css("visibility","visible");
+                $("#downloadJournalButton").css("visibility", "visible")
                 $("#waitImg").css("visibility", "hidden")
                 console.log(err);
                 self.currentState = "";
@@ -193,6 +193,33 @@ var imapController = (function () {
             pdfArchiveRootPath: pdfArchiveRootPath,
             mailAdress: $("#mailInput").val(),
 
+        }
+        // Build a form
+        var form = $('<form></form>').attr('action', "/imap").attr('method', 'post');
+        // Add the one key/value
+        for (var key in payload) {
+            form.append($("<input></input>").attr('type', 'hidden').attr('name', key).attr('value', payload[key]));
+        }
+        //send request
+        form.appendTo('body').submit().remove();
+    };
+
+
+    self.downloadJournal = function () {
+        var html = $("#messageDiv2").html();
+        var selectedNodes = self.getJsTreeSelectedNodes();
+        var folder = selectedNodes[0];
+        var user=$("#mailInput").val()
+
+        var content="<html><body>Date :" +new Date()+"<br>"
+        content+="User :"+user+"<br>";
+       // content+="Folder :"+folder+"<br>";
+        content+=html;
+        content+="</body></html>";
+
+        var payload = {
+            downloadJournal: 1,
+            content: content,
         }
         // Build a form
         var form = $('<form></form>').attr('action', "/imap").attr('method', 'post');

@@ -71,7 +71,7 @@ var mailPdfGenerator = {
 
         var pdfPath = path.resolve(pdfDirPath + "/" + pdfFileName);
 
-        //  console.log("--processing--"+pdfPath);
+        // Check duplicates file names and increment if exists
         if (fs.existsSync(pdfPath)) {
             var pathRoot = pdfPath.substring(0, pdfPath.indexOf(".pdf"))
             var newPath;
@@ -83,11 +83,8 @@ var mailPdfGenerator = {
             pdfPath = newPath
 
 
-            //    console.log(" !!!!--duplicate--"+pdfFileName);
-
         }
         fs.writeFileSync(pdfPath,"");
-
 
         if (mail.text.indexOf("html") < 0) {
 
@@ -106,10 +103,6 @@ var mailPdfGenerator = {
         }
 
 
-        /*  if (true || mail.Subject.indexOf("500") > -1)
-              console.log(mail.text)
-          else
-              return;*/
 
         var pdfData = ""
 
@@ -181,20 +174,25 @@ sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
  */
 
         try {
-            if(true) {
-                wkhtmltopdf(pdfHtml, {
-                    //  output: pdfPath,
-                    noImages: true,
-                    disableExternalLinks: true,
-                    title: mail.Subject,
-                    noBackground: true,
-                    encoding: "8859-1"
-                }, function (err, stream) {
-                    if (err)
-                        return console.log(err + "  html " + pdfHtml);
-                    stream.pipe(fs.createWriteStream(pdfPath));
-                });
-            }
+            wkhtmltopdf(pdfHtml, {
+                //  output: pdfPath,
+                noImages: true,
+                disableExternalLinks: true,
+                title: mail.Subject,
+                noBackground: true,
+                encoding: "8859-1"
+            }, function (err, stream) {
+                if (err){
+                    console.log(err + "  html " + pdfHtml);
+                    return callback(pdfFileName);
+                }
+
+                stream.pipe(fs.createWriteStream(pdfPath));
+                callback(null,pdfFileName)
+            });
+         //   mailPdfGenerator.makeWkhtmlPdf(pdfPath,pdfFileName,mail.Subject,pdfHtml,callback);
+
+
          /*   else{//linux Debian
 
 
@@ -232,7 +230,38 @@ sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
         }
     }
 
+,
+    makeWkhtmlPdf:function(pdfPath,pdfFileName,title,pdfHtml,callback){
 
+
+
+
+        wkhtmltopdf(pdfHtml, {
+            noImages: true,
+            disableExternalLinks: true,
+            title: title,
+            noBackground: true,
+            encoding: "8859-1"
+        }, function (err, stream) {
+            if (err){
+                console.log(err + "  html " + pdfHtml);
+                return callback(pdfFileName);
+            }
+            if(pdfPath) {
+                stream.pipe(fs.createWriteStream(pdfPath));
+                callback(null, pdfFileName);
+            }
+            else{
+                callback(null, stream);
+            }
+        });
+
+
+
+
+
+
+    }
 
 
 
