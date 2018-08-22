@@ -13,8 +13,10 @@ var chardet = require('chardet');
 var iconv = require('iconv-lite');
 
 var libmime = require('libmime');
-var base64 = require('base64-stream');
-
+var base64Stream = require('base64-stream');
+var base64 = require('base-64');
+var utf8 = require('utf8');
+var streams = require('memory-streams');
 var AllHtmlEntities = require('html-entities').AllHtmlEntities;
 var htmlEntities = new AllHtmlEntities();
 
@@ -150,12 +152,15 @@ var port = 993;*/
         var str = "";
 
         var encoding = chardet.detect(chunk);
+        if (partEncoding)
+            partEncoding = partEncoding.toUpperCase();
 
         if (partEncoding == "QUOTED-PRINTABLE") {
             str = decodeQuotedPrintable(chunk.toString());
             return str;
 
         }
+// if (partEncoding= base64 process all stream and not chunk : error
         if (encoding.length > 0 && encoding != 'UTF-8') {
             try {
                 var str = iconv.decode(chunk, encoding);
@@ -323,9 +328,7 @@ var port = 993;*/
                         });
                         msg.once('attributes', function (attrs) {
 
-                            if (folderCountMessages > 135) {
-                                var xx = "a";
-                            }
+
                             messages[seqno].infos = imapMailExtractor.getPartsInfos(attrs.struct);
 
                             var totalSize = messages[seqno].infos.totalSize;
@@ -437,6 +440,7 @@ var port = 993;*/
                         //***********************************************************************
 
                         var message = folderInfos[messageSeqno].headers;
+
                         message.text = "";
 
                         var f = imap.seq.fetch(messageSeqno, {
@@ -444,12 +448,16 @@ var port = 993;*/
                             struct: false
                         });
 
-
+                        var isBase64Message = false;
                         f.on('message', function (msg, seqno) {
                             var isAttachement = false;
 
 
                             msg.on('body', function (stream, info) {
+                                console.log(message.Subject + "_" + messageSeqno + "_" + info.which)
+
+
+                                message.Subject = messageSeqno + "_" + info.which + "_" + message.Subject;
                                 if (folderInfos[messageSeqno].infos.validTextsOrHtmls[info.which])
                                     var encoding = folderInfos[messageSeqno].infos.validTextsOrHtmls[info.which].encoding;
 
@@ -463,7 +471,6 @@ var port = 993;*/
 
                                 //process Attachments
                                 if (withAttachments && validAttachments[info.which]) {
-                                    var y = xx;
                                     isAttachement = true;
                                     var attachmentInfos = validAttachments[info.which];
                                     var file = imapMailExtractor.getAttachmentFileName(message, attachmentInfos, pdfArchiveFolderPath);
@@ -478,27 +485,54 @@ var port = 993;*/
                                         try {
                                             if (attachmentInfos.encoding === 'BASE64')
 
-                                                stream.pipe(base64.decode()).pipe(writeStream);
+                                                stream.pipe(base64Stream.decode()).pipe(writeStream);
                                             else stream.pipe(writeStream)
                                         }
                                         catch (e) {
                                             console.log(e);
                                         }
                                     }
-
-
-                                } else {
+                                }
+                                else {
 
                                     isAttachement = false;
                                 }
 
-                                if (isAttachement === false) {
+                                //special processing for messages base64 encoded
+                                if (isAttachement == false && encoding == "BASE64") {
+
+                                    if (messageSeqno == 30)
+                                        var xxx = 1;
+                                    isBase64Message = true;
+                                    var writeStream = new streams.WritableStream();
+                                    stream.once('end', function () {
+                                        message.text = writeStream.toString();
+                                    })
+
+                                    try {
+                                        stream.pipe(base64Stream.decode()).pipe(writeStream);
+                                    }
+                                    catch (e) {
+                                        console.log(e);
+                                        socket.message("<span class='rejected'>cannot generate PDF for message " + message.date + "_" + message.Subject + "</span>")
+                                    }
+
+
+                                }
+
+                                if (isAttachement === false && isBase64Message === false) {
 
                                     var buffer = '';
                                     stream.on('data', function (chunk) {
                                         // !!!!!!!!!!!determination de l'encodage du buffer pour le transformer en UTF8
-                                        var str = imapMailExtractor.decodeChunk(chunk, encoding);
-                                        buffer += str;
+                                        try {
+                                            var str = imapMailExtractor.decodeChunk(chunk, encoding);
+                                            buffer += str;
+                                        }
+                                        catch (e) {
+                                            console.log("ERROR " + message.Date + "_" + message.Subject + "\\n" + e);
+                                            socket.message("<span class='rejected'>cannot generate PDF for message " + message.date + "_" + message.Subject + "</span>")
+                                        }
                                     });
                                     stream.once('end', function () {
                                         messageTextOrHtmlPartsIndex += 1;
@@ -524,13 +558,16 @@ var port = 993;*/
                             callbackEachMessage(err);
                         });
                         f.once('end', function () {
-                            message.text += messageTextOrHtmlContent;
+                            if (isBase64Message === false) {
+                                message.text += messageTextOrHtmlContent;
+                            }
                             mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath, message, function (err, result) {
 
                                 if (err) {
                                     socket.message("<span class='rejected'>error while generating PDF  : " + err + "</span>");
                                 }
                                 totalArchiveCountMails += 1;
+
                                 return callbackEachMessage();
                             })
 
@@ -769,14 +806,16 @@ var port = 993;*/
     ,
 
     downloadJournal: function (content, response) {
-        var fileName = path.resolve(__dirname + "/journal.pdf")
-        mailPdfGeneratorHtml.makeWkhtmlPdf(fileName, "journal", "Archive journal", content, function (err, result) {
-            var archive = fs.readFileSync(fileName);
-            response.setHeader('Content-type', 'application/zip');
+     //   var fileName = path.resolve(__dirname + "/journal.pdf");
+        content="<html><head><style>body{color:red;font-size:24px}</style></style></styme></head>/head><body>Date :Mon Aug 20 2018 08:45:34 GMT+0200 (heure d’été d’Europe centrale)<br>User :claude.fauconnet@atd-quartmonde.org<br>Folder :[object HTMLDivElement]<br>user :claude.fauconnet@atd-quartmonde.org<br>testtttttttt</body></html>"
+        mailPdfGeneratorHtml.makeWkhtmlPdf(null, "journal", "Archive journal", content, function (err, stream) {
+         /*   var archive = fs.readFileSync(fileName);
+            console.log(""+archive);
+            response.setHeader('Content-type', 'application/pdf');
             response.setHeader("Content-Disposition", "attachment;filename=archiveJournal.pdf");
-            response.send(archive);
+            response.send(archive);*/
 
-            return;
+
             var buffer = new Buffer(256);
             var chunks = [];
             stream.on('data', function (chunk) {
@@ -785,22 +824,15 @@ var port = 993;*/
 
             });
             stream.once('end', function () {
-                var buffer = new Buffer.concat(chunks).toString();
-                //    response.setHeader('Content-type', 'application/pdf');
+                var str = new Buffer.concat(chunks).toString();
+                fs.writeFileSync("d:\\testJournal.pdf",str)
+                 response.setHeader('Content-type', 'application/pdf');
                 response.setHeader("Content-Disposition", "attachment;filename=ArchiveJournal.pdf");
-                response.send(buffer);
+                response.send(str);
 
 
             });
-            /*  var toString = require('stream-to-string');
 
-              toString(stream, function (err, pdf) {
-                  var jsfile = new Buffer.concat(chunks).toString('base64');
-
-                  response.setHeader('Content-type', 'application/pdf');
-                  response.setHeader("Content-Disposition", "attachment;filename=ArchiveJournal.pdf");
-                  response.send(pdf);
-              })*/
 
 
         })
@@ -886,43 +918,7 @@ var port = 993;*/
 
     }
 }
-if (false) {
 
-
-    function decodeQuotedPrintable(str) {
-        str = (str || '').toString().// remove invalid whitespace from the end of lines
-        replace(/[\t ]+$/gm, '').// remove soft line breaks
-        replace(/\=(?:\r?\n|$)/g, '');
-
-        var encodedBytesCount = (str.match(/\=[\da-fA-F]{2}/g) || []).length,
-            bufferLength = str.length - encodedBytesCount * 2,
-            chr, hex,
-            buffer = new Buffer(bufferLength),
-            bufferPos = 0;
-
-        for (var i = 0, len = str.length; i < len; i++) {
-            chr = str.charAt(i);
-            if (chr === '=' && (hex = str.substr(i + 1, 2)) && /[\da-fA-F]{2}/.test(hex)) {
-                buffer[bufferPos++] = parseInt(hex, 16);
-                i += 2;
-                continue;
-            }
-            buffer[bufferPos++] = chr.charCodeAt(0);
-        }
-
-        var str2 = buffer.toString();
-        str2 = htmlEntities.decode(str2);
-        return str2;
-    }
-
-    var str = "Lors de la derni=C3=A8re r=C3=\r\n=A9union du Comit=C3=A9 d&#39;Orientation, nous =C3=A9tions convenus que je=\r\n passerais en revue la convention avec le CNC, pour d=C3=A9cision et mise e=\r\nn =C5=93uvre =C3=A9ventuelle.</div><div><br></div><div>Si cela est toujours=\r\n d&#39;actualit=C3=A9, peux-tu m&#39;en envoyer une copie";
-
-
-    var str2 = decodeQuotedPrintable(str);
-
-    var vv = str2;
-
-}
 
 
 module.exports = imapMailExtractor;

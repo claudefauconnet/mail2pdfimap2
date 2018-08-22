@@ -38,9 +38,7 @@ var exec = require('child_process').exec;
 
 var addMetaData = false;
 var exec = require('child_process').exec;
-var initLinuxwkhtml2pdf=false;
-
-
+var initLinuxwkhtml2pdf = false;
 
 
 var mailPdfGenerator = {
@@ -57,8 +55,8 @@ var mailPdfGenerator = {
         else
             mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
 
-        if(mail.Subject.indexOf("De-Diana-Skelton-archive")>-1)
-            var xx="1";
+        if (mail.Subject.indexOf("De-Diana-Skelton-archive") > -1)
+            var xx = "1";
 
 
         var initialName = mailTitle;
@@ -84,7 +82,7 @@ var mailPdfGenerator = {
 
 
         }
-        fs.writeFileSync(pdfPath,"");
+        fs.writeFileSync(pdfPath, "");
 
         if (mail.text.indexOf("html") < 0) {
 
@@ -103,17 +101,16 @@ var mailPdfGenerator = {
         }
 
 
-
         var pdfData = ""
 
         pdfData += "Subject : <span class=key>" + mail.Subject + "</span><br>"
         pdfData += "From : <span class=key>" + htmlencode.htmlEncode(mail.From) + "</span><br>"
-        pdfData += "To : <span class=key>" +  htmlencode.htmlEncode(mail.To) + "</span><br>"
+        pdfData += "To : <span class=key>" + htmlencode.htmlEncode(mail.To) + "</span><br>"
         pdfData += "Date : <span class=key>" + mail.Date + "</span><br>";
         if (mail.Cc)
-            pdfData += "Cc : <span class=key>" +  htmlencode.htmlEncode(mail.Cc) + "</span><br>";
+            pdfData += "Cc : <span class=key>" + htmlencode.htmlEncode(mail.Cc) + "</span><br>";
         if (mail.ReplyTo)
-            pdfData += "ReplyTo : <span class=key>" +  htmlencode.htmlEncode(mail.ReplyTo) + "</span><br>";
+            pdfData += "ReplyTo : <span class=key>" + htmlencode.htmlEncode(mail.ReplyTo) + "</span><br>";
 
 
         var pdfHtml;
@@ -150,28 +147,28 @@ var mailPdfGenerator = {
         else {
             pdfHtml = pdfHtml.substring(0, q + 6) + headContent + pdfHtml.substring(q + 6);
         }
-/* INSTALL LINUX wkhtmltopdf
-https://discuss.flectrahq.com/t/any-guide-for-wkhtmltox-0-12-1-install-on-debian-9-x/120/4
+        /* INSTALL LINUX wkhtmltopdf
+        https://discuss.flectrahq.com/t/any-guide-for-wkhtmltox-0-12-1-install-on-debian-9-x/120/4
 
-dpkg -i libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
-dpkg -i libpng12-0_1.2.49-1+deb7u2_amd64.deb
+        dpkg -i libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
+        dpkg -i libpng12-0_1.2.49-1+deb7u2_amd64.deb
 
-download wkhtmltopdf 0.12.2.1 jessie precompiled binary for jessie
+        download wkhtmltopdf 0.12.2.1 jessie precompiled binary for jessie
 
-https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.2.1/wkhtmltox-0.12.2.1_linux-jessie-amd64.deb 50
+        https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.2.1/wkhtmltox-0.12.2.1_linux-jessie-amd64.deb 50
 
-install it:
-dpkg -i wkhtmltox-0.12.2.1_linux-jessie-amd64.deb
+        install it:
+        dpkg -i wkhtmltox-0.12.2.1_linux-jessie-amd64.deb
 
-add symlink:
+        add symlink:
 
-sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
-sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
-
-
+        sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
+        sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
 
 
- */
+
+
+         */
 
         try {
             wkhtmltopdf(pdfHtml, {
@@ -182,92 +179,97 @@ sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
                 noBackground: true,
                 encoding: "8859-1"
             }, function (err, stream) {
-                if (err){
+                if (err) {
                     console.log(err + "  html " + pdfHtml);
                     return callback(pdfFileName);
                 }
 
                 stream.pipe(fs.createWriteStream(pdfPath));
-                callback(null,pdfFileName)
+                callback(null, pdfFileName)
             });
-         //   mailPdfGenerator.makeWkhtmlPdf(pdfPath,pdfFileName,mail.Subject,pdfHtml,callback);
+            //   mailPdfGenerator.makeWkhtmlPdf(pdfPath,pdfFileName,mail.Subject,pdfHtml,callback);
 
 
-         /*   else{//linux Debian
+            /*   else{//linux Debian
 
 
-                var tempHtmlPath=pdfPath.replace(".pdf",".html")
+                   var tempHtmlPath=pdfPath.replace(".pdf",".html")
 
-                fs.writeFileSync(tempHtmlPath,pdfHtml)   ;
+                   fs.writeFileSync(tempHtmlPath,pdfHtml)   ;
 
-                //  var cmd =" xvfb-run --auto-servernum --server-num= 1  /usr/local/sbin/wkhtmltopdf ";
-                var cmd ="/usr/local/sbin/wkhtmltopdf ";
-                if( path.sep=="\\") {
-                    cmd = 'D:\\wkhtmltox\\bin\\wkhtmltopdf';
-                }
-                var options="";
-                cmd+=options+" "+tempHtmlPath+" "+pdfPath;
-                console.log(cmd);
-                exec(cmd, function (err, stdout, stderr) {
+                   //  var cmd =" xvfb-run --auto-servernum --server-num= 1  /usr/local/sbin/wkhtmltopdf ";
+                   var cmd ="/usr/local/sbin/wkhtmltopdf ";
+                   if( path.sep=="\\") {
+                       cmd = 'D:\\wkhtmltox\\bin\\wkhtmltopdf';
+                   }
+                   var options="";
+                   cmd+=options+" "+tempHtmlPath+" "+pdfPath;
+                   console.log(cmd);
+                   exec(cmd, function (err, stdout, stderr) {
 
-                    if (err) {
-                        console.log(err);
-
-
-
-                    }
-                    fs.unlinkSync(tempHtmlPath);
+                       if (err) {
+                           console.log(err);
 
 
-                });
+
+                       }
+                       fs.unlinkSync(tempHtmlPath);
 
 
-            }*/
+                   });
+
+
+               }*/
 
         }
-        catch(e){
+        catch (e) {
             console.log(e);
         }
     }
 
-,
-    makeWkhtmlPdf:function(pdfPath,pdfFileName,title,pdfHtml,callback){
+    ,
+    makeWkhtmlPdf: function (pdfPath, pdfFileName, title, pdfHtml, callback) {
 
 
+        try {
 
+            wkhtmltopdf(pdfHtml, {
 
-        wkhtmltopdf(pdfHtml, {
-            noImages: true,
-            disableExternalLinks: true,
-            title: title,
-            noBackground: true,
-            encoding: "8859-1"
-        }, function (err, stream) {
-            if (err){
-                console.log(err + "  html " + pdfHtml);
-                return callback(pdfFileName);
-            }
-            if(pdfPath) {
-                stream.pipe(fs.createWriteStream(pdfPath));
-                callback(null, pdfFileName);
-            }
-            else{
-                callback(null, stream);
-            }
-        });
+                noImages: true,
+                disableExternalLinks: true,
+                title: title,
+                noBackground: true,
+                encoding: "8859-1"
+            }, function (err, stream) {
+                if (err) {
+                    console.log(err + "  html " + pdfHtml);
+                    return callback(pdfFileName);
+                }
+                if (pdfPath) {
+                    stream.once('end', function () {
+                        callback(null, pdfFileName);
+                    });
 
+                    stream.pipe(fs.createWriteStream(pdfPath));
 
+                }
+                else {
+                    callback(null, stream);
+                }
+            });
 
+        }
+        catch (e) {
 
-
+            console.log(e);
+        }
 
     }
 
 
-
     ,
     formatStringForArchive: function (str, maxLength) {
-        str=str.trim();
+        str = str.trim();
         str = common.toAscii(common.truncate(str, maxLength));
         str = str.replace(/ /g, "_");
         str = common.replaceNonLetterOrNumberChars(str, "");
@@ -328,7 +330,6 @@ sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
         return pdfFileName;
 
     }
-
 
 
 }

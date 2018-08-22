@@ -63,3 +63,5 @@ typings/
 pdfs/*
 !pdfs/.gitkeep
 package.jsonOld
+bin/journal.pdf
+mailtopdfimap/
