@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a96685c-461d-44a4-ab34-6a49d3b4b2ca" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/bin/imapMailExtractor..js" afterPath="$PROJECT_DIR$/bin/imapMailExtractor..js" />
+      <change beforePath="$PROJECT_DIR$/bin/journal.pdf" afterPath="$PROJECT_DIR$/bin/journal.pdf" />
+      <change beforePath="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" afterPath="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,16 +22,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="imapMailExtractor..js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="imapMailExtractor..js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bin/imapMailExtractor..js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="79" column="0" lean-forward="true" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-              <folding>
-                <marker date="1534840545218" expanded="true" signature="36747:36752" ph="'" />
-                <marker date="1534840545218" expanded="true" signature="36964:36969" ph="'" />
-                <marker date="1534840545218" expanded="true" signature="36994:36999" ph="'" />
-              </folding>
+            <state relative-caret-position="10296">
+              <caret line="572" column="44" lean-forward="false" selection-start-line="572" selection-start-column="28" selection-end-line="572" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/test.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="238" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mailPdfGeneratorHtml.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="140" column="48" lean-forward="false" selection-start-line="140" selection-start-column="48" selection-end-line="140" selection-end-column="48" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -36,7 +55,7 @@
       <file leaf-file-name="libqp.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/node_modules/libqp/lib/libqp.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
+            <state relative-caret-position="1458">
               <caret line="81" column="1" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="81" selection-end-column="1" />
               <folding />
             </state>
@@ -46,7 +65,7 @@
       <file leaf-file-name="async.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/node_modules/async/dist/async.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
+            <state relative-caret-position="17370">
               <caret line="965" column="31" lean-forward="false" selection-start-line="965" selection-start-column="31" selection-end-line="965" selection-end-column="31" />
               <folding />
             </state>
@@ -56,7 +75,7 @@
       <file leaf-file-name="quoted-printable.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/node_modules/quoted-printable/quoted-printable.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
+            <state relative-caret-position="1764">
               <caret line="98" column="14" lean-forward="false" selection-start-line="98" selection-start-column="14" selection-end-line="98" selection-end-column="14" />
               <folding />
             </state>
@@ -66,7 +85,7 @@
       <file leaf-file-name="module.js" pinned="false" current-in-tab="false">
         <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/8.10.0/core-modules/module.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
+            <state relative-caret-position="8784">
               <caret line="507" column="4" lean-forward="false" selection-start-line="507" selection-start-column="4" selection-end-line="507" selection-end-column="4" />
               <folding />
             </state>
@@ -86,21 +105,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>shell</find>
-      <find>args</find>
-      <find>wkhtmltopdf</find>
-      <find>count</find>
-      <find>wkhtmltopdf.command</find>
-      <find>in</find>
-      <find>folderCountMessages</find>
-      <find>exists</find>
-      <find>conso</find>
-      <find>htmlPartIds</find>
-      <find>msgState</find>
-      <find>waitUntil</find>
-      <find>time</find>
-      <find>startTi</find>
-      <find>message.tex</find>
       <find>read</find>
       <find>partSubType</find>
       <find>totalArch</find>
@@ -115,7 +119,22 @@
       <find>pars</find>
       <find>stringFromCharCode</find>
       <find>decodeC</find>
+      <find>messageTextOrHtmlContent</find>
       <find>utf8</find>
+      <find>base64</find>
+      <find>isAttachement</find>
+      <find>encoding</find>
+      <find>isBase64Message</find>
+      <find>getAttachmentFileName</find>
+      <find>30</find>
+      <find>PDFDocument</find>
+      <find>modulesDir</find>
+      <find>exec</find>
+      <find>initLinuxwkhtml2pdf</find>
+      <find>getAtttachmentNames</find>
+      <find>mailPdfGeneratorHtml</find>
+      <find>addMetaData</find>
+      <find>mailPdfGenerator</find>
     </findStrings>
     <replaceStrings>
       <replace>pdfDirPath</replace>
@@ -163,9 +182,9 @@
         <option value="$PROJECT_DIR$/public/indexCF.html" />
         <option value="$PROJECT_DIR$/public/test.html" />
         <option value="$PROJECT_DIR$/public/js/imapController.js" />
-        <option value="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" />
         <option value="$PROJECT_DIR$/node_modules/quoted-printable/quoted-printable.js" />
         <option value="$PROJECT_DIR$/bin/imapMailExtractor..js" />
+        <option value="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" />
       </list>
     </option>
   </component>
@@ -216,30 +235,6 @@
               <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
               <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
               <item name="mailtopdfimap" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="libqp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="libqp" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mail2pdfImap" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="quoted-printable" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mail2pdfImap" type="b2602c69:ProjectViewProjectNode" />
@@ -357,12 +352,15 @@
       <workItem from="1534604263458" duration="20820000" />
       <workItem from="1534758039304" duration="145000" />
       <workItem from="1534759862123" duration="194000" />
-      <workItem from="1534760181884" duration="15258000" />
+      <workItem from="1534760181884" duration="22096000" />
+      <workItem from="1534914731702" duration="158000" />
+      <workItem from="1534915027067" duration="12790000" />
+      <workItem from="1534932866720" duration="151000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="400415000" />
+    <option name="totallyTimeSpent" value="420352000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -375,25 +373,24 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1849315" sideWeight="0.83573484" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32826087" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32826087" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.09130435" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39782608" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24920969" sideWeight="0.49250937" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24565217" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1849315" sideWeight="0.16426513" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23369566" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23369566" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -473,7 +470,7 @@
         </line-breakpoint>
         <line-breakpoint type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>78</line>
+          <line>80</line>
           <option name="timeStamp" value="168" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
@@ -518,46 +515,68 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>788</line>
+          <line>839</line>
           <option name="timeStamp" value="1014" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
-          <line>238</line>
-          <option name="timeStamp" value="1016" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
-          <line>245</line>
-          <option name="timeStamp" value="1017" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
-          <line>250</line>
-          <option name="timeStamp" value="1019" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
-          <line>228</line>
+          <line>212</line>
           <option name="timeStamp" value="1021" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/quoted-printable/quoted-printable.js</url>
           <line>74</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1081" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/quoted-printable/quoted-printable.js</url>
           <line>99</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1093" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/quoted-printable/quoted-printable.js</url>
           <line>98</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1094" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
+          <line>253</line>
+          <option name="timeStamp" value="1161" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>838</line>
+          <option name="timeStamp" value="1166" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>821</line>
+          <option name="timeStamp" value="1167" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>836</line>
+          <option name="timeStamp" value="1168" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
+          <line>224</line>
+          <option name="timeStamp" value="1169" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
+          <line>223</line>
+          <option name="timeStamp" value="1170" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js</url>
+          <line>242</line>
+          <option name="timeStamp" value="1171" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>832</line>
+          <option name="timeStamp" value="1172" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -568,7 +587,7 @@
           <properties />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="1107" />
+      <option name="time" value="1182" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -687,7 +706,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
           <caret line="42" column="38" lean-forward="false" selection-start-line="42" selection-start-column="38" selection-end-line="42" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -695,7 +713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="21" column="24" lean-forward="false" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -703,7 +720,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3780">
           <caret line="210" column="0" lean-forward="false" selection-start-line="210" selection-start-column="0" selection-end-line="210" selection-end-column="56" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -727,7 +743,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1260">
           <caret line="70" column="46" lean-forward="false" selection-start-line="70" selection-start-column="46" selection-end-line="70" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -739,57 +754,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="126" lean-forward="false" selection-start-line="0" selection-start-column="126" selection-end-line="0" selection-end-column="126" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3312">
-          <caret line="184" column="16" lean-forward="false" selection-start-line="184" selection-start-column="16" selection-end-line="184" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/mailparser/lib/mail-parser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/mailsplit/lib/flowed-decoder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="28" column="41" lean-forward="false" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/mailparser/lib/mail-parser.js" />
+    <entry file="file://$PROJECT_DIR$/node_modules/mailsplit/lib/flowed-decoder.js" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/8.10.0/core-modules/module.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
+        <state relative-caret-position="8784">
           <caret line="507" column="4" lean-forward="false" selection-start-line="507" selection-start-column="4" selection-end-line="507" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/async/dist/async.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="965" column="31" lean-forward="false" selection-start-line="965" selection-start-column="31" selection-end-line="965" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/quoted-printable/quoted-printable.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
+        <state relative-caret-position="1764">
           <caret line="98" column="14" lean-forward="false" selection-start-line="98" selection-start-column="14" selection-end-line="98" selection-end-column="14" />
           <folding />
         </state>
@@ -797,21 +774,41 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/libqp/lib/libqp.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
+        <state relative-caret-position="1458">
           <caret line="81" column="1" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="81" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/async/dist/async.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17370">
+          <caret line="965" column="31" lean-forward="false" selection-start-line="965" selection-start-column="31" selection-end-line="965" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/test.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="238" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/imapMailExtractor..js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="79" column="0" lean-forward="true" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-          <folding>
-            <marker date="1534840545218" expanded="true" signature="36747:36752" ph="'" />
-            <marker date="1534840545218" expanded="true" signature="36964:36969" ph="'" />
-            <marker date="1534840545218" expanded="true" signature="36994:36999" ph="'" />
-          </folding>
+        <state relative-caret-position="10296">
+          <caret line="572" column="44" lean-forward="false" selection-start-line="572" selection-start-column="28" selection-end-line="572" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="140" column="48" lean-forward="false" selection-start-line="140" selection-start-column="48" selection-end-line="140" selection-end-column="48" />
+          <folding />
         </state>
       </provider>
     </entry>

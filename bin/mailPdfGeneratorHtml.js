@@ -26,25 +26,20 @@
  ******************************************************************************/
 
 var fs = require('fs')
-var modulesDir = "";//'../../../../nodeJS/node_modules/'
-var PDFDocument = require(modulesDir + 'pdfkit');
 var path = require('path');
 var common = require('./common.js');
 var socket = require('../routes/socket.js');
+var imapMailExtractor=require("./imapMailExtractor..js");
+
 var wkhtmltopdf = require('wkhtmltopdf');
 var htmlencode = require('htmlencode');
 
-var exec = require('child_process').exec;
 
-var addMetaData = false;
-var exec = require('child_process').exec;
-var initLinuxwkhtml2pdf = false;
 
 
 var mailPdfGenerator = {
     pdfDir: "",//"pdfArchives",
-    maxPdfSubjectLength: 33,
-    addMetaData: true
+    maxPdfSubjectLength: 33
     ,
 
     createMailPdf: function (pdfDirPath, mail, callback) {
@@ -55,8 +50,6 @@ var mailPdfGenerator = {
         else
             mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
 
-        if (mail.Subject.indexOf("De-Diana-Skelton-archive") > -1)
-            var xx = "1";
 
 
         var initialName = mailTitle;
@@ -112,6 +105,21 @@ var mailPdfGenerator = {
         if (mail.ReplyTo)
             pdfData += "ReplyTo : <span class=key>" + htmlencode.htmlEncode(mail.ReplyTo) + "</span><br>";
 
+        if(mail.validAttachments.length>0){
+            pdfData += "Attachments :<ul>" ;
+            for (var i=0;i<mail.validAttachments.length;i++){
+                pdfData+="<li>"+mail.validAttachments[i]+"</li>";
+            }
+            pdfData+="</ul>"
+        }
+        if(mail.rejectedAttachments.length>0){
+          //  pdfData += "Rejected attachements (size>"+common.roundToMO(imapMailExtractor.maxAttachmentsSize)+"MO.:<ul>" ;
+            pdfData += "<B>Rejected</B> attachements (size too large) :<ul>" ;
+            for (var i=0;i<mail.rejectedAttachments.length;i++){
+                pdfData+="<li>"+mail.rejectedAttachments[i]+"</li>";
+            }
+            pdfData+="</ul>"
+        }
 
         var pdfHtml;
         var p = mail.text.indexOf("<html>");
@@ -132,7 +140,7 @@ var mailPdfGenerator = {
 
         var headContent = "<meta charset=\"UTF-8\" />"
 
-//https://github.com/wkhtmltopdf/wkhtmltopdf/issues/2000
+
 
 
         headContent += "<style>body{font-size :14px}.key {font-size :18px;font-weight:bold}</style>";
@@ -147,28 +155,7 @@ var mailPdfGenerator = {
         else {
             pdfHtml = pdfHtml.substring(0, q + 6) + headContent + pdfHtml.substring(q + 6);
         }
-        /* INSTALL LINUX wkhtmltopdf
-        https://discuss.flectrahq.com/t/any-guide-for-wkhtmltox-0-12-1-install-on-debian-9-x/120/4
 
-        dpkg -i libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
-        dpkg -i libpng12-0_1.2.49-1+deb7u2_amd64.deb
-
-        download wkhtmltopdf 0.12.2.1 jessie precompiled binary for jessie
-
-        https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.2.1/wkhtmltox-0.12.2.1_linux-jessie-amd64.deb 50
-
-        install it:
-        dpkg -i wkhtmltox-0.12.2.1_linux-jessie-amd64.deb
-
-        add symlink:
-
-        sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
-        sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
-
-
-
-
-         */
 
         try {
             wkhtmltopdf(pdfHtml, {
@@ -233,14 +220,17 @@ var mailPdfGenerator = {
 
         try {
 
-            wkhtmltopdf(pdfHtml, {
 
-                noImages: true,
-                disableExternalLinks: true,
-                title: title,
-                noBackground: true,
-                encoding: "8859-1"
-            }, function (err, stream) {
+            wkhtmltopdf('<h1>Test</h1><p>Hello world</p>', {
+
+                    /*  noImages: true,
+                      disableExternalLinks: true,
+                      title: title,
+                      noBackground: true,
+                      encoding: "8859-1"*/
+                }
+
+           , function (err, stream) {
                 if (err) {
                     console.log(err + "  html " + pdfHtml);
                     return callback(pdfFileName);

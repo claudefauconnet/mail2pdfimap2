@@ -124,7 +124,7 @@ var port = 993;*/
 
     decodeChunk: function (chunk, partEncoding) {
         //  var nodeEncodings=["BASE64","ASCII","UTF-8",]
-        function decodeQuotedPrintable(str) {
+        function decodeQuotedPrintable(str,encoding) {
             str = (str || '').toString().// remove invalid whitespace from the end of lines
             replace(/[\t ]+$/gm, '').// remove soft line breaks
             replace(/\=(?:\r?\n|$)/g, '');
@@ -144,7 +144,11 @@ var port = 993;*/
                 }
                 buffer[bufferPos++] = chr.charCodeAt(0);
             }
-            var str2 = buffer.toString();
+            var str2;
+            if(encoding=="UTF-8")
+               str2= buffer.toString();
+            else
+                str2=  iconv.decode(buffer, encoding);
             str2 = htmlEntities.decode(str2);
             return str2;
         }
@@ -156,7 +160,9 @@ var port = 993;*/
             partEncoding = partEncoding.toUpperCase();
 
         if (partEncoding == "QUOTED-PRINTABLE") {
-            str = decodeQuotedPrintable(chunk.toString());
+
+
+            str = decodeQuotedPrintable(chunk.toString('utf8'),encoding);
             return str;
 
         }
@@ -457,7 +463,7 @@ var port = 993;*/
                                 console.log(message.Subject + "_" + messageSeqno + "_" + info.which)
 
 
-                                message.Subject = messageSeqno + "_" + info.which + "_" + message.Subject;
+                              //  message.Subject = messageSeqno + "_" + info.which + "_" + message.Subject;
                                 if (folderInfos[messageSeqno].infos.validTextsOrHtmls[info.which])
                                     var encoding = folderInfos[messageSeqno].infos.validTextsOrHtmls[info.which].encoding;
 
@@ -561,6 +567,9 @@ var port = 993;*/
                             if (isBase64Message === false) {
                                 message.text += messageTextOrHtmlContent;
                             }
+                            message.validAttachments=imapMailExtractor.getAtttachmentNames(folderInfos[messageSeqno].infos.validAttachments);
+                            message.rejectedAttachments=imapMailExtractor.getAtttachmentNames(folderInfos[messageSeqno].infos.rejectedAttachments);
+
                             mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath, message, function (err, result) {
 
                                 if (err) {
@@ -808,6 +817,8 @@ var port = 993;*/
     downloadJournal: function (content, response) {
      //   var fileName = path.resolve(__dirname + "/journal.pdf");
         content="<html><head><style>body{color:red;font-size:24px}</style></style></styme></head>/head><body>Date :Mon Aug 20 2018 08:45:34 GMT+0200 (heure d’été d’Europe centrale)<br>User :claude.fauconnet@atd-quartmonde.org<br>Folder :[object HTMLDivElement]<br>user :claude.fauconnet@atd-quartmonde.org<br>testtttttttt</body></html>"
+
+       content='http://apple.com/'
         mailPdfGeneratorHtml.makeWkhtmlPdf(null, "journal", "Archive journal", content, function (err, stream) {
          /*   var archive = fs.readFileSync(fileName);
             console.log(""+archive);
@@ -860,6 +871,21 @@ var port = 993;*/
                 console.log(e);
             }
         }
+    },
+    extractAttachmentName:function(attachmentInfos){
+        var attachmentName;
+        if (!attachmentInfos.params)
+            if (!attachmentInfos.disposition)
+                return null;
+        if (attachmentInfos.disposition.params && attachmentInfos.disposition.params.name)
+            attachmentName = attachmentInfos.disposition.params.name;
+        if (!attachmentName && attachmentInfos.disposition.params && attachmentInfos.disposition.params.filename)
+            attachmentName = attachmentInfos.disposition.params.filename;
+        if (!attachmentName)
+            return null;
+        //   attachmentName = "attachment_" + Math.round(Math.random() * 100);
+        attachmentName = imapMailExtractor.decodeChunk(attachmentName);
+        return attachmentName;
     }
 
     /**
@@ -884,20 +910,9 @@ var port = 993;*/
             pdfName = messageInfos.Subject;
         else
             pdfName = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
-        pdfName = mailPdfGeneratorHtml.formatStringForArchive(pdfName, mailPdfGenerator.maxPdfSubjectLength);
+        pdfName = mailPdfGeneratorHtml.formatStringForArchive(pdfName, mailPdfGeneratorHtml.maxPdfSubjectLength);
 
-        var attachmentName;
-        if (!attachmentInfos.params)
-            if (!attachmentInfos.disposition)
-                return null;
-        if (attachmentInfos.disposition.params && attachmentInfos.disposition.params.name)
-            attachmentName = attachmentInfos.disposition.params.name;
-        if (!attachmentName && attachmentInfos.disposition.params && attachmentInfos.disposition.params.filename)
-            attachmentName = attachmentInfos.disposition.params.filename;
-        if (!attachmentName)
-            return null;
-        //   attachmentName = "attachment_" + Math.round(Math.random() * 100);
-        attachmentName = imapMailExtractor.decodeChunk(attachmentName);
+      var attachmentName=imapMailExtractor.extractAttachmentName(attachmentInfos);
         if (imapMailExtractor.attachmentsExcluded.indexOf(attachmentName) > -1)
             return;
         if (attachmentName.indexOf(".eml") > -1) {
@@ -915,6 +930,15 @@ var port = 993;*/
         else
             return fileName;
 
+
+    },
+    getAtttachmentNames:function(attachmentInfosArray){
+        var names=[];
+        for( var key in attachmentInfosArray){
+            var infos=attachmentInfosArray[key];
+            names.push(imapMailExtractor.extractAttachmentName(infos));
+        }
+        return names;
 
     }
 }
