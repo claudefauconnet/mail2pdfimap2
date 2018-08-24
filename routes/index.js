@@ -10,12 +10,12 @@ router.get('/', function(req, res, next) {
 router.post('/imap', function (req, response) {
     //  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!" + JSON.stringify(req.body));
     if (req.body.getFolderHierarchy)
-        imapMailExtractor.getFolderHierarchy(req.body.mailAdress,req.body.password ,req.body.rootFolder,  function (error, result) {
+        imapMailExtractor.getFolderHierarchy(req.body.mailAdress,req.body.password ,req.body.rootFolder,req.body.folderId,  function (error, result) {
             processResponse(response, error, result)
         });
 
     if (req.body. generateFolderHierarchyMessages)
-        imapMailExtractor. generateFolderHierarchyMessages(req.body.mailAdress,req.body.password ,req.body.rootFolder, req.body.withAttachments, req.body.scanOnly, function (error, result) {
+        imapMailExtractor. generateFolderHierarchyMessages(req.body.mailAdress,req.body.password ,req.body.rootFolder,req.body.folderId, req.body.withAttachments, req.body.scanOnly, function (error, result) {
             processResponse(response, error, result)
         });
     if (req.body.downloadArchive)

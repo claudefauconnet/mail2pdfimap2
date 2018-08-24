@@ -68,9 +68,11 @@ var imapController = (function () {
                     }
 
                     ;
-                    $("#generateFolderPdfArchiveButton").css("visibility", "visible");
+                    $("#generateFolderPdfArchiveButton").css("visibility", "hidden");
                     $("#scanFolderPdfArchiveButton").css("visibility", "visible");
-                    $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "visible");
+                 /*   $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "hidden");
+                    $("#downloadJournalButton").css("visibility", "hidden");*/
+
                     $("#messageDiv2").html("");
                     $("#messageDiv3").html("");
                     $("#messageDiv").html(data.node.text + " selected");
@@ -89,11 +91,13 @@ var imapController = (function () {
 
     }
 
-    self.getJsTreeSelectedNodes = function () {
+    self.getJsTreeSelectedNodes = function (dontCleanMessages) {
         var selectedData = [];
         var selectedIndexes;
-        $("#messageDiv2").html("");
-        $("#messageDiv3").html("");
+        if (!dontCleanMessages) {
+            $("#messageDiv2").html("");
+            $("#messageDiv3").html("");
+        }
         //  $("#messageDiv").html("");
         selectedIndexes = $("#jstreeDiv").jstree("get_selected", true);
         jQuery.each(selectedIndexes, function (index, value) {
@@ -132,7 +136,8 @@ var imapController = (function () {
             generateFolderHierarchyMessages: 1,
             rootFolder: folderPath,
             mailAdress: $("#mailInput").val(),
-            password: $("#passwordInput").val()
+            password: $("#passwordInput").val(),
+            folderId:folder.id
 
         }
         if (scanOnly)
@@ -151,12 +156,27 @@ var imapController = (function () {
 
                 self.currentState = "ARCHIVE_DONE";
                 $("#waitImg").css("visibility", "hidden");
-                 $("#downloadJournalButton").css("visibility", "visible")
+                $("#downloadJournalButton").css("visibility", "visible")
 
 
                 $("#messageDiv3").html("<B>" + data.text + "</B>");
 
                 if (scanOnly) {
+                    self.downloadJournal();
+                    var status=data.status;
+                    if( status=="ko"){
+                        $("#generateFolderPdfArchiveButton").css("visibility","hidden")
+                        $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility","hidden")
+                    }
+                   else if( status=="okMessagesOnly"){
+                        $("#generateFolderPdfArchiveButton").css("visibility","visible")
+                        $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility","hidden")
+                    }
+                    else if( status=="okAll"){
+                        $("#generateFolderPdfArchiveButton").css("visibility","visible");
+                        $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility","visible")
+                    }
+
                     return;
                 }
 
@@ -206,16 +226,28 @@ var imapController = (function () {
 
 
     self.downloadJournal = function () {
-        var html = $("#messageDiv2").html();
-        var selectedNodes = self.getJsTreeSelectedNodes();
-        var folder = selectedNodes[0];
-        var user=$("#mailInput").val()
+        var html = $("#messageDiv3").html()+"<br>"+$("#messageDiv2").html();
 
-        var content="<html><body>Date :" +new Date()+"<br>"
-        content+="User :"+user+"<br>";
-       // content+="Folder :"+folder+"<br>";
-        content+=html;
-        content+="</body></html>";
+        var selectedNodes = self.getJsTreeSelectedNodes(true);
+        var folder = selectedNodes[0];
+        var user = $("#mailInput").val()
+        var date = ""+new Date();
+
+        var style = "<style>\n" +
+            "        body {\n" +
+            "            font-family: Verdana;\n" +
+            "            font-size: 12px;\n" +
+            "        }\n" +
+            "        .rejected {\n" +
+            "            font-style: italic;\n" +
+            "            color: red;\n" +
+            "        }\n" +
+            "    </style>"
+        var content = "<html><head>" + style + "</head><body>Date :" + date.substring(0, date.indexOf("(")) + "<br>"
+        content += "User :" + user + "<br>";
+        // content+="Folder :"+folder+"<br>";
+        content += html;
+        content += "</body></html>";
 
         var payload = {
             downloadJournal: 1,

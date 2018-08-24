@@ -143,7 +143,7 @@ var mailPdfGenerator = {
 
 
 
-        headContent += "<style>body{font-size :14px}.key {font-size :18px;font-weight:bold}</style>";
+        headContent += "<style>body{font-size :12px}.key {font-size :12px;font-weight:bold}</style>";
 
         var p = pdfHtml.indexOf("<head>")
         if (p < 0) {
@@ -221,9 +221,9 @@ var mailPdfGenerator = {
         try {
 
 
-            wkhtmltopdf('<h1>Test</h1><p>Hello world</p>', {
+            wkhtmltopdf(pdfHtml, {
 
-                    /*  noImages: true,
+                    /* noImages: true,
                       disableExternalLinks: true,
                       title: title,
                       noBackground: true,
