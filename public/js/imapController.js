@@ -70,8 +70,8 @@ var imapController = (function () {
                     ;
                     $("#generateFolderPdfArchiveButton").css("visibility", "hidden");
                     $("#scanFolderPdfArchiveButton").css("visibility", "visible");
-                 /*   $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "hidden");
-                    $("#downloadJournalButton").css("visibility", "hidden");*/
+                   $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "hidden");
+                    $("#downloadJournalButton").css("visibility", "hidden");
 
                     $("#messageDiv2").html("");
                     $("#messageDiv3").html("");
@@ -162,7 +162,7 @@ var imapController = (function () {
                 $("#messageDiv3").html("<B>" + data.text + "</B>");
 
                 if (scanOnly) {
-                    self.downloadJournal();
+                  //  self.downloadJournal();
                     var status=data.status;
                     if( status=="ko"){
                         $("#generateFolderPdfArchiveButton").css("visibility","hidden")

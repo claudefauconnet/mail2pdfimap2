@@ -29,12 +29,10 @@ var fs = require('fs')
 var path = require('path');
 var common = require('./common.js');
 var socket = require('../routes/socket.js');
-var imapMailExtractor=require("./imapMailExtractor..js");
+var imapMailExtractor = require("./imapMailExtractor..js");
 
 var wkhtmltopdf = require('wkhtmltopdf');
 var htmlencode = require('htmlencode');
-
-
 
 
 var mailPdfGenerator = {
@@ -49,7 +47,6 @@ var mailPdfGenerator = {
             mailTitle = mail.Subject;
         else
             mailTitle = "mail_sans_sujet_" + Math.round(Math.random() * 1000000);
-
 
 
         var initialName = mailTitle;
@@ -91,6 +88,13 @@ var mailPdfGenerator = {
             mail.text = mail.text.replace(/\n/g, "")
             mail.text = mail.text.replace(/<meta[^>]*>/g, "")
 
+            //avec <pre></pre>
+            if( mail.text.indexOf("<pre")>-1 || mail.text.indexOf("<PRE>")>-1) {
+                mail.text = mail.text.replace(/<.?pre[^>]*>/gi, "");
+                mail.text = mail.text.replace(/&lt;/gi, "");
+                mail.text = mail.text.replace(/&gt;/gi,"<br>");
+                mail.text = mail.text.replace(/\*/g, "");
+            }
         }
 
 
@@ -105,20 +109,20 @@ var mailPdfGenerator = {
         if (mail.ReplyTo)
             pdfData += "ReplyTo : <span class=key>" + htmlencode.htmlEncode(mail.ReplyTo) + "</span><br>";
 
-        if(mail.validAttachments.length>0){
-            pdfData += "Attachments :<ul>" ;
-            for (var i=0;i<mail.validAttachments.length;i++){
-                pdfData+="<li>"+mail.validAttachments[i]+"</li>";
+        if (mail.validAttachments.length > 0) {
+            pdfData += "Attachments :<ul>";
+            for (var i = 0; i < mail.validAttachments.length; i++) {
+                pdfData += "<li>" + mail.validAttachments[i] + "</li>";
             }
-            pdfData+="</ul>"
+            pdfData += "</ul>"
         }
-        if(mail.rejectedAttachments.length>0){
-          //  pdfData += "Rejected attachements (size>"+common.roundToMO(imapMailExtractor.maxAttachmentsSize)+"MO.:<ul>" ;
-            pdfData += "<B>Rejected</B> attachements (size too large) :<ul>" ;
-            for (var i=0;i<mail.rejectedAttachments.length;i++){
-                pdfData+="<li>"+mail.rejectedAttachments[i]+"</li>";
+        if (mail.rejectedAttachments.length > 0) {
+            //  pdfData += "Rejected attachements (size>"+common.roundToMO(imapMailExtractor.maxAttachmentsSize)+"MO.:<ul>" ;
+            pdfData += "<B>Rejected</B> attachements (size too large) :<ul>";
+            for (var i = 0; i < mail.rejectedAttachments.length; i++) {
+                pdfData += "<li>" + mail.rejectedAttachments[i] + "</li>";
             }
-            pdfData+="</ul>"
+            pdfData += "</ul>"
         }
 
         var pdfHtml;
@@ -139,8 +143,6 @@ var mailPdfGenerator = {
         }
 
         var headContent = "<meta charset=\"UTF-8\" />"
-
-
 
 
         headContent += "<style>body{font-size :12px}.key {font-size :12px;font-weight:bold}</style>";
@@ -230,23 +232,23 @@ var mailPdfGenerator = {
                       encoding: "8859-1"*/
                 }
 
-           , function (err, stream) {
-                if (err) {
-                    console.log(err + "  html " + pdfHtml);
-                    return callback(pdfFileName);
-                }
-                if (pdfPath) {
-                    stream.once('end', function () {
-                        callback(null, pdfFileName);
-                    });
+                , function (err, stream) {
+                    if (err) {
+                        console.log(err + "  html " + pdfHtml);
+                        return callback(pdfFileName);
+                    }
+                    if (pdfPath) {
+                        stream.once('end', function () {
+                            callback(null, pdfFileName);
+                        });
 
-                    stream.pipe(fs.createWriteStream(pdfPath));
+                        stream.pipe(fs.createWriteStream(pdfPath));
 
-                }
-                else {
-                    callback(null, stream);
-                }
-            });
+                    }
+                    else {
+                        callback(null, stream);
+                    }
+                });
 
         }
         catch (e) {
