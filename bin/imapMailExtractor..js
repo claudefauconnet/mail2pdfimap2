@@ -31,7 +31,7 @@ var imapMailExtractor = {
     archiveMaxSize: 1000 * 1000 * 1000,//1000MO,
     maxMessageSize: 1000 * 1000 * 5,
     maxAttachmentsSize: 1000 * 1000 * 5,
-    minAttachmentsSize: 5000, //pour filtrer les images signature
+    minAttachmentsSize: 0, //pour filtrer les images signature
     pdfArchiveDir: "./pdfs",
     host: 'imap.atd-quartmonde.org',
     port: 993,
@@ -125,16 +125,17 @@ var port = 993;*/
     }
     ,
 
-    decodeChunk: function (chunk, partEncoding) {
+    decodeChunk: function (chunk, partEncoding,charset) {
 
         //https://emn178.github.io/online-tools/md2.html
 
         //  var nodeEncodings=["BASE64","ASCII","UTF-8",]
-        function decodeQuotedPrintable(chunk, encoding) {
+        function decodeQuotedPrintable(chunk, charset) {
             // str = (str || '').toString().// remove invalid whitespace from the end of lines
-            if (encoding.length > 0 && encoding != 'UTF-8') {
+
+            if (charset.length > 0 && charset != 'UTF-8') {
                 try {
-                    var str = iconv.decode(chunk, encoding);
+                    var str = iconv.decode(chunk, charset);
                 }
                 catch (e) {
                     //   socket.message(e);
@@ -172,9 +173,9 @@ var port = 993;*/
                 buffer[bufferPos++] = chr.charCodeAt(0);
             }
            var str2;
-            if (encoding.length > 0 && encoding != 'UTF-8') {
+            if (charset.length > 0 && charset != 'UTF-8') {
                 try {
-                    var str2 = iconv.decode(buffer, encoding);
+                    var str2 = iconv.decode(buffer, charset);
                 }
                 catch (e) {
                     //   socket.message(e);
@@ -192,19 +193,20 @@ var port = 993;*/
 
         var str = "";
 
-        var encoding = chardet.detect(chunk);
+        if(!charset)
+        var charset = chardet.detect(chunk);
         if (partEncoding)
             partEncoding = partEncoding.toUpperCase();
 
         if (partEncoding == "QUOTED-PRINTABLE") {
-            str = decodeQuotedPrintable(chunk, encoding);
+            str = decodeQuotedPrintable(chunk, charset);
             return str;
 
         }
 // if (partEncoding= base64 process all stream and not chunk : error
-        if (encoding.length > 0 && encoding != 'UTF-8') {
+        if (charset.length > 0 && charset != 'UTF-8') {
             try {
-                var str = iconv.decode(chunk, encoding);
+                var str = iconv.decode(chunk, charset);
             }
             catch (e) {
                 //   socket.message(e);
@@ -223,7 +225,7 @@ var port = 993;*/
     ,
 
 
-    getPartsInfos: function (parts, _infos) {
+    getPartsInfos: function (parts, _infos,messageSeqno) {
         var infos = _infos || [];
         infos.totalSize = infos.totalSize || 0;
         infos.validAttachmentsSize = infos.validAttachmentsSize || 0;
@@ -236,7 +238,7 @@ var port = 993;*/
 
         for (var i = 0; i < parts.length; ++i) {
             if (Array.isArray(parts[i])) {
-                infos = imapMailExtractor.getPartsInfos(parts[i], infos);
+                infos = imapMailExtractor.getPartsInfos(parts[i], infos,messageSeqno);
             }
             else {
                 if (parts[i].disposition && ['INLINE', 'ATTACHMENT'].indexOf(parts[i].disposition.type) > -1) {
@@ -250,7 +252,9 @@ var port = 993;*/
                     } else {
                         parts[i].type = "attachment";
                         if (parts[i].size) {
-                            if (parts[i].size <= imapMailExtractor.maxAttachmentsSize &&parts[i].size > imapMailExtractor.minAttachmentsSize ) {
+
+                            if (parts[i].size <= imapMailExtractor.maxAttachmentsSize && parts[i].size > imapMailExtractor.minAttachmentsSize ) {
+
                                 infos.validAttachments[parts[i].partID] = parts[i];
                                 infos.validAttachmentsSize += parts[i].size;
                             }
@@ -263,12 +267,19 @@ var port = 993;*/
 
 
                 } else {
+
+                    if(parts[i].type=="related"){//cf mail 196 vectachrom
+                      //  socket.message("<span class='rejected'>  Warning !  mail with related part"+messageSeqno+" troncated</span>")
+                    }
                     if (parts[i].size)
                         infos.totalSize += parts[i].size;
                     if (parts[i].partID) {
                         if (parts[i].subtype) {
                             var partSubType = parts[i].subtype.toUpperCase();
-                            infos.validTextsOrHtmls[parts[i].partID] = {encoding: parts[i].encoding}
+                            var charset=null;
+                            if(parts[i].params)
+                                charset=parts[i].params.charset;
+                            infos.validTextsOrHtmls[parts[i].partID] = {encoding: parts[i].encoding,charset:charset}
                             if (partSubType == "HTML")
                                 infos.htmlPartIds.push(parts[i].partID);
                             else if (partSubType == "PLAIN") {
@@ -340,10 +351,18 @@ var port = 993;*/
                 var folderCountMessages = 0;
                 var headerFields = 'HEADER.FIELDS (TO FROM SUBJECT DATE SENDER CC REPLY-TO)'
                 //   All functions below have sequence number-based counterparts that can be accessed by using the 'seq' namespace of the imap connection's instance (e.g. conn.seq.search() returns sequence number(s) instead of UIDs, conn.seq.fetch() fetches by sequence number(s) instead of UIDs, etc):
+
+
+
                 imap.seq.search([['LARGER', 1]], function (err, results) {
                     // imap.search([['LARGER', 1]], function (err, results) {
                     if (results.length == 0)
                         return callback1(null, messages);
+
+
+// results = [196];
+
+
                     var f = imap.seq.fetch(results, {
                         bodies: headerFields,
                         //  bodies: ['HEADER.FIELDS (SUBJECT)', 'TEXT'],
@@ -373,7 +392,7 @@ var port = 993;*/
                         msg.once('attributes', function (attrs) {
 
 
-                            messages[seqno].infos = imapMailExtractor.getPartsInfos(attrs.struct);
+                            messages[seqno].infos = imapMailExtractor.getPartsInfos(attrs.struct,null,seqno);
 
                             var totalSize = messages[seqno].infos.totalSize;
                             var attachmentsSize = messages[seqno].infos.validAttachmentsSize;
@@ -390,14 +409,17 @@ var port = 993;*/
 
                             folderCountMessages += 1;
                             // console.log("-\t" + folderCountMessages + " \t" + headerObj.Subject);
-                            messages[seqno].headers = headerObj; //imapMailExtractor.getPartsInfos(attrs.struct);
+                            messages[seqno].headers = headerObj;
 
                             if (messages[seqno].infos.rejectedAttachmentsSize > imapMailExtractor.minAttachmentsSize) {
                                 var rejectedAttachments = messages[seqno].infos.rejectedAttachments;
                                 var header = messages[seqno].headers;
-                                for (var key in  rejectedAttachments)
-                                    var attachmentName = imapMailExtractor.getAttachmentFileName(headerObj, rejectedAttachments[key]);
-                                socket.message("<span class='rejected' >Attachment rejected , too Big  : " + attachmentName + ", size " + common.roundToMO(rejectedAttachments[key].size) + "</span>");
+                                for (var key in  rejectedAttachments) {
+                                    if (rejectedAttachments[key].size > imapMailExtractor.maxAttachmentsSize) {
+                                        var attachmentName = imapMailExtractor.getAttachmentFileName(headerObj, rejectedAttachments[key]);
+                                        socket.message("<span class='rejected' >Attachment rejected , too Big  : " + attachmentName + ", size " + common.roundToMO(rejectedAttachments[key].size) + " MO.</span>");
+                                    }
+                                }
                             }
 
 
@@ -450,7 +472,7 @@ var port = 993;*/
                     if (results.length == 0)
                         return callback0(null, []);
                     var folderCountMessages = 0;
- //   results = [196];
+//results = [63];
                     async.eachSeries(results, function (messageSeqno, callbackEachMessage) {
 
 
@@ -460,7 +482,8 @@ var port = 993;*/
 
                         // on ne fetcthe que les parts ids de texte
                         // on prefere le html
-                        seqBodies = folderInfos[messageSeqno].infos.htmlPartIds
+                        seqBodies = folderInfos[messageSeqno].infos.htmlPartIds;
+                        console.log(JSON.stringify(seqBodies))
                         if (seqBodies.length == 0)
                             seqBodies = folderInfos[messageSeqno].infos.textPartIds;
                         if (seqBodies.length == 0) {
@@ -495,6 +518,7 @@ var port = 993;*/
                             struct: false
                         });
                         var encoding;
+                        var charset;
                         var isBase64Message = false;
                         f.on('message', function (msg, seqno) {
                             var isAttachement = false;
@@ -505,8 +529,11 @@ var port = 993;*/
 
 
                                 //  message.Subject = messageSeqno + "_" + info.which + "_" + message.Subject;
-                                if (folderInfos[messageSeqno].infos.validTextsOrHtmls[info.which])
+                                if (folderInfos[messageSeqno].infos.validTextsOrHtmls[info.which]) {
                                     encoding = folderInfos[messageSeqno].infos.validTextsOrHtmls[info.which].encoding;
+                                    charset=folderInfos[messageSeqno].infos.validTextsOrHtmls[info.which].charset;
+                                }
+
 
                                 messages.folderSize += info.size;
                                 totalArchiveSize += info.size;
@@ -521,7 +548,9 @@ var port = 993;*/
                                 if (withAttachments && validAttachments[info.which]) {
                                     isAttachement = true;
                                     var attachmentInfos = validAttachments[info.which];
+
                                     var file = imapMailExtractor.getAttachmentFileName(message, attachmentInfos, pdfArchiveFolderPath);
+
                                     if (file && stream) {
                                         //https://stackoverflow.com/questions/25247207/how-to-read-and-save-attachments-using-node-imap/25281153
                                         var writeStream = fs.createWriteStream(file);
@@ -586,7 +615,7 @@ var port = 993;*/
                                         messageTextOrHtmlPartsIndex += 1;
                                         // !!!!!!!!!!!determination de l'encodage du buffer pour le transformer en UTF8
                                         // case where several html or text parts in same email concat parts
-                                        messageTextOrHtmlContent += imapMailExtractor.decodeChunk(Buffer.concat(chunks), encoding);
+                                        messageTextOrHtmlContent += imapMailExtractor.decodeChunk(Buffer.concat(chunks), encoding,charset);
                                         ;
 
 
@@ -1051,7 +1080,7 @@ var port = 993;*/
 
                         });
                         msg.once('attributes', function (attrs) {
-                            infos = imapMailExtractor.getPartsInfos(attrs.struct);
+                            infos = imapMailExtractor.getPartsInfos(attrs.struct,null,seqno);
 
 
                         });

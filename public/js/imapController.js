@@ -2,6 +2,7 @@ var imapController = (function () {
     var self = {};
     self.currentState = "";
     self.currentFolder = "";
+    var serverUrl="./imap"
 
     self.onLoadPage = function () {
         var url = window.location.href;
@@ -40,7 +41,7 @@ var imapController = (function () {
 
         $.ajax({
             type: "POST",
-            url: "/imap",
+            url: serverUrl,
             data: payload,
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
@@ -147,7 +148,7 @@ var imapController = (function () {
 
         $.ajax({
             type: "POST",
-            url: "/imap",
+            url: serverUrl,
             data: payload,
             timeout: 1000 * 3600 * 2,
             dataType: "json",
@@ -215,7 +216,7 @@ var imapController = (function () {
 
         }
         // Build a form
-        var form = $('<form></form>').attr('action', "/imap").attr('method', 'post');
+        var form = $('<form></form>').attr('action', serverUrl).attr('method', 'post');
         // Add the one key/value
         for (var key in payload) {
             form.append($("<input></input>").attr('type', 'hidden').attr('name', key).attr('value', payload[key]));
@@ -254,7 +255,7 @@ var imapController = (function () {
             content: content,
         }
         // Build a form
-        var form = $('<form></form>').attr('action', "/imap").attr('method', 'post');
+        var form = $('<form></form>').attr('action', serverUrl).attr('method', 'post');
         // Add the one key/value
         for (var key in payload) {
             form.append($("<input></input>").attr('type', 'hidden').attr('name', key).attr('value', payload[key]));
