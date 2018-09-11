@@ -266,7 +266,21 @@ var port = 993;*/
                     }
 
 
-                } else {
+                }
+                else if(parts[i].type=='image') {
+                    if (parts[i].size) {
+
+                        if (parts[i].size <= imapMailExtractor.maxAttachmentsSize && parts[i].size > imapMailExtractor.minAttachmentsSize) {
+
+                            infos.validAttachments[parts[i].partID] = parts[i];
+                            infos.validAttachmentsSize += parts[i].size;
+                        }
+                        else {
+                            infos.rejectedAttachments[parts[i].partID] = parts[i];
+                            infos.rejectedAttachmentsSize += parts[i].size;
+                        }
+                    }
+                }else {
 
                     if(parts[i].type=="related"){//cf mail 196 vectachrom
                       //  socket.message("<span class='rejected'>  Warning !  mail with related part"+messageSeqno+" troncated</span>")
@@ -360,7 +374,7 @@ var port = 993;*/
                         return callback1(null, messages);
 
 
-// results = [196];
+ //results = [196];
 
 
                     var f = imap.seq.fetch(results, {
@@ -472,7 +486,7 @@ var port = 993;*/
                     if (results.length == 0)
                         return callback0(null, []);
                     var folderCountMessages = 0;
-//results = [63];
+//results = [196];
                     async.eachSeries(results, function (messageSeqno, callbackEachMessage) {
 
 
@@ -968,6 +982,8 @@ var port = 993;*/
     },
     extractAttachmentName: function (attachmentInfos) {
         var attachmentName;
+        if(attachmentInfos.params && attachmentInfos.params.name)
+           return attachmentInfos.params.name
         if (!attachmentInfos.params)
             if (!attachmentInfos.disposition)
                 return null;

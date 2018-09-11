@@ -7,6 +7,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/socket.io', function(req, res, next) {
+    response.send("io/socket.io.js");
+});
+
 router.post('/imap', function (req, response) {
     //  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!" + JSON.stringify(req.body));
     if (req.body.getFolderHierarchy)

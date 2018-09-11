@@ -1,0 +1,14 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+
+
+    socket.on('connect', function (data) {
+        socket.emit('join', 'Hello World from client');
+    });
+    socket.on('messages', function (message) {
+        console.log(message);
+    })
+
+    // your initialization code here.
+</script>

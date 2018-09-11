@@ -8,7 +8,7 @@ var imapController = (function () {
         var url = window.location.href;
         var p = url.indexOf('/index');
         url = url.substring(0, p);
-        var socket = io.connect(url);
+        var socket = io();
         socket.on('connect', function (data) {
             socket.emit('join', 'Hello World from client');
         });
