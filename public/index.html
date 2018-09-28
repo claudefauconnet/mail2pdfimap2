@@ -50,19 +50,20 @@
         <td>
             <input id="mailInput" value="">
         </td>
-    </tr>
-    <tr>
+
         <td>
             password
         </td>
         <td>
             <input type='password' id="passwordInput" value="">
         </td>
+        <td><button onclick="imapController.loadTreeHierarchy();">Connect</button>&nbsp;</td>
     </tr>
 
 
 </table>
-<button onclick="imapController.loadTreeHierarchy();">1.show folders</button>&nbsp;
+
+
 
 <button id="scanFolderPdfArchiveButton" style="visibility: hidden" onclick="imapController.scanFolderPdfArchive();">
     2. scan archive
@@ -75,9 +76,9 @@
 <button id="generateFolderPdfArchiveWithAttachmentButton" style="visibility: hidden"
         onclick="imapController.generateFolderPdfArchive(true);">3b.generate pdf + attachments
 </button>&nbsp;
-<button id="downloadJournalButton" style="visibility: hidden"
+<!--<button id="downloadJournalButton" style="visibility: hidden"
         onclick="imapController.downloadJournal();">4.download journal
-</button>&nbsp;
+</button>&nbsp;-->
 <!--   <button id="downloadArchiveButton"  style="visibility: hidden"  onclick="imapController.downloadArchive();">3. download zip archive</button>&nbsp;-->
 
 <br>

@@ -166,16 +166,20 @@ var imapController = (function () {
                   //  self.downloadJournal();
                     var status=data.status;
                     if( status=="ko"){
-                        $("#generateFolderPdfArchiveButton").css("visibility","hidden")
-                        $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility","hidden")
+                        $("#generateFolderPdfArchiveButton").prop('disabled', true);
+                        $("#generateFolderPdfArchiveWithAttachmentButton").prop('disabled', true);
+                        $("#generateFolderPdfArchive").css("visibility","hidden")
+
                     }
                    else if( status=="okMessagesOnly"){
-                        $("#generateFolderPdfArchiveButton").css("visibility","visible")
-                        $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility","hidden")
+                        $("#generateFolderPdfArchiveButton").prop('disabled', true);
+                        $("#generateFolderPdfArchiveWithAttachmentButton").prop('disabled', false);
+                        $("#generateFolderPdfArchive").css("visibility","visible")
                     }
                     else if( status=="okAll"){
-                        $("#generateFolderPdfArchiveButton").css("visibility","visible");
-                        $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility","visible")
+                        $("#generateFolderPdfArchiveButton").prop('disabled', false);
+                        $("#generateFolderPdfArchiveWithAttachmentButton").prop('disabled', false);
+                        $("#generateFolderPdfArchive").css("visibility","visible")
                     }
 
                     return;

@@ -558,12 +558,8 @@ var port = 993;*/
 
                                 messages.folderSize += info.size;
                                 totalArchiveSize += info.size;
-                                if (folderCountMessages % 10 == 0) {
-                                    var totalDuration = Math.round((new Date() - startTime) / 1000);
-                                    socket.message("__" + folderCountMessages + " messages read from  folder " + folder + " " + common.roundToMO(messages.folderSize) + "MO.<br> Total archive : count " + totalArchiveCountMails + ", size  " + common.roundToMO(totalArchiveSize) + "MO in " + totalDuration + " sec.");
-                                }
-                                //  if(message.Subject.indexOf("Démonstration")>-1)
-                                //    var xx=1
+
+
 
                                 //process Attachments
                                 if (withAttachments && validAttachments[info.which]) {
@@ -647,6 +643,13 @@ var port = 993;*/
                                 message.attributes = attrs.uid;
                             });
                             msg.once('end', function () {
+                                //   if (folderCountMessages % 10 == 0) {
+                                folderInfos.processedMails+=1;
+                                if (folderInfos.processedMails % 10 == 0) {
+
+                                    var totalDuration = Math.round((new Date() - startTime) / 1000);
+                                    socket.message("__" + folderCountMessages + " messages read from  folder " + folder + " " + common.roundToMO(messages.folderSize) + "MO.<br>Total messages processed :"+folderInfos.processedMails+"in " + totalDuration + " sec.<br> Total archive : count " + totalArchiveCountMails + ", size  " + common.roundToMO(totalArchiveSize) + "MO");
+                                }
 
 
                             });
@@ -737,6 +740,7 @@ var port = 993;*/
         imapMailExtractor.getFolderHierarchy(mailAdress, password, rootFolder, folderId, function (err, folders) {
             var output = [];
             var mailListSb = "";// new StringBuilder('Hi');
+            var processedMails=0;
 
             async.eachSeries(folders, function (folder, callbackEachFolder) {
                 // on ne traite pas les boites partagées (fausses racinbes qui font planter)
@@ -841,8 +845,9 @@ var port = 993;*/
                         //  console.log(pdfArchiveFolderPath);
                         folderInfos.totalArchiveSize = archiveTotalSize;
                         folderInfos.totalArchiveCountMails = archiveTotalValidMails;
+                        folderInfos.processedMails=processedMails;
                         imapMailExtractor.processFolderPdfs(mailAdress, password, box, folderInfos, pdfArchiveFolderPath, withAttachments, startTime, function (err, messages) {
-
+                            processedMails+=messages.length;
                             if (err) {
                                 return callbackSerie2(err);
                             }

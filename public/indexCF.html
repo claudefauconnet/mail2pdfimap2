@@ -46,34 +46,51 @@
         <td>
             <input id="mailInput" value="claude.fauconnet@atd-quartmonde.org">
         </td>
-    </tr>
-    <tr>
+
         <td>
             password
         </td>
         <td>
             <input type='password' id="passwordInput" value="fc6kDgD8">
         </td>
+
+        <td>
+            <button onclick="imapController.loadTreeHierarchy();">Login</button>&nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="4">
+            <table>
+                <tr><img id="waitImg" src="images/waitAnimated.gif" width="30px" style="visibility: hidden;"><td>
+            <button id="scanFolderPdfArchiveButton" style="visibility: hidden" onclick="imapController.scanFolderPdfArchive();">
+               scan archive
+            </button>&nbsp;
+                </td><td>
+            <div id="generateFolderPdfArchive" style="visibility: visible;">
+            Select an option for archive génération<br> (depending on folders and attachment size)
+            <button id="generateFolderPdfArchiveButton" style="visibility: hidden"
+                    onclick="imapController.generateFolderPdfArchive();">3b. generate pdf
+            </button>&nbsp;
+
+            <button id="generateFolderPdfArchiveWithAttachmentButton" style="visibility: visible"
+                    onclick="imapController.generateFolderPdfArchive(true);">3b.generate pdf + attachments
+            </button>&nbsp;
+            </div>
+                </td></tr>
+            </table>
+        </td>
+
     </tr>
 
 
 </table>
-<button onclick="imapController.loadTreeHierarchy();">1.show folders</button>&nbsp;
 
-<button id="scanFolderPdfArchiveButton" style="visibility: hidden" onclick="imapController.scanFolderPdfArchive();">
-    2. scan archive
-</button>&nbsp;
 
-<button id="generateFolderPdfArchiveButton" style="visibility: hidden"
-        onclick="imapController.generateFolderPdfArchive();">3b. generate pdf
-</button>&nbsp;
 
-<button id="generateFolderPdfArchiveWithAttachmentButton" style="visibility: hidden"
-        onclick="imapController.generateFolderPdfArchive(true);">3b.generate pdf + attachments
-</button>&nbsp;
-<button id="downloadJournalButton" style="visibility: visible"
+<!--<button id="downloadJournalButton" style="visibility: visible"
         onclick="imapController.downloadJournal();">4.download journal
-</button>&nbsp;
+</button>&nbsp;-->
 <!--   <button id="downloadArchiveButton"  style="visibility: hidden"  onclick="imapController.downloadArchive();">3. download zip archive</button>&nbsp;-->
 
 <br>
@@ -84,8 +101,8 @@
         <td>
             <div id="jstreeDiv" style="font-weight: normal;color: saddlebrown;height: 500px; overflow: auto;"></div>
         </td>
-        <td valign="top"><img id="waitImg" src="images/waitAnimated.gif" width="30px" style="visibility: hidden;"><span
-                id="messageDiv3" style="font-weight: bold"></span><br>
+
+        <td valign="top"><span id="messageDiv3" style="font-weight: bold"></span><br>
             <div id="messageDiv2" style="font-weight: normal;color: saddlebrown;height: 500px; overflow: auto;">testtttttttt</div>
         </td>
     </tr>
