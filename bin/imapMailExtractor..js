@@ -29,6 +29,7 @@ var imapMailExtractor = {
     deleteDirAfterZip: true,
     archivePrefix: "pdfMailArchive",
     archiveMaxSize: 1000 * 1000 * 1000,//1000MO,
+    //archiveMaxSize: 1000 * 1000 * 1000,//1000MO,
     maxMessageSize: 1000 * 1000 * 5,
     maxAttachmentsSize: 1000 * 1000 * 5,
     minAttachmentsSize: 0, //pour filtrer les images signature
@@ -36,7 +37,13 @@ var imapMailExtractor = {
     host: 'imap.atd-quartmonde.org',
     port: 993,
     skippedFolders: ["Autres utilisateurs", "Dossiers partagés"],
-    attachmentsExcluded: ["logosignature.png", "atd_slogan.png"],
+    attachmentsExcluded: {
+        names: ["logosignature.png", "atd_slogan.png"],
+        smallerThan: 10000,
+        extensions: ["jpg", "png", "gif", "asc", "vcf"]
+    },
+
+
 
 
     /*var host = 'imap.sfr.fr';
@@ -787,8 +794,14 @@ var port = 993;*/
                             }
 
 
-                            if (!scanOnly && archiveAttachmentsSize > imapMailExtractor.archiveMaxSize) {
-                                var text = "Operation aborted : maximum size of archive reached :" + Math.round(archiveAttachmentsSize / 1000000) + "/" + Math.round(imapMailExtractor.archiveMaxSize / 1000000) + "MO"
+
+
+                            var totalSize= messages._globalInfo.totalSize;
+                                if(withAttachments)
+                                    totalSize+=archiveAttachmentsSize;
+                         //   if (!scanOnly && archiveAttachmentsSize > imapMailExtractor.archiveMaxSize) {
+                            if (!scanOnly && totalSize > imapMailExtractor.archiveMaxSize) {
+                                var text = "Operation aborted : maximum size of archive reached :" + Math.round(messages._globalInfo.totalSize / 1000000) + "/" + Math.round(imapMailExtractor.archiveMaxSize / 1000000) + "MO"
                                 socket.message(text);
                                 imapMailExtractor.deleteFolderRecursive(pdfArchiveRootPath);
                                 return callbackSerie(text);
@@ -868,12 +881,13 @@ var port = 993;*/
                         });
                     }
                     var status = "okAll";
-                    if (archiveTotalSize + archiveTotalRejectedMails > imapMailExtractor.archiveMaxSize) {
-                        text = "<span class='rejected'><B>Archive with attachments exceeds max allowed size : " + imapMailExtractor.archiveMaxSize + "try without attachments or with smaller subfolder</B></span>" + text;
-                        status:"okMessagesOnly"
-                    } else if (archiveTotalSize > imapMailExtractor.archiveMaxSize) {
-                        text = "<span class='rejected'><B>Archive exceeds max allowed size : " + imapMailExtractor.archiveMaxSize + "try  with smaller subfolder</B></span>" + text;
-                        status: "ko";
+                    if (archiveTotalSize > imapMailExtractor.archiveMaxSize) {
+                        text = "<span class='rejected'><B>Archive exceeds max allowed size ( " + common.roundToMO(imapMailExtractor.archiveMaxSize) + "MO)"+ "try  with smaller subfolder  or contact administrator</B></span><br>" + text;
+                        status= "ko";
+                    }
+                    else  if (archiveTotalSize + archiveAttachmentsSize > imapMailExtractor.archiveMaxSize) {
+                        text = "<span class='rejected'><B>Archive with attachments exceeds max allowed size (" +  common.roundToMO(imapMailExtractor.archiveMaxSize) + "MO)" + " you can  process an archive without attachments, or try with smaller subfolder or contact administrator</B></span><br>" + text;
+                        status="okMessagesOnly"
                     }
                     return callback(null, {
                         text: text,
@@ -1023,8 +1037,16 @@ var port = 993;*/
         pdfName = mailPdfGeneratorHtml.formatStringForArchive(pdfName, mailPdfGeneratorHtml.maxPdfSubjectLength);
 
         var attachmentName = imapMailExtractor.extractAttachmentName(attachmentInfos);
-        if (imapMailExtractor.attachmentsExcluded.indexOf(attachmentName) > -1)
+        //exclusion of logos and small images
+        if (imapMailExtractor.attachmentsExcluded.names.indexOf(attachmentName.toLowerCase()) > -1)
             return;
+        var p=attachmentName.lastIndexOf('.');
+        if(p>-1 ) {
+            var extension = attachmentName.substring(p + 1).toLowerCase();
+            if (imapMailExtractor.attachmentsExcluded.extensions.indexOf(attachmentName) > -1)
+                if(attachmentInfos.size<imapMailExtractor.attachmentsExcluded.smallerThan)
+                return;
+        }
         if (!attachmentName)
             attachmentName = "??";
 
