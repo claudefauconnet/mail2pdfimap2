@@ -2,9 +2,15 @@ var imapController = (function () {
     var self = {};
     self.currentState = "";
     self.currentFolder = "";
-    var serverUrl="./imap"
+    self.storedImapServer ;
+    self.storedMailAdress;
+    var serverUrl = "./imap"
 
     self.onLoadPage = function () {
+        self.storedImapServer = localStorage.getItem("mail2pdf_imapServer");
+        self.storedMailAdress = localStorage.getItem("mail2pdf_mailAdress");
+        $("#imapServer").val(self.storedImapServer || "")
+        $("#mailInput").val(self.storedMailAdress || "")
         var url = window.location.href;
         var p = url.indexOf('/index');
         url = url.substring(0, p);
@@ -31,12 +37,15 @@ var imapController = (function () {
 
     self.loadTreeHierarchy = function () {
 
+
+
         $("#waitImg").css("visibility", "visible")
         var payload = {
             getFolderHierarchy: 1,
             //   rootFolder: "testMail2Pdf",
             mailAdress: $("#mailInput").val(),
-            password: $("#passwordInput").val()
+            password: $("#passwordInput").val(),
+            imapServer: $("#imapServer").val()
         }
 
         $.ajax({
@@ -50,6 +59,14 @@ var imapController = (function () {
                     return;
 
                 }
+
+                if ($("#imapServer").val() != self.storedImapServer)
+                    localStorage.setItem("mail2pdf_imapServer", $("#imapServer").val())
+                if ($("#mailInput").val() != self.storedMailAdress)
+                    localStorage.setItem("mail2pdf_mailAdress", $("#mailInput").val())
+
+
+
                 self.currentState = "OPENED";
                 $("#messageDiv").html("Select a box to process");
 
@@ -69,9 +86,11 @@ var imapController = (function () {
                     }
 
                     ;
+
+                    $("#generateFolderPdfArchive").css("visibility", "hidden");
                     $("#generateFolderPdfArchiveButton").css("visibility", "hidden");
                     $("#scanFolderPdfArchiveButton").css("visibility", "visible");
-                   $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "hidden");
+                    $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "hidden");
                     $("#downloadJournalButton").css("visibility", "hidden");
 
                     $("#messageDiv2").html("");
@@ -138,7 +157,8 @@ var imapController = (function () {
             rootFolder: folderPath,
             mailAdress: $("#mailInput").val(),
             password: $("#passwordInput").val(),
-            folderId:folder.id
+            imapServer: $("#imapServer").val(),
+            folderId: folder.id
 
         }
         if (scanOnly)
@@ -163,24 +183,30 @@ var imapController = (function () {
                 $("#messageDiv3").html("<B>" + data.text + "</B>");
 
                 if (scanOnly) {
-                  //  self.downloadJournal();
-                    var status=data.status;
-                    if( status=="ko"){
-                        $("#generateFolderPdfArchiveButton").prop('disabled', true);
-                        $("#generateFolderPdfArchiveWithAttachmentButton").prop('disabled', true);
-                        $("#generateFolderPdfArchive").css("visibility","hidden")
+                    //  self.downloadJournal();
+                    var status = data.status;
+                    var WithAttachmentButtonState = true;
+                    var messagesOnlyButtonState = true;
+                    if (status == "ko") {
+                        WithAttachmentButtonState = true;
+                        messagesOnlyButtonState = true;
+
 
                     }
-                   else if( status=="okMessagesOnly"){
-                        $("#generateFolderPdfArchiveButton").prop('disabled', true);
-                        $("#generateFolderPdfArchiveWithAttachmentButton").prop('disabled', false);
-                        $("#generateFolderPdfArchive").css("visibility","visible")
+                    else if (status == "okMessagesOnly") {
+                        WithAttachmentButtonState = true;
+                        messagesOnlyButtonState = false;
                     }
-                    else if( status=="okAll"){
-                        $("#generateFolderPdfArchiveButton").prop('disabled', false);
-                        $("#generateFolderPdfArchiveWithAttachmentButton").prop('disabled', false);
-                        $("#generateFolderPdfArchive").css("visibility","visible")
+                    else if (status == "okAll") {
+                        WithAttachmentButtonState = false;
+                        messagesOnlyButtonState = false;
                     }
+                    $("#generateFolderPdfArchive").css("visibility", "visible")
+                    $("#generateFolderPdfArchiveButton").css("visibility", "visible")
+                    $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "visible")
+                    $("#generateFolderPdfArchiveButton").prop('disabled', messagesOnlyButtonState);
+                    $("#generateFolderPdfArchiveWithAttachmentButton").prop('disabled', WithAttachmentButtonState);
+
 
                     return;
                 }
@@ -231,12 +257,12 @@ var imapController = (function () {
 
 
     self.downloadJournal = function () {
-        var html = $("#messageDiv3").html()+"<br>"+$("#messageDiv2").html();
+        var html = $("#messageDiv3").html() + "<br>" + $("#messageDiv2").html();
 
         var selectedNodes = self.getJsTreeSelectedNodes(true);
         var folder = selectedNodes[0];
         var user = $("#mailInput").val()
-        var date = ""+new Date();
+        var date = "" + new Date();
 
         var style = "<style>\n" +
             "        body {\n" +

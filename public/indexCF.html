@@ -13,9 +13,8 @@
 
     <script>
         $(function () {
-      imapController.onLoadPage();
+            imapController.onLoadPage();
         })
-
 
 
     </script>
@@ -32,6 +31,12 @@
             font-style: italic;
             color: red;
         }
+
+        .modedemploi{
+            font-weight: normal;
+            color: blue;
+            font-size: 14px;
+        }
     </style>
 
 </head>
@@ -41,43 +46,53 @@
 <table>
     <tr>
         <td>
+            Imap server URL
+
+            <input id="imapServer">
+
             mail
-        </td>
-        <td>
-            <input id="mailInput" value="claude.fauconnet@atd-quartmonde.org">
-        </td>
 
-        <td>
+            <input id="mailInput" value="claude.fauconnet@atd-quartmonde.org" size="35">
+
             password
-        </td>
-        <td>
-            <input type='password' id="passwordInput" value="fc6kDgD8">
-        </td>
 
-        <td>
+            <input type='password' id="passwordInput" value="fc6kDgD8">
+
             <button onclick="imapController.loadTreeHierarchy();">Login</button>&nbsp;
         </td>
     </tr>
     <tr>
-        <td></td>
+
         <td colspan="4">
             <table>
-                <tr><img id="waitImg" src="images/waitAnimated.gif" width="30px" style="visibility: hidden;"><td>
-            <button id="scanFolderPdfArchiveButton" style="visibility: hidden" onclick="imapController.scanFolderPdfArchive();">
-               scan archive
-            </button>&nbsp;
-                </td><td>
-            <div id="generateFolderPdfArchive" style="visibility: visible;">
-            Select an option for archive génération<br> (depending on folders and attachment size)
-            <button id="generateFolderPdfArchiveButton" style="visibility: hidden"
-                    onclick="imapController.generateFolderPdfArchive();">3b. generate pdf
-            </button>&nbsp;
+                <tr>
+                    <td rowspan="2"><img id="waitImg" src="images/waitAnimated.gif" width="30px"
+                                         style="visibility: hidden;">
 
-            <button id="generateFolderPdfArchiveWithAttachmentButton" style="visibility: visible"
-                    onclick="imapController.generateFolderPdfArchive(true);">3b.generate pdf + attachments
-            </button>&nbsp;
-            </div>
-                </td></tr>
+                        <button id="scanFolderPdfArchiveButton" style="visibility: hidden"
+                                onclick="imapController.scanFolderPdfArchive();">
+                            scan archive size
+                        </button>&nbsp;
+                    </td>
+
+
+                    <td>
+                        <p align="center"  style="visibility: hidden;text-align: center">
+
+                            <span id="generateFolderPdfArchive"  style="visibility: hidden;" class="modedemploi">Select an option for archive generation (depending on folders / attachments size)</span>
+
+                   <br>   <br>
+                        <button id="generateFolderPdfArchiveButton" style="visibility: hidden;align-self: center"
+                                onclick="imapController.generateFolderPdfArchive();">3b. generate pdf
+                        </button>&nbsp;&nbsp;
+
+                        <button id="generateFolderPdfArchiveWithAttachmentButton" style="visibility: hidden;align-self: center"
+                                onclick="imapController.generateFolderPdfArchive(true);">3b.generate pdf + attachments
+                        </button>&nbsp;
+                       </p>
+
+                    </td>
+                </tr>
             </table>
         </td>
 
@@ -87,23 +102,24 @@
 </table>
 
 
-
 <!--<button id="downloadJournalButton" style="visibility: visible"
         onclick="imapController.downloadJournal();">4.download journal
 </button>&nbsp;-->
 <!--   <button id="downloadArchiveButton"  style="visibility: hidden"  onclick="imapController.downloadArchive();">3. download zip archive</button>&nbsp;-->
 
-<br>
-<div id="messageDiv" style="font-weight: bold;color: blue"></div>
+
+<div id="messageDiv" class="modedemploi"></div>
 <br>
 <table>
     <tr>
         <td>
-            <div id="jstreeDiv" style="font-weight: normal;color: saddlebrown;height: 500px; overflow: auto;"></div>
+            <div id="jstreeDiv" style="font-weight: normal;color: saddlebrown;height: 450px; overflow: auto;"></div>
         </td>
 
         <td valign="top"><span id="messageDiv3" style="font-weight: bold"></span><br>
-            <div id="messageDiv2" style="font-weight: normal;color: saddlebrown;height: 500px; overflow: auto;">testtttttttt</div>
+            <div id="messageDiv2" style="font-weight: normal;color: saddlebrown;height: 450px; overflow: auto;">
+
+            </div>
         </td>
     </tr>
 </table>
