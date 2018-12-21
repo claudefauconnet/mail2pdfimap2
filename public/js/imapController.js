@@ -72,7 +72,8 @@ var imapController = (function () {
 
                 $('#jstreeDiv').jstree({
                     'core': {
-                        'data': data
+                        'data': data,
+                        multiple:true
                     }
                 }).on('loaded.jstree', function () {
                     $('#jstreeDiv').jstree('open_all');

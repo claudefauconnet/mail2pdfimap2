@@ -490,6 +490,7 @@ var imapMailExtractor = {
         var totalArchiveCountMails = folderInfos.totalArchiveCountMails;
         var messages = [];
         messages.folderSize = 0;
+        messages.count = 0;
         var partsInfos = folderInfos.partsInfos;
         var i = 0;
         var imap = imapMailExtractor.getImapConn(imapServer, mailAdress, password);
@@ -691,7 +692,7 @@ var imapMailExtractor = {
                                     imapMailExtractor.sendSocketMessage(mailAdress, "<span class='rejected'>error while generating PDF  : " + err + "</span>");
                                 }
                                 //  totalArchiveCountMails += 1;
-
+                                messages.count++;
                                 return callbackEachMessage();
                             })
 
@@ -733,6 +734,7 @@ var imapMailExtractor = {
         var archiveTotalRejectedMails = 0;
         var startTime = new Date();
         imapMailExtractor.initSocketMessage(mailAdress);
+        var processedMails = 0;
 
         if (rootFolder) {
             var p = rootFolder.lastIndexOf("/");
@@ -744,7 +746,7 @@ var imapMailExtractor = {
 
 
         //set pdf files root path
-        var pdfArchiveRootPath = imapMailExtractor.pdfArchiveDir + "/" + imapMailExtractor.archivePrefix + "_" + mailAdress + "_" + Math.round(Math.random() * 100000);
+        var pdfArchiveRootPath = imapMailExtractor.pdfArchiveDir + "/" + imapMailExtractor.archivePrefix + "_" + mailAdress.replace("@","-At-") + "_" + Math.round(Math.random() * 100000);
         pdfArchiveRootPath = path.resolve(pdfArchiveRootPath);
         if (!fs.existsSync(pdfArchiveRootPath)) {
             fs.mkdirSync(pdfArchiveRootPath);
@@ -754,7 +756,7 @@ var imapMailExtractor = {
         imapMailExtractor.getFolderHierarchy(imapServer, mailAdress, password, rootFolder, folderId, function (err, folders) {
             var output = [];
             var mailListSb = "";// new StringBuilder('Hi');
-            var processedMails = 0;
+
 
             async.eachSeries(folders, function (folder, callbackEachFolder) {
                 // on ne traite pas les boites partagées (fausses racinbes qui font planter)
@@ -860,7 +862,7 @@ var imapMailExtractor = {
                         folderInfos.totalArchiveCountMails = archiveTotalValidMails;
                         folderInfos.processedMails = processedMails;
                         imapMailExtractor.processFolderPdfs(imapServer, mailAdress, password, box, folderInfos, pdfArchiveFolderPath, withAttachments, startTime, function (err, messages) {
-                            processedMails += messages.length;
+                            processedMails += messages.count;
                             if (err) {
                                 return callbackSerie2(err);
                             }
@@ -1061,6 +1063,8 @@ var imapMailExtractor = {
         pdfName = mailPdfGeneratorHtml.formatStringForArchive(pdfName, mailPdfGeneratorHtml.maxPdfSubjectLength);
 
         var attachmentName = imapMailExtractor.extractAttachmentName(attachmentInfos);
+        if(!attachmentName)
+            return;
         //exclusion of logos and small images
         if (imapMailExtractor.attachmentsExcluded.names.indexOf(attachmentName.toLowerCase()) > -1)
             return;
