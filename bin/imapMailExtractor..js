@@ -27,7 +27,7 @@ process.setMaxListeners(0);
 
 
 var imapMailExtractor = {
-    listMails:false,
+    listMails: false,
     deleteDirAfterZip: true,
     archivePrefix: "pdfMailArchive",
     archiveMaxSize: 1000 * 1000 * 1000,//1000MO,
@@ -47,8 +47,8 @@ var imapMailExtractor = {
 
 
     getImapConn: function (imapServer, mailAdress, password) {
-      //  console.log("----------imapServer:" + imapServer);
-     //   console.log("----------mailAdress:" + mailAdress);
+        //  console.log("----------imapServer:" + imapServer);
+        //   console.log("----------mailAdress:" + mailAdress);
         var imapServerPort;
         var imapServerHost;
         if (!imapServer) {
@@ -369,6 +369,9 @@ var imapMailExtractor = {
     ,
     getFolderMailsInfos: function (imapServer, mailAdress, password, folder, callback1) {
 
+        if (folder.indexOf("Arto") > -1)
+            var xx = 1
+
         var messages = {
             _globalInfo: {
                 totalSize: 0,
@@ -377,6 +380,7 @@ var imapMailExtractor = {
                 attachmentsSize: 0
             }
         };
+
         var imap = imapMailExtractor.getImapConn(imapServer, mailAdress, password);
         imap.once('ready', function () {
             imap.openBox(folder, true, function (err, box) {
@@ -721,8 +725,112 @@ var imapMailExtractor = {
     }
     ,
 
+    generateMultiFoldersHierarchyMessages: function (imapServer, mailAdress, password, rootFolders, folderIds, withAttachments, scanOnly, callback) {
 
-    generateFolderHierarchyMessages: function (imapServer, mailAdress, password, rootFolder, folderId, withAttachments, scanOnly, callback) {
+
+        //set pdf files root path
+        var pdfArchiveRootPath = imapMailExtractor.pdfArchiveDir + "/" + imapMailExtractor.archivePrefix + "_" + mailAdress.replace("@", "-At-") + "_" + Math.round(Math.random() * 100000);
+        pdfArchiveRootPath = path.resolve(pdfArchiveRootPath);
+        if (!fs.existsSync(pdfArchiveRootPath)) {
+            fs.mkdirSync(pdfArchiveRootPath);
+        }
+        var index = 0;
+        var allResults = [];
+        async.eachSeries(folderIds, function (folderId, callbackEach) {
+                var rootFolder = rootFolders[index++];
+                imapMailExtractor.generateFolderHierarchyMessages(imapServer, mailAdress, password, rootFolder, folderId, withAttachments, scanOnly, pdfArchiveRootPath, function (err, result) {
+                    if (err) {
+                        return callbackEach(err);
+                    }
+                    var endFolderMessage = "Total mails Processed : " + result.archiveTotalValidMails + " in " + result.totalDuration + "sec,  size:" + common.roundToMO(result.archiveAttachmentsSize) + "MO";
+                    imapMailExtractor.sendSocketMessage(mailAdress, endFolderMessage)
+                   // imapMailExtractor.storeSocketMessage(mailAdress, endFolderMessage);
+
+                    allResults.push(result)
+                    callbackEach(null)
+                })
+
+            },
+            function (err) {// at the end of processing all folders
+                if (err) {
+                    return callback(err);
+                }
+
+                var xx = allResults;
+                var totalDuration = 0;
+                var archiveTotalValidMails = 0;
+                var archiveTotalRejectedMails = 0;
+                var archiveTotalSize = 0;
+                var archiveAttachmentsSize = 0;
+                allResults.forEach(function (line) {
+                    totalDuration += line.totalDuration;
+                    archiveTotalValidMails += line.archiveTotalValidMails;
+                    archiveTotalRejectedMails += line.archiveTotalRejectedMails;
+                    archiveTotalSize += line.archiveTotalSize;
+                    archiveAttachmentsSize += line.archiveAttachmentsSize;
+
+                })
+                var text = "";
+                if (scanOnly)
+                    text = "Archive scan  result :";
+
+                text += "<br>Total mails  :" + (archiveTotalValidMails + archiveTotalRejectedMails) +
+                    "<br>Total archive size  :" + common.roundToMO(archiveTotalSize) + "MO" +
+                    "<br>Total attachments size  :" + common.roundToMO(archiveAttachmentsSize) + "MO"
+
+                if (scanOnly) {
+                    var status = "okAll";
+                    if (archiveTotalSize > imapMailExtractor.archiveMaxSize) {
+                        text = "<span class='rejected'><B>Archive exceeds max allowed size ( " + common.roundToMO(imapMailExtractor.archiveMaxSize) + "MO)" + "<br>try  with smaller subfolder  or contact administrator</B></span><br>" + text;
+                        status = "ko";
+                    }
+                    else if (archiveTotalSize + archiveAttachmentsSize > imapMailExtractor.archiveMaxSize) {
+                        text = "<span class='rejected'><B>Archive with attachments exceeds max allowed size (" + common.roundToMO(imapMailExtractor.archiveMaxSize) + "MO)" + "<br> you can  process an archive without attachments, or try with smaller subfolder or contact administrator</B></span><br>" + text;
+                        status = "okMessagesOnly"
+                    }
+                    return callback(null, {
+                        text: text,
+                        status: status
+
+                    })
+                }
+
+                var endMessage = "Total mails Processed : " + archiveTotalValidMails + " in " + totalDuration + "sec, preparing zip download, size:" + common.roundToMO(archiveAttachmentsSize) + "MO" + "<br>" + text;
+                var listMails = false;
+                if (listMails) {
+                    fs.writeFileSync(pdfArchiveRootPath + "/mailsList.txt", mailListSb);
+                    imapMailExtractor.sendSocketMessage(mailAdress, endMessage)
+                    imapMailExtractor.storeSocketMessage(mailAdress, pdfArchiveRootPath);
+                }
+
+
+                imapMailExtractor.sendSocketMessage(mailAdress, "creating  zip archive on server...");
+                setTimeout(function () {
+
+                    zipdir(pdfArchiveRootPath, function (err, buffer) {
+                        if (err)
+                            return callback(err);
+                        fs.writeFileSync(pdfArchiveRootPath + ".zip", buffer);
+
+                        if (imapMailExtractor.deleteDirAfterZip)
+                            setTimeout(function () {
+                                imapMailExtractor.deleteFolderRecursive(pdfArchiveRootPath);
+                            }, 1000 * 60 * 10)
+                        return callback(null, {
+
+                            text: endMessage,
+                            pdfArchiveRootPath: pdfArchiveRootPath + ".zip"
+                        })
+                    })
+                }, 1000 * 5)
+
+            }
+        )
+    }
+
+    ,
+
+    generateFolderHierarchyMessages: function (imapServer, mailAdress, password, rootFolder, folderId, withAttachments, scanOnly, pdfArchiveRootPath, callback) {
 
         var listMails = imapMailExtractor.listMails;
         var archivePath = null;
@@ -745,14 +853,6 @@ var imapMailExtractor = {
         imapMailExtractor.sendSocketMessage(mailAdress, message);
 
 
-        //set pdf files root path
-        var pdfArchiveRootPath = imapMailExtractor.pdfArchiveDir + "/" + imapMailExtractor.archivePrefix + "_" + mailAdress.replace("@","-At-") + "_" + Math.round(Math.random() * 100000);
-        pdfArchiveRootPath = path.resolve(pdfArchiveRootPath);
-        if (!fs.existsSync(pdfArchiveRootPath)) {
-            fs.mkdirSync(pdfArchiveRootPath);
-        }
-
-
         imapMailExtractor.getFolderHierarchy(imapServer, mailAdress, password, rootFolder, folderId, function (err, folders) {
             var output = [];
             var mailListSb = "";// new StringBuilder('Hi');
@@ -760,6 +860,7 @@ var imapMailExtractor = {
 
             async.eachSeries(folders, function (folder, callbackEachFolder) {
                 // on ne traite pas les boites partagées (fausses racinbes qui font planter)
+                // console.log(folder.text);
                 if (imapMailExtractor.skippedFolders.indexOf(folder.text) > -1) {
                     return callbackEachFolder();
                 }
@@ -785,6 +886,7 @@ var imapMailExtractor = {
                 if (listMails) {
                     mailListSb += ("\n" + box + "\t");
                 }
+
 
                 async.series([
 
@@ -886,63 +988,18 @@ var imapMailExtractor = {
                     console.log(err);
                     return callback(err);
                 }
-                var text = "";
-                if (scanOnly)
-                    text = "Archive scan  result :";
 
-                text += "<br>Total mails  :" + (archiveTotalValidMails + archiveTotalRejectedMails) +
-                    // "<br>Total valid mails  :" + archiveTotalValidMails +
-                    // "<br>Total rejected mails  :" + archiveTotalRejectedMails +
-                    "<br>Total archive size  :" + common.roundToMO(archiveTotalSize) + "MO" +
-                    "<br>Total attachments size  :" + common.roundToMO(archiveAttachmentsSize) + "MO"
+                       return callback(null, {
+
+                    archiveTotalSize: archiveTotalSize,
+                    archiveTotalValidMails: archiveTotalValidMails,
+                    archiveTotalRejectedMails: archiveTotalRejectedMails,
+                    archiveAttachmentsSize: archiveAttachmentsSize,
+                    totalDuration: totalDuration
+
+                })
 
 
-                if (scanOnly) {
-
-                    var status = "okAll";
-                    if (archiveTotalSize > imapMailExtractor.archiveMaxSize) {
-                        text = "<span class='rejected'><B>Archive exceeds max allowed size ( " + common.roundToMO(imapMailExtractor.archiveMaxSize) + "MO)" + "<br>try  with smaller subfolder  or contact administrator</B></span><br>" + text;
-                        status = "ko";
-                    }
-                    else if (archiveTotalSize + archiveAttachmentsSize > imapMailExtractor.archiveMaxSize) {
-                        text = "<span class='rejected'><B>Archive with attachments exceeds max allowed size (" + common.roundToMO(imapMailExtractor.archiveMaxSize) + "MO)" + "<br> you can  process an archive without attachments, or try with smaller subfolder or contact administrator</B></span><br>" + text;
-                        status = "okMessagesOnly"
-                    }
-                    return callback(null, {
-                        text: text,
-                        status: status
-
-                    })
-                }
-                var endMessage = "Total mails Processed : " + archiveTotalValidMails + " in " + totalDuration + "sec, preparing zip download, size:" + common.roundToMO(archiveAttachmentsSize) + "MO" + "<br>" + text;
-
-                if (listMails) {
-                    fs.writeFileSync(pdfArchiveRootPath + "/mailsList.txt", mailListSb);
-                    imapMailExtractor.sendSocketMessage(mailAdress, endMessage)
-                    // imapMailExtractor.sendSocketMessage(mailAdress, "<style> body { font-family: Verdana; font-size: 12px;}.rejected { font-style: italic;color: red;}</style>")
-                    imapMailExtractor.storeSocketMessage(mailAdress, pdfArchiveRootPath);
-                }
-
-                //  console.log(pdfArchiveRootPath)
-                imapMailExtractor.sendSocketMessage(mailAdress, "creating  zip archive on server...");
-                setTimeout(function () {
-
-                    zipdir(pdfArchiveRootPath, function (err, buffer) {
-                        if (err)
-                            return callback(err);
-                        fs.writeFileSync(pdfArchiveRootPath + ".zip", buffer);
-
-                        if (imapMailExtractor.deleteDirAfterZip)
-                            setTimeout(function () {
-                                imapMailExtractor.deleteFolderRecursive(pdfArchiveRootPath);
-                            }, 1000 * 60 * 10)
-                        return callback(null, {
-
-                            text: endMessage,
-                            pdfArchiveRootPath: pdfArchiveRootPath + ".zip"
-                        })
-                    })
-                }, 1000 * 5)
             })
 
 
@@ -1063,7 +1120,7 @@ var imapMailExtractor = {
         pdfName = mailPdfGeneratorHtml.formatStringForArchive(pdfName, mailPdfGeneratorHtml.maxPdfSubjectLength);
 
         var attachmentName = imapMailExtractor.extractAttachmentName(attachmentInfos);
-        if(!attachmentName)
+        if (!attachmentName)
             return;
         //exclusion of logos and small images
         if (imapMailExtractor.attachmentsExcluded.names.indexOf(attachmentName.toLowerCase()) > -1)

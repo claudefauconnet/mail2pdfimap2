@@ -1,6 +1,7 @@
 var imapController = (function () {
     var self = {};
     self.currentState = "";
+    self.currentFolder = "";
     self.storedImapServer ;
     self.storedMailAdress;
     var serverUrl = "./imap"
@@ -123,6 +124,7 @@ var imapController = (function () {
         jQuery.each(selectedIndexes, function (index, value) {
             selectedData.push(selectedIndexes[index]);
         });
+        self.currentFolder = selectedData[0].text;
         return selectedData;
     }
 
@@ -144,32 +146,24 @@ var imapController = (function () {
         $("#messageDiv").html("");
         $("#waitImg").css("visibility", "visible")
         self.currentState = "ARCHIVE_PROCESSING";
-      //  var folder = selectedNodes[0];
-        var folderPathes = [];
-        var folderIds = [];
-        selectedNodes.forEach(function(folder){
-            var folderPath=""
+        var folder = selectedNodes[0];
+        var folderPath = "";
         for (var i = 0; i < folder.original.ancestors.length; i++) {
             if (i > 0)
                 folderPath += "/";
             folderPath += folder.original.ancestors[i];
         }
-            folderPathes.push(folderPath)
-            folderIds.push(folder.id)
-        })
         var payload = {
-            generateMultiFoldersHierarchyMessages: 1,
-            rootFolders: folderPathes,
+            generateFolderHierarchyMessages: 1,
+            rootFolder: folderPath,
             mailAdress: $("#mailInput").val(),
             password: $("#passwordInput").val(),
             imapServer: $("#imapServer").val(),
-            folderIds: folderIds
+            folderId: folder.id
 
         }
         if (scanOnly)
             payload.scanOnly = true
-        else
-            $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "hidden");
         if (withAttachments)
             payload.withAttachments = true;
 
