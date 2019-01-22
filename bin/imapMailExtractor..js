@@ -726,7 +726,10 @@ var imapMailExtractor = {
     ,
 
     generateMultiFoldersHierarchyMessages: function (imapServer, mailAdress, password, rootFolders, folderIds, withAttachments, scanOnly, callback) {
-
+        if (!Array.isArray(folderIds))
+            folderIds = [folderIds];
+        if (!Array.isArray(rootFolders))
+            rootFolders = [rootFolders];
 
         //set pdf files root path
         var pdfArchiveRootPath = imapMailExtractor.pdfArchiveDir + "/" + imapMailExtractor.archivePrefix + "_" + mailAdress.replace("@", "-At-") + "_" + Math.round(Math.random() * 100000);
@@ -744,7 +747,7 @@ var imapMailExtractor = {
                     }
                     var endFolderMessage = "Total mails Processed : " + result.archiveTotalValidMails + " in " + result.totalDuration + "sec,  size:" + common.roundToMO(result.archiveAttachmentsSize) + "MO";
                     imapMailExtractor.sendSocketMessage(mailAdress, endFolderMessage)
-                   // imapMailExtractor.storeSocketMessage(mailAdress, endFolderMessage);
+                    // imapMailExtractor.storeSocketMessage(mailAdress, endFolderMessage);
 
                     allResults.push(result)
                     callbackEach(null)
@@ -989,7 +992,7 @@ var imapMailExtractor = {
                     return callback(err);
                 }
 
-                       return callback(null, {
+                return callback(null, {
 
                     archiveTotalSize: archiveTotalSize,
                     archiveTotalValidMails: archiveTotalValidMails,
