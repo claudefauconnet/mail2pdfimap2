@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var imapMailExtractor=require('../bin/imapMailExtractor..js');
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -12,6 +13,7 @@ router.get('/socket.io', function(req, res, next) {
 });
 
 router.post('/imap', function (req, response) {
+
     //  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!" + JSON.stringify(req.body));
     if (req.body.getFolderHierarchy)
         imapMailExtractor.getFolderHierarchy(req.body.imapServer,req.body.mailAdress,req.body.password ,req.body.rootFolder,req.body.folderId,  function (error, result) {
