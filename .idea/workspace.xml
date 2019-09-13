@@ -2,18 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a96685c-461d-44a4-ab34-6a49d3b4b2ca" name="Default" comment="">
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/bin/imapMailExtractor..js" afterPath="$PROJECT_DIR$/bin/imapMailExtractor..js" />
       <change beforePath="$PROJECT_DIR$/public/index.html" afterPath="$PROJECT_DIR$/public/index.html" />
       <change beforePath="$PROJECT_DIR$/public/indexCF.html" afterPath="$PROJECT_DIR$/public/indexCF.html" />
       <change beforePath="$PROJECT_DIR$/public/js/imapController.js" afterPath="$PROJECT_DIR$/public/js/imapController.js" />
       <change beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
+=======
+      <change afterPath="$PROJECT_DIR$/bin/elasticIndexer..js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/imapMailExtractor..js" beforeDir="false" afterPath="$PROJECT_DIR$/bin/imapMailExtractor..js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/indexCF.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/indexCF.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/imapController.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/imapController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
-    <ignored path="$PROJECT_DIR$/.tmp/" />
-    <ignored path="$PROJECT_DIR$/temp/" />
-    <ignored path="$PROJECT_DIR$/tmp/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,6 +28,7 @@
   <component name="FavoritesManager">
     <favorites_list name="mail2pdfImap" />
   </component>
+<<<<<<< Updated upstream
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="imapMailExtractor..js" pinned="false" current-in-tab="false">
@@ -144,15 +151,18 @@
       </file>
     </leaf>
   </component>
+=======
+>>>>>>> Stashed changes
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="JS module" />
         <option value="HTML File" />
+        <option value="JS module" />
       </list>
     </option>
   </component>
+<<<<<<< Updated upstream
   <component name="FindInProjectRecents">
     <findStrings>
       <find>sock</find>
@@ -257,11 +267,18 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
+=======
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+>>>>>>> Stashed changes
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1280" />
     <option name="height" value="680" />
   </component>
+  <component name="ProjectId" id="1QmgwnvT6YN56mSwyREqUFeg10D" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+<<<<<<< Updated upstream
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -318,15 +335,23 @@
       <pane id="Scratches" />
     </panes>
   </component>
+=======
+>>>>>>> Stashed changes
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="project.scopes" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="nodejs_interpreter_path" value="node" />
-    <property name="javascript.nodejs.core.library.configured.version" value="8.10.0" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="javascript.nodejs.core.library.configured.version" value="10.16.0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path" value="node" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
+<<<<<<< Updated upstream
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+=======
+    <property name="settings.editor.selected.configurable" value="project.scopes" />
+>>>>>>> Stashed changes
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -354,33 +379,42 @@
     </option>
   </component>
   <component name="RunManager" selected="Node.js.bin\www">
-    <configuration name="imapMailExtractor..js" type="NodeJSConfigurationType" factoryName="Node.js" path-to-js-file="imapMailExtractor..js" working-dir="$PROJECT_DIR$/bin" />
-    <configuration name="index.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/node_modules/wkhtmltopdf" />
-    <configuration name="mailPdfGeneratorHtml.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="mailPdfGeneratorHtml.js" working-dir="$PROJECT_DIR$/bin" />
-    <configuration name="testEncoding..js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="testEncoding..js" working-dir="$PROJECT_DIR$/bin" />
-    <configuration name="testImapSimple..js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="testImapSimple..js" working-dir="$PROJECT_DIR$/bin" />
-    <configuration name="testSocket..js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="testSocket..js" working-dir="$PROJECT_DIR$/bin" />
-    <list size="7">
-      <item index="0" class="java.lang.String" itemvalue="Node.js.bin\www" />
-      <item index="1" class="java.lang.String" itemvalue="Node.js.imapMailExtractor..js" />
-      <item index="2" class="java.lang.String" itemvalue="Node.js.mailPdfGeneratorHtml.js" />
-      <item index="3" class="java.lang.String" itemvalue="Node.js.index.js" />
-      <item index="4" class="java.lang.String" itemvalue="Node.js.testEncoding..js" />
-      <item index="5" class="java.lang.String" itemvalue="Node.js.testImapSimple..js" />
-      <item index="6" class="java.lang.String" itemvalue="Node.js.testSocket..js" />
+    <configuration name="imapMailExtractor..js" type="NodeJSConfigurationType" path-to-js-file="imapMailExtractor..js" working-dir="$PROJECT_DIR$/bin">
+      <method v="2" />
+    </configuration>
+    <configuration name="index.js" type="NodeJSConfigurationType" temporary="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/node_modules/wkhtmltopdf">
+      <method v="2" />
+    </configuration>
+    <configuration name="mailPdfGeneratorHtml.js" type="NodeJSConfigurationType" temporary="true" path-to-js-file="mailPdfGeneratorHtml.js" working-dir="$PROJECT_DIR$/bin">
+      <method v="2" />
+    </configuration>
+    <configuration name="testEncoding..js" type="NodeJSConfigurationType" temporary="true" path-to-js-file="testEncoding..js" working-dir="$PROJECT_DIR$/bin">
+      <method v="2" />
+    </configuration>
+    <configuration name="testImapSimple..js" type="NodeJSConfigurationType" temporary="true" path-to-js-file="testImapSimple..js" working-dir="$PROJECT_DIR$/bin">
+      <method v="2" />
+    </configuration>
+    <configuration name="testSocket..js" type="NodeJSConfigurationType" temporary="true" path-to-js-file="testSocket..js" working-dir="$PROJECT_DIR$/bin">
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Node.js.bin\www" />
+      <item itemvalue="Node.js.imapMailExtractor..js" />
+      <item itemvalue="Node.js.mailPdfGeneratorHtml.js" />
+      <item itemvalue="Node.js.index.js" />
+      <item itemvalue="Node.js.testEncoding..js" />
+      <item itemvalue="Node.js.testImapSimple..js" />
+      <item itemvalue="Node.js.testSocket..js" />
     </list>
     <recent_temporary>
-      <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Node.js.testSocket..js" />
-        <item index="1" class="java.lang.String" itemvalue="Node.js.testImapSimple..js" />
-        <item index="2" class="java.lang.String" itemvalue="Node.js.testEncoding..js" />
-        <item index="3" class="java.lang.String" itemvalue="Node.js.mailPdfGeneratorHtml.js" />
-        <item index="4" class="java.lang.String" itemvalue="Node.js.index.js" />
+      <list>
+        <item itemvalue="Node.js.testSocket..js" />
+        <item itemvalue="Node.js.testImapSimple..js" />
+        <item itemvalue="Node.js.testEncoding..js" />
+        <item itemvalue="Node.js.mailPdfGeneratorHtml.js" />
+        <item itemvalue="Node.js.index.js" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -435,6 +469,7 @@
       <workItem from="1538117764999" duration="728000" />
       <workItem from="1538149257334" duration="20311000" />
       <workItem from="1538386739420" duration="50000" />
+<<<<<<< Updated upstream
       <workItem from="1538407573407" duration="612000" />
     </task>
     <servers />
@@ -442,6 +477,25 @@
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="537206000" />
   </component>
+=======
+      <workItem from="1538407573407" duration="5178000" />
+      <workItem from="1538470769671" duration="3570000" />
+      <workItem from="1538984544504" duration="2042000" />
+      <workItem from="1540828309974" duration="808000" />
+      <workItem from="1541432564064" duration="632000" />
+      <workItem from="1544977782024" duration="2297000" />
+      <workItem from="1545908168842" duration="6400000" />
+      <workItem from="1546962560704" duration="4373000" />
+      <workItem from="1547066146213" duration="1197000" />
+      <workItem from="1547317460285" duration="713000" />
+      <workItem from="1548094008013" duration="15300000" />
+      <workItem from="1559583194791" duration="608000" />
+      <workItem from="1559720086618" duration="3000" />
+      <workItem from="1568381431133" duration="3193000" />
+    </task>
+    <servers />
+  </component>
+>>>>>>> Stashed changes
   <component name="TodoView">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
@@ -451,6 +505,7 @@
       <is-autoscroll-to-source value="true" />
     </todo-panel>
   </component>
+<<<<<<< Updated upstream
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="2902" height="1570" extended-state="6" />
     <layout>
@@ -494,11 +549,21 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35964912" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
+=======
+>>>>>>> Stashed changes
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -513,15 +578,30 @@
           <line>5</line>
           <option name="timeStamp" value="1333" />
         </line-breakpoint>
+<<<<<<< Updated upstream
+=======
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>360</line>
+          <option name="timeStamp" value="1400" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
+          <line>470</line>
+          <option name="timeStamp" value="1403" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bin/elasticIndexer..js</url>
+          <line>34</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1456" />
+        </line-breakpoint>
+>>>>>>> Stashed changes
       </breakpoints>
-      <breakpoints-dialog>
-        <breakpoints-dialog />
-      </breakpoints-dialog>
       <default-breakpoints>
-        <breakpoint type="dart-exception">
-          <properties />
-        </breakpoint>
+        <breakpoint type="dart-exception" />
       </default-breakpoints>
+<<<<<<< Updated upstream
       <option name="time" value="1371" />
     </breakpoint-manager>
     <watches-manager />
@@ -772,6 +852,9 @@
         </state>
       </provider>
     </entry>
+=======
+    </breakpoint-manager>
+>>>>>>> Stashed changes
   </component>
   <component name="masterDetails">
     <states>

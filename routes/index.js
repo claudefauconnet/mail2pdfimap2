@@ -19,9 +19,19 @@ router.post('/imap', function (req, response) {
         });
 
     if (req.body. generateFolderHierarchyMessages)
-        imapMailExtractor. generateFolderHierarchyMessages(req.body.imapServer,req.body.mailAdress,req.body.password ,req.body.rootFolder,req.body.folderId, req.body.withAttachments, req.body.scanOnly, function (error, result) {
+        imapMailExtractor. generateFolderHierarchyMessages(req.body.imapServer,req.body.mailAdress,req.body.password ,req.body.rootFolder,req.body.folderId, req.body.withAttachments, req.body.scanOnly,req.body.indexElastic, function (error, result) {
             processResponse(response, error, result)
         });
+<<<<<<< Updated upstream
+=======
+    if (req.body. generateMultiFoldersHierarchyMessages)
+        imapMailExtractor. generateMultiFoldersHierarchyMessages(req.body.imapServer,req.body.mailAdress,req.body.password ,req.body["rootFolders[]"],req.body["folderIds[]"], req.body.withAttachments, req.body.scanOnly,req.body.indexElastic, function (error, result) {
+            processResponse(response, error, result)
+        });
+
+
+
+>>>>>>> Stashed changes
     if (req.body.downloadArchive)
         imapMailExtractor.downloadArchive(req.body.mailAdress,req.body.pdfArchiveRootPath, response);
     if (req.body.downloadJournal)

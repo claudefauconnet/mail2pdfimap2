@@ -132,6 +132,73 @@ var imapController = (function () {
 
     }
 
+
+    self.indexMails = function (withAttachments, scanOnly) {
+
+var index=prompt("Enter index name");
+if(!index || index=="")
+    return
+        var selectedNodes = self.getJsTreeSelectedNodes();
+        if (selectedNodes.length == 0) {
+            return alert("select a root folder first");
+        }
+        $("#messageDiv3").html("Processing...");
+        $("#messageDiv2").html("");
+        $("#messageDiv").html("");
+        $("#waitImg").css("visibility", "visible")
+        self.currentState = "ARCHIVE_PROCESSING";
+        //  var folder = selectedNodes[0];
+        var folderPathes = [];
+        var folderIds = [];
+        selectedNodes.forEach(function(folder){
+            var folderPath=""
+            for (var i = 0; i < folder.original.ancestors.length; i++) {
+                if (i > 0)
+                    folderPath += "/";
+                folderPath += folder.original.ancestors[i];
+            }
+            folderPathes.push(folderPath)
+            folderIds.push(folder.id)
+        })
+        var payload = {
+            generateMultiFoldersHierarchyMessages: 1,
+            rootFolders: folderPathes,
+            mailAdress: $("#mailInput").val(),
+            password: $("#passwordInput").val(),
+            imapServer: $("#imapServer").val(),
+            folderIds: folderIds,
+
+            indexElastic:index,
+
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: serverUrl,
+            data: payload,
+            timeout: 1000 * 3600 * 2,
+            dataType: "json",
+            success: function (data, textStatus, jqXHR) {
+                self.currentState ="_done" ;
+                $("#waitImg").css("visibility", "hidden");
+                $("#messageDiv3").html("<B>" + "Indexation DONE" + "</B>");
+            },
+            error: function (err, status) {
+
+                console.log(status);
+                $("#waitImg").css("visibility", "hidden")
+                console.log(err);
+                self.currentState = "";
+                $("#messageDiv").html("ERROR : " + err.responseText);
+            }
+        })
+
+
+    }
+
+
+
     self.generateFolderPdfArchive = function (withAttachments, scanOnly) {
 
 
