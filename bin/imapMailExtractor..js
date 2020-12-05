@@ -1052,12 +1052,12 @@ var imapMailExtractor = {
                 //  console.log(pdfArchiveRootPath)
                 imapMailExtractor.sendSocketMessage(mailAdress, "creating  zip archive on server...");
                 setTimeout(function () {
-
+console.log(pdfArchiveRootPath);
                     zipdir(pdfArchiveRootPath, function (err, buffer) {
                         if (err)
                             return callback(err);
-                        fs.writeFileSync(pdfArchiveRootPath + ".zip", buffer);
-
+                       // fs.writeFileSync(pdfArchiveRootPath + ".zip", buffer);
+                        fs.writeFile(pdfArchiveRootPath + ".zip",buffer,function(err) {
                         if (imapMailExtractor.deleteDirAfterZip)
                             setTimeout(function () {
                                 imapMailExtractor.deleteFolderRecursive(pdfArchiveRootPath);
@@ -1067,6 +1067,7 @@ var imapMailExtractor = {
                             text: endMessage,
                             pdfArchiveRootPath: pdfArchiveRootPath + ".zip"
                         })
+                    })
                     })
                 }, 1000 * 5)
             })
@@ -1188,6 +1189,8 @@ var imapMailExtractor = {
         pdfName = mailPdfGeneratorHtml.formatStringForArchive(pdfName, mailPdfGeneratorHtml.maxPdfSubjectLength);
 
         var attachmentName = imapMailExtractor.extractAttachmentName(attachmentInfos);
+        if(!attachmentName)
+            return;
         //exclusion of logos and small images
         if (imapMailExtractor.attachmentsExcluded.names.indexOf(attachmentName.toLowerCase()) > -1)
             return;
