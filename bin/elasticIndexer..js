@@ -12,7 +12,7 @@ var elasticIndexer={
 
             var id = ""+elasticId
 
-
+mail.content=mail.Subject+";"+mail.From+";"+mail.To+";"+mail.Cc+";"+mail.text+";"
             str+=JSON.stringify({index:{"_index": index, _type: index, "_id": id}})+"\r\n"
             str+=JSON.stringify(mail)+"\r\n"
 
@@ -35,6 +35,9 @@ var elasticIndexer={
             if (error)
                 return callback(err);
 
+            var result=new String(body)
+            if(result.errors)
+                return callback(errors)
             return callback();
         })
     }

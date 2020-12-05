@@ -1,8 +1,7 @@
 var imapController = (function () {
     var self = {};
     self.currentState = "";
-    self.currentFolder = "";
-    self.storedImapServer ;
+    self.storedImapServer;
     self.storedMailAdress;
     var serverUrl = "./imap"
 
@@ -32,11 +31,15 @@ var imapController = (function () {
                 $("#messageDiv2").prepend(message + "<br>");
             }
         })
+
+        self.initBoxesSelect();
+
+
+
     }
 
 
     self.loadTreeHierarchy = function () {
-
 
 
         $("#waitImg").css("visibility", "visible")
@@ -66,13 +69,13 @@ var imapController = (function () {
                     localStorage.setItem("mail2pdf_mailAdress", $("#mailInput").val())
 
 
-
                 self.currentState = "OPENED";
                 $("#messageDiv").html("Select a box to process");
 
                 $('#jstreeDiv').jstree({
                     'core': {
-                        'data': data
+                        'data': data,
+                        multiple: true
                     }
                 }).on('loaded.jstree', function () {
                     $('#jstreeDiv').jstree('open_all');
@@ -123,7 +126,6 @@ var imapController = (function () {
         jQuery.each(selectedIndexes, function (index, value) {
             selectedData.push(selectedIndexes[index]);
         });
-        self.currentFolder = selectedData[0].text;
         return selectedData;
     }
 
@@ -131,73 +133,6 @@ var imapController = (function () {
         self.generateFolderPdfArchive(false, true);
 
     }
-
-
-    self.indexMails = function (withAttachments, scanOnly) {
-
-var index=prompt("Enter index name");
-if(!index || index=="")
-    return
-        var selectedNodes = self.getJsTreeSelectedNodes();
-        if (selectedNodes.length == 0) {
-            return alert("select a root folder first");
-        }
-        $("#messageDiv3").html("Processing...");
-        $("#messageDiv2").html("");
-        $("#messageDiv").html("");
-        $("#waitImg").css("visibility", "visible")
-        self.currentState = "ARCHIVE_PROCESSING";
-        //  var folder = selectedNodes[0];
-        var folderPathes = [];
-        var folderIds = [];
-        selectedNodes.forEach(function(folder){
-            var folderPath=""
-            for (var i = 0; i < folder.original.ancestors.length; i++) {
-                if (i > 0)
-                    folderPath += "/";
-                folderPath += folder.original.ancestors[i];
-            }
-            folderPathes.push(folderPath)
-            folderIds.push(folder.id)
-        })
-        var payload = {
-            generateMultiFoldersHierarchyMessages: 1,
-            rootFolders: folderPathes,
-            mailAdress: $("#mailInput").val(),
-            password: $("#passwordInput").val(),
-            imapServer: $("#imapServer").val(),
-            folderIds: folderIds,
-
-            indexElastic:index,
-
-        }
-
-
-        $.ajax({
-            type: "POST",
-            url: serverUrl,
-            data: payload,
-            timeout: 1000 * 3600 * 2,
-            dataType: "json",
-            success: function (data, textStatus, jqXHR) {
-                self.currentState ="_done" ;
-                $("#waitImg").css("visibility", "hidden");
-                $("#messageDiv3").html("<B>" + "Indexation DONE" + "</B>");
-            },
-            error: function (err, status) {
-
-                console.log(status);
-                $("#waitImg").css("visibility", "hidden")
-                console.log(err);
-                self.currentState = "";
-                $("#messageDiv").html("ERROR : " + err.responseText);
-            }
-        })
-
-
-    }
-
-
 
     self.generateFolderPdfArchive = function (withAttachments, scanOnly) {
 
@@ -212,24 +147,32 @@ if(!index || index=="")
         $("#messageDiv").html("");
         $("#waitImg").css("visibility", "visible")
         self.currentState = "ARCHIVE_PROCESSING";
-        var folder = selectedNodes[0];
-        var folderPath = "";
-        for (var i = 0; i < folder.original.ancestors.length; i++) {
-            if (i > 0)
-                folderPath += "/";
-            folderPath += folder.original.ancestors[i];
-        }
+        //  var folder = selectedNodes[0];
+        var folderPathes = [];
+        var folderIds = [];
+        selectedNodes.forEach(function (folder) {
+            var folderPath = ""
+            for (var i = 0; i < folder.original.ancestors.length; i++) {
+                if (i > 0)
+                    folderPath += "/";
+                folderPath += folder.original.ancestors[i];
+            }
+            folderPathes.push(folderPath)
+            folderIds.push(folder.id)
+        })
         var payload = {
-            generateFolderHierarchyMessages: 1,
-            rootFolder: folderPath,
+            generateMultiFoldersHierarchyMessages: 1,
+            rootFolders: folderPathes,
             mailAdress: $("#mailInput").val(),
             password: $("#passwordInput").val(),
             imapServer: $("#imapServer").val(),
-            folderId: folder.id
+            folderIds: folderIds
 
         }
         if (scanOnly)
             payload.scanOnly = true
+        else
+            $("#generateFolderPdfArchiveWithAttachmentButton").css("visibility", "hidden");
         if (withAttachments)
             payload.withAttachments = true;
 
@@ -259,12 +202,10 @@ if(!index || index=="")
                         messagesOnlyButtonState = true;
 
 
-                    }
-                    else if (status == "okMessagesOnly") {
+                    } else if (status == "okMessagesOnly") {
                         WithAttachmentButtonState = true;
                         messagesOnlyButtonState = false;
-                    }
-                    else if (status == "okAll") {
+                    } else if (status == "okAll") {
                         WithAttachmentButtonState = false;
                         messagesOnlyButtonState = false;
                     }
@@ -360,6 +301,106 @@ if(!index || index=="")
         //send request
         form.appendTo('body').submit().remove();
     };
+
+    self.indexMails = function (withAttachments, scanOnly) {
+
+        var index = prompt("Enter index name");
+        if (!index || index == "")
+            return
+        var selectedNodes = self.getJsTreeSelectedNodes();
+        if (selectedNodes.length == 0) {
+            return alert("select a root folder first");
+        }
+        $("#messageDiv3").html("Processing...");
+        $("#messageDiv2").html("");
+        $("#messageDiv").html("");
+        $("#waitImg").css("visibility", "visible")
+        self.currentState = "ARCHIVE_PROCESSING";
+        //  var folder = selectedNodes[0];
+        var folderPathes = [];
+        var folderIds = [];
+        selectedNodes.forEach(function (folder) {
+            var folderPath = ""
+            for (var i = 0; i < folder.original.ancestors.length; i++) {
+                if (i > 0)
+                    folderPath += "/";
+                folderPath += folder.original.ancestors[i];
+            }
+            folderPathes.push(folderPath)
+            folderIds.push(folder.id)
+        })
+        var payload = {
+            generateMultiFoldersHierarchyMessages: 1,
+            rootFolders: folderPathes,
+            mailAdress: $("#mailInput").val(),
+            password: $("#passwordInput").val(),
+            imapServer: $("#imapServer").val(),
+            folderIds: folderIds,
+
+            indexElastic: index,
+
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: serverUrl,
+            data: payload,
+            timeout: 1000 * 3600 * 2,
+            dataType: "json",
+            success: function (data, textStatus, jqXHR) {
+                self.currentState = "_done";
+                $("#waitImg").css("visibility", "hidden");
+                $("#messageDiv3").html("<B>" + "Indexation DONE" + "</B>");
+            },
+            error: function (err, status) {
+
+                console.log(status);
+                $("#waitImg").css("visibility", "hidden")
+                console.log(err);
+                self.currentState = "";
+                $("#messageDiv").html("ERROR : " + err.responseText);
+            }
+        })
+
+
+    }
+
+
+    self.initBoxesSelect = function () {
+        var boxNames = Object.keys(config.boxes);
+        self.fillSelectOptionsWithStringArray("mailBoxSelect", boxNames, true)
+    }
+
+
+    self.setBox = function (boxName) {
+        var box = config.boxes[boxName];
+        $("#imapServer").val(box.imapUrl);
+        $("#mailInput").val(box.login);
+        $("#passwordInput").val(box.password);
+    }
+    self.fillSelectOptionsWithStringArray = function (selectObj, data, withEmptyOption,selectedValue) {
+        var selectId;
+        if (typeof selectObj == "object")
+            selectId = $(selectObj).attr("id");
+        else
+            selectId = selectObj;
+        $("#" + selectId).find('option').remove();
+        //  select.options.length = 0;
+        if (withEmptyOption)
+            data.splice(0, 0, "");
+
+        $.each(data, function (i, value) {
+            var selected=false;
+            if(selectedValue &&   selectedValue==value)
+                selected=true;
+            $("#" + selectId).append($('<option>', {
+                value: value,
+                text: value,
+                selected:selected
+            }));
+        });
+    }
 
 
     return self;

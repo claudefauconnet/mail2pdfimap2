@@ -29,7 +29,7 @@ process.setMaxListeners(0);
 
 
 var imapMailExtractor = {
-    listMails:false,
+    listMails: false,
     deleteDirAfterZip: true,
     archivePrefix: "pdfMailArchive",
     archiveMaxSize: 1000 * 1000 * 1000,//1000MO,
@@ -49,8 +49,8 @@ var imapMailExtractor = {
 
 
     getImapConn: function (imapServer, mailAdress, password) {
-      //  console.log("----------imapServer:" + imapServer);
-     //   console.log("----------mailAdress:" + mailAdress);
+        //  console.log("----------imapServer:" + imapServer);
+        //   console.log("----------mailAdress:" + mailAdress);
         var imapServerPort;
         var imapServerHost;
         if (!imapServer) {
@@ -507,7 +507,7 @@ var imapMailExtractor = {
                         // on prefere le html
                         seqBodies = folderInfos[messageSeqno].infos.htmlPartIds;
                         //   console.log(JSON.stringify(seqBodies))
-                        if (seqBodies.length == 0)
+                        if (seqBodies.length == 0 || indexElastic)
                             seqBodies = folderInfos[messageSeqno].infos.textPartIds;
                         if (seqBodies.length == 0) {
                             console.log("no body in message " + messageSeqno);
@@ -670,16 +670,15 @@ var imapMailExtractor = {
                              }
                              return callbackEachMessage();*/
 
-<<<<<<< Updated upstream
-                                if (err) {
-                                    imapMailExtractor.sendSocketMessage(mailAdress, "<span class='rejected'>error while generating PDF  : " + err + "</span>");
-                                }
-                                //  totalArchiveCountMails += 1;
 
-=======
+                            if (err) {
+                                imapMailExtractor.sendSocketMessage(mailAdress, "<span class='rejected'>error while generating PDF  : " + err + "</span>");
+                            }
+                            //  totalArchiveCountMails += 1;
+
+
                             if (indexElastic) {
                                 mailsToIndex.push(message);
->>>>>>> Stashed changes
                                 return callbackEachMessage();
                             } else {
                                 mailPdfGeneratorHtml.createMailPdf(pdfArchiveFolderPath, message, function (err, result) {
@@ -718,10 +717,9 @@ var imapMailExtractor = {
     }
     ,
 
-<<<<<<< Updated upstream
 
-    generateFolderHierarchyMessages: function (imapServer, mailAdress, password, rootFolder, folderId, withAttachments, scanOnly, callback) {
-=======
+//generateFolderHierarchyMessages: function (imapServer, mailAdress, password, rootFolder, folderId, withAttachments, scanOnly, callback) {
+
     generateMultiFoldersHierarchyMessages: function (imapServer, mailAdress, password, rootFolders, folderIds, withAttachments, scanOnly, indexElastic, callback) {
         if (!Array.isArray(folderIds))
             folderIds = [folderIds];
@@ -747,7 +745,7 @@ var imapMailExtractor = {
                     // imapMailExtractor.storeSocketMessage(mailAdress, endFolderMessage);
 
                     allResults.push(result)
-                    callbackEach(null)
+                   return callbackEach(null)
                 })
 
             },
@@ -809,7 +807,12 @@ var imapMailExtractor = {
                     zipdir(pdfArchiveRootPath, function (err, buffer) {
                         if (err)
                             return callback(err);
-                        fs.writeFileSync(pdfArchiveRootPath + ".zip", buffer);
+                        try {
+                            fs.writeFileSync(pdfArchiveRootPath + ".zip", buffer);
+                        }
+                        catch(e){
+                            return callback(err);
+                        }
 
                         if (imapMailExtractor.deleteDirAfterZip)
                             setTimeout(function () {
@@ -830,7 +833,7 @@ var imapMailExtractor = {
     ,
 
     generateFolderHierarchyMessages: function (imapServer, mailAdress, password, rootFolder, folderId, withAttachments, scanOnly, pdfArchiveRootPath, indexElastic, callback) {
->>>>>>> Stashed changes
+
 
         var listMails = imapMailExtractor.listMails;
         var archivePath = null;
@@ -893,10 +896,7 @@ var imapMailExtractor = {
                     mailListSb += ("\n" + box + "\t");
                 }
 
-<<<<<<< Updated upstream
-=======
                 mailsToIndex = [];
->>>>>>> Stashed changes
                 async.series([
 
                     function (callbackSerie) {//getting headers and metadata
@@ -972,13 +972,11 @@ var imapMailExtractor = {
                         folderInfos.totalArchiveSize = archiveTotalSize;
                         folderInfos.totalArchiveCountMails = archiveTotalValidMails;
                         folderInfos.processedMails = processedMails;
-<<<<<<< Updated upstream
-                        imapMailExtractor.processFolderPdfs(imapServer, mailAdress, password, box, folderInfos, pdfArchiveFolderPath, withAttachments, startTime, function (err, messages) {
-                            processedMails += messages.length;
-=======
+
+
                         imapMailExtractor.processFolderPdfs(imapServer, mailAdress, password, box, folderInfos, pdfArchiveFolderPath, withAttachments, startTime, indexElastic, function (err, messages) {
                             processedMails += messages.count;
->>>>>>> Stashed changes
+
                             if (err) {
                                 return callbackSerie2(err);
                             }
@@ -998,8 +996,8 @@ var imapMailExtractor = {
                             }
                             return callbackEachFolder();
                         });
-                    }
-                    return callbackEachFolder();
+                    } else
+                        return callbackEachFolder();
                 })
 
 
@@ -1018,7 +1016,13 @@ var imapMailExtractor = {
                     // "<br>Total rejected mails  :" + archiveTotalRejectedMails +
                     "<br>Total archive size  :" + common.roundToMO(archiveTotalSize) + "MO" +
                     "<br>Total attachments size  :" + common.roundToMO(archiveAttachmentsSize) + "MO"
+                if (indexElastic) {
+                    return callback(null, {
+                        text: "folder(s) indexed in index "+indexElastic ,
+                        status: "indexation OK"
 
+                    })
+                }
 
                 if (scanOnly) {
 
@@ -1026,8 +1030,7 @@ var imapMailExtractor = {
                     if (archiveTotalSize > imapMailExtractor.archiveMaxSize) {
                         text = "<span class='rejected'><B>Archive exceeds max allowed size ( " + common.roundToMO(imapMailExtractor.archiveMaxSize) + "MO)" + "<br>try  with smaller subfolder  or contact administrator</B></span><br>" + text;
                         status = "ko";
-                    }
-                    else if (archiveTotalSize + archiveAttachmentsSize > imapMailExtractor.archiveMaxSize) {
+                    } else if (archiveTotalSize + archiveAttachmentsSize > imapMailExtractor.archiveMaxSize) {
                         text = "<span class='rejected'><B>Archive with attachments exceeds max allowed size (" + common.roundToMO(imapMailExtractor.archiveMaxSize) + "MO)" + "<br> you can  process an archive without attachments, or try with smaller subfolder or contact administrator</B></span><br>" + text;
                         status = "okMessagesOnly"
                     }
@@ -1058,7 +1061,7 @@ var imapMailExtractor = {
                         if (imapMailExtractor.deleteDirAfterZip)
                             setTimeout(function () {
                                 imapMailExtractor.deleteFolderRecursive(pdfArchiveRootPath);
-                            }, 1000 * 60 * 10)
+                            }, 1000 * 60 * 60)
                         return callback(null, {
 
                             text: endMessage,
@@ -1340,4 +1343,3 @@ var imapMailExtractor = {
 
 
 module.exports = imapMailExtractor;
-

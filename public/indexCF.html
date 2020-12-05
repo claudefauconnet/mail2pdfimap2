@@ -9,6 +9,7 @@
     <script src="./js/jquery/jquery-ui.min.js"></script>
     <script src="./js/jsTree/jstree.min.js"></script>
     <script src="./js/imapController.js"></script>
+    <script src="./js/config.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
@@ -46,17 +47,19 @@
 <table>
     <tr>
         <td>
-            Imap server URL
+            box
+            <select id="mailBoxSelect" onchange="imapController.setBox($(this).val());"> </select>
 
+            imap server URL
             <input id="imapServer">
 
             mail
 
-            <input id="mailInput" value="claude.fauconnet@atd-quartmonde.org" size="35">
+            <input id="mailInput" value="" size="35">
 
             password
 
-            <input type='password' id="passwordInput" value="fc6kDgD8">
+            <input type='password' id="passwordInput" value=''>
 
             <button onclick="imapController.loadTreeHierarchy();">Login</button>&nbsp;
         </td>
