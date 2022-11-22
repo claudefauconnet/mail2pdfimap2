@@ -31,7 +31,7 @@
     "quoted-printable": "^1.0.1",
     "rebuild": "^0.1.2",
     "serve-favicon": "~2.4.5",
-    "socket.io": "^1.7.4",
+    "socket.io": "^4.5.3",
     "stream-to-string": "^1.1.0",
     "utf8": "^3.0.0",
     "wkhtmltopdf": "^0.3.4",
