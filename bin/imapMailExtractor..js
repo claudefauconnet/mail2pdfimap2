@@ -78,7 +78,8 @@ var imapMailExtractor = {
             port: imapServerPort,
             connTimeout: 30000,
             authTimeout: 30000,
-            tls: true
+            tls: true,
+            tlsOptions: { servername: imapServerHost }
         });
 
         return imap;
