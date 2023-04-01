@@ -79,7 +79,7 @@ var imapMailExtractor = {
             connTimeout: 30000,
             authTimeout: 30000,
             tls: true,
-            tlsOptions: { servername: imapServerHost }
+            tlsOptions: { servername: imapServerHost,rejectUnauthorized :false}
         });
 
         return imap;
@@ -1124,11 +1124,11 @@ var imapMailExtractor = {
         pdfName = mailPdfGeneratorHtml.formatStringForArchive(pdfName, mailPdfGeneratorHtml.maxPdfSubjectLength);
 
         var attachmentName = imapMailExtractor.extractAttachmentName(attachmentInfos);
-        if (!attachmentName)
-            return;
+        if (!attachmentName || !attachmentName.toLowerCase)
+            return "??";
         //exclusion of logos and small images
         if (imapMailExtractor.attachmentsExcluded.names.indexOf(attachmentName.toLowerCase()) > -1)
-            return;
+            return "??";
         var p = attachmentName.lastIndexOf('.');
         if (p > -1) {
             var extension = attachmentName.substring(p + 1).toLowerCase();
