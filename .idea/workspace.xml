@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0a96685c-461d-44a4-ab34-6a49d3b4b2ca" name="Default" comment="correction imapMailExtractor..js">
+    <list default="true" id="0a96685c-461d-44a4-ab34-6a49d3b4b2ca" name="Default" comment="repear all">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/imapMailExtractor..js" beforeDir="false" afterPath="$PROJECT_DIR$/bin/imapMailExtractor..js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" beforeDir="false" afterPath="$PROJECT_DIR$/bin/mailPdfGeneratorHtml.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/indexCF.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/indexCF.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/imapController.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/imapController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -330,7 +323,7 @@
       <workItem from="1674322648719" duration="2729000" />
       <workItem from="1680339420956" duration="1975000" />
       <workItem from="1680341544074" duration="8217000" />
-      <workItem from="1680426063064" duration="4897000" />
+      <workItem from="1680426063064" duration="5166000" />
     </task>
     <task id="LOCAL-00001" summary="21/01/2023">
       <created>1674324625667</created>
@@ -339,7 +332,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674324625667</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="repear all">
+      <created>1680444745359</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680444745359</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -415,7 +415,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="21/01/2023" />
     <MESSAGE value="correction imapMailExtractor..js" />
-    <option name="LAST_COMMIT_MESSAGE" value="correction imapMailExtractor..js" />
+    <MESSAGE value="repear all" />
+    <option name="LAST_COMMIT_MESSAGE" value="repear all" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -434,7 +435,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bin/imapMailExtractor..js</url>
-          <line>1017</line>
+          <line>1018</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="8" />
         </line-breakpoint>

@@ -690,6 +690,8 @@ var imapMailExtractor = {
 
                         });
 
+
+
                     }, function (err) {// end eachMessage
                         if (err)
                             callback0(err)
