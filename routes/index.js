@@ -20,14 +20,32 @@ router.post('/imap', function (req, response) {
             processResponse(response, error, result)
         });
 
-    if (req.body. generateFolderHierarchyMessages)
+    if (req.body. generateFolderHierarchyMessages){
         imapMailExtractor. generateFolderHierarchyMessages(req.body.imapServer,req.body.mailAdress,req.body.password ,req.body.rootFolder,req.body.folderId, req.body.withAttachments, req.body.scanOnly, function (error, result) {
-            processResponse(response, error, result)
-        });
-    if (req.body. generateMultiFoldersHierarchyMessages)
+           if(error) {
+             return  processResponse(response, error, result)
+           }
+            imapMailExtractor.downloadArchive (req.body.mailAdress, result.pdfArchiveFolderPath, response)
+
+            })
+
+
+        };
+    if (req.body. generateMultiFoldersHierarchyMessages){
         imapMailExtractor. generateMultiFoldersHierarchyMessages(req.body.imapServer,req.body.mailAdress,req.body.password ,req.body["rootFolders[]"],req.body["folderIds[]"], req.body.withAttachments, req.body.scanOnly, function (error, result) {
-            processResponse(response, error, result)
-        });
+            if(error) {
+                return  processResponse(response, error, result)
+            }
+
+            if( result.pdfArchiveFolderPath) {
+
+                return  processResponse(response, error, result)
+                imapMailExtractor.downloadArchive(req.body.mailAdress, result.pdfArchiveFolderPath, response)
+            }else
+                return  processResponse(response, error, result)
+
+        })
+        };
 
 
 

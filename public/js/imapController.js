@@ -218,12 +218,25 @@ var imapController = (function () {
                     return;
                 }
 
+                if(data.zipPath)
+                    var html="<a href='/"+data.zipPath+"'><span style='color:blueviolet;font-size: 18x;font-weight: bold'>Click here to download archive</span>"
+                $("#generateFolderPdfArchive").html(html);
+
+
                 if (data.length == 0) {
                     return;
 
                 }
+
+
+return;
+
+
+
                 setTimeout(function () {// time to effectivly write files on server (if zip is incomplete and delete dir fails ( not empty)
-                    self.downloadArchive(data.pdfArchiveRootPath)
+                  //  self.downloadArchive(data.pdfArchiveRootPath)
+                    self.currentArchive=data.pdfArchiveRootPath
+                    $("#downloadArchiveBtn").css("display","block")
                 }, 3000)
 
 
@@ -246,13 +259,29 @@ var imapController = (function () {
     self.downloadArchive = function (pdfArchiveRootPath) {
 
 
+        if(!pdfArchiveRootPath)
+            pdfArchiveRootPath=  self.currentArchive
         var payload = {
             downloadArchive: 1,
             pdfArchiveRootPath: pdfArchiveRootPath,
             mailAdress: $("#mailInput").val(),
 
         }
-        // Build a form
+
+        $.ajax({
+            type: "POST",
+            url: serverUrl,
+            data: payload,
+            timeout: 1000 * 3600 * 2,
+            dataType: "json",
+            success: function (data, textStatus, jqXHR) {
+            }, error(e) {
+                console.log(err)
+            }
+        })
+        return;
+
+                // Build a form
         var form = $('<form></form>').attr('action', serverUrl).attr('method', 'post');
         // Add the one key/value
         for (var key in payload) {

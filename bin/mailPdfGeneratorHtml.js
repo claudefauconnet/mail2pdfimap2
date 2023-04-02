@@ -32,6 +32,7 @@ var socket = require('../routes/socket.js');
 var imapMailExtractor = require("./imapMailExtractor..js");
 
 var wkhtmltopdf = require('wkhtmltopdf');
+wkhtmltopdf.command="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe"
 var htmlencode = require('htmlencode');
 
 
